@@ -12,7 +12,7 @@
       "ink": { "role": "neutral", "displayName": "Ink", "canonical": "oklch(97% 0.005 250)", "tonalRamp": ["oklch(15% 0.006 250)", "oklch(26% 0.012 250)", "oklch(37% 0.012 250)", "oklch(48% 0.012 250)", "oklch(59% 0.012 250)", "oklch(70% 0.012 250)", "oklch(82% 0.012 250)", "oklch(97% 0.005 250)"] }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Match scores, hero team names, champion reveal. The one fluid (clamp) tier — cinematic focal moments only." },
+      "display": { "displayName": "Display", "purpose": "The cinematic focal tier and only fluid one. Scoreboard scores clamp(3.5rem,13vw,5.5rem); page hero (masthead) clamp(3.25rem,10vw,5.75rem). Ceiling 5.75rem, never past 6rem." },
       "headline": { "displayName": "Headline", "purpose": "Section titles, round labels, feature player names. Barlow Condensed, fixed size." },
       "title": { "displayName": "Title", "purpose": "Card and panel headers. Inter 600." },
       "body": { "displayName": "Body", "purpose": "Analysis prose and explanations. Inter 400, max 70ch." },
@@ -55,25 +55,25 @@
       "name": "Live Chip",
       "kind": "chip",
       "refersTo": "chip-live",
-      "description": "Live-state marker. Red text plus a leading dot — the non-color signal that survives CVD.",
-      "html": "<span class=\"ds-chip-live\"><span class=\"ds-chip-live__dot\"></span>LIVE</span>",
-      "css": ".ds-chip-live { display: inline-flex; align-items: center; gap: 6px; font-family: Inter, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: #ed4a49; background: #101419; border-radius: 2px; padding: 4px 8px; } .ds-chip-live__dot { width: 6px; height: 6px; border-radius: 9999px; background: #ed4a49; animation: ds-pulse 1.6s cubic-bezier(0.22,1,0.36,1) infinite; } @keyframes ds-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } } @media (prefers-reduced-motion: reduce) { .ds-chip-live__dot { animation: none; } }"
+      "description": "Live/now marker (e.g. a match kicking off Today). Red text on a red tint plus a leading pulsing dot — red's role-locked live use; the dot is the non-color signal.",
+      "html": "<span class=\"ds-chip-live\"><span class=\"ds-chip-live__dot\"></span>TODAY</span>",
+      "css": ".ds-chip-live { display: inline-flex; align-items: center; gap: 7px; font-family: Inter, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #ed4a49; background: color-mix(in oklab, #ed4a49 12%, transparent); border-radius: 2px; padding: 5px 10px; } .ds-chip-live__dot { width: 7px; height: 7px; border-radius: 9999px; background: #ed4a49; animation: ds-pulse 1.6s cubic-bezier(0.22,1,0.36,1) infinite; } @keyframes ds-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } } @media (prefers-reduced-motion: reduce) { .ds-chip-live__dot { animation: none; } }"
     },
     {
       "name": "Group Chip",
       "kind": "chip",
       "refersTo": "chip-group",
-      "description": "Group-stage category marker. Green text with the leading group letter as the non-color signal.",
-      "html": "<span class=\"ds-chip-group\"><span class=\"ds-chip-group__letter\">J</span>GROUP</span>",
-      "css": ".ds-chip-group { display: inline-flex; align-items: center; gap: 6px; font-family: Inter, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: #35c26d; background: #101419; border-radius: 2px; padding: 4px 8px; } .ds-chip-group__letter { font-weight: 700; color: #35c26d; }"
+      "description": "Group-stage category marker — green's boldest on-screen presence. The letter is a filled green badge (the per-group differentiator); groups are not hue-coded individually.",
+      "html": "<span class=\"ds-chip-group\"><span class=\"ds-chip-group__badge\">J</span>GROUP</span>",
+      "css": ".ds-chip-group { display: inline-flex; align-items: center; gap: 7px; font-family: Inter, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #35c26d; } .ds-chip-group__badge { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; font-weight: 800; font-size: 0.875rem; color: #080c0f; background: #35c26d; border-radius: 2px; }"
     },
     {
       "name": "Match Card",
       "kind": "card",
       "refersTo": null,
-      "description": "Core matchup container: condensed team names + tabular score on the card surface.",
-      "html": "<div class=\"ds-match-card\"><div class=\"ds-match-card__row\"><span class=\"ds-match-card__team\">ARGENTINA</span><span class=\"ds-match-card__score\">2</span></div><div class=\"ds-match-card__row\"><span class=\"ds-match-card__team\">BRAZIL</span><span class=\"ds-match-card__score\">1</span></div></div>",
-      "css": ".ds-match-card { background: #101419; border: 1px solid #292e34; border-radius: 8px; padding: 20px 24px; min-width: 240px; transition: transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms cubic-bezier(0.22,1,0.36,1); } .ds-match-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.45); } .ds-match-card__row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 6px 0; } .ds-match-card__team { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 1.75rem; line-height: 1.05; color: #f3f5f8; } .ds-match-card__score { font-family: Inter, system-ui, sans-serif; font-weight: 600; font-size: 1.75rem; font-variant-numeric: tabular-nums; color: #f3f5f8; }"
+      "description": "Core matchup container, stadium-scoreboard layout: FIFA code above the full team name, with an oversized tabular score that dominates the card. Flat at rest.",
+      "html": "<div class=\"ds-match-card\"><div class=\"ds-match-card__row\"><span class=\"ds-match-card__id\"><span class=\"ds-match-card__code\">ARG</span><span class=\"ds-match-card__team\">Argentina</span></span><span class=\"ds-match-card__score\">2</span></div><div class=\"ds-match-card__row\"><span class=\"ds-match-card__id\"><span class=\"ds-match-card__code\">BRA</span><span class=\"ds-match-card__team\">Brazil</span></span><span class=\"ds-match-card__score is-loser\">1</span></div></div>",
+      "css": ".ds-match-card { background: #101419; border: 1px solid #292e34; border-radius: 8px; padding: 32px; min-width: 280px; } .ds-match-card__row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; padding: 8px 0; } .ds-match-card__id { display: flex; flex-direction: column; gap: 2px; } .ds-match-card__code { font-family: Inter, system-ui, sans-serif; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; color: #8a9096; } .ds-match-card__team { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight: 800; font-size: 2rem; line-height: 0.95; text-transform: uppercase; color: #f3f5f8; } .ds-match-card__score { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight: 800; font-size: 4.5rem; line-height: 0.85; font-variant-numeric: tabular-nums; color: #f3f5f8; } .ds-match-card__score.is-loser { color: #8a9096; }"
     },
     {
       "name": "Probability Bar",
@@ -108,7 +108,9 @@
       "Do keep Studio Black (#080c0f) at 70%+ of any view.",
       "Do use Barlow Condensed only for scores, team names, and match headlines; Inter for everything read or scanned.",
       "Do keep the host colors role-locked: green = group, red = live, blue = prediction. Neutral chrome for buttons and nav.",
-      "Do reserve trophy gold for one genuine championship moment per view.",
+      "Do reserve trophy gold for one genuine championship moment per view (e.g. the masthead favourite).",
+      "Do concentrate blue in the probability bar; render secondary probability figures (championship odds) in neutral ink so blue stays rare.",
+      "Do render the group identity as a bold filled green badge — green's primary on-screen presence — differentiated by letter, not per-group hues.",
       "Do pair every color-encoded datum with a non-color signal (dot, label, letter, position).",
       "Do set font-variant-numeric: tabular-nums on all numerics.",
       "Do keep motion anchored to events; 150-250ms on working UI, choreography only for focal moments.",

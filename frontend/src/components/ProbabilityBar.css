@@ -1,0 +1,112 @@
+.prob {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* --- The bar --- */
+.prob__track {
+  display: flex;
+  width: 100%;
+  height: 26px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-elevated);
+  gap: 2px;
+  /* Mount wipe — the count-up moment. Resting state (no clip-path) is the full
+     bar, so it's never gated: if the animation can't run, the bar is just there. */
+  animation: prob-wipe var(--dur-cinematic) var(--ease-out-quint);
+}
+
+@keyframes prob-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+.prob__seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  flex-basis: 0;
+  transition: flex-grow var(--dur-cinematic) var(--ease-out-quint);
+}
+
+.prob__seg--home {
+  background: var(--american-blue);
+}
+.prob__seg--draw {
+  background: var(--ink-muted); /* mid-neutral; distinct from away via the 2px gap + label */
+}
+.prob__seg--away {
+  background: var(--ink-secondary);
+}
+
+.prob__seg-pct {
+  font-size: var(--text-label);
+  font-weight: 600;
+  color: var(--studio-black);
+  padding-inline: 4px;
+}
+
+/* Completed matches: emphasise the segment that actually happened */
+.prob__seg.is-dimmed {
+  opacity: 0.4;
+}
+.prob__seg.is-actual {
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+/* --- Legend (always-present labels; guarantees the bar is never color-only) --- */
+.prob__legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  list-style: none;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.prob__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-label);
+  color: var(--ink-secondary);
+}
+
+.prob__swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.prob__swatch--home {
+  background: var(--american-blue);
+}
+.prob__swatch--draw {
+  background: var(--ink-muted);
+}
+.prob__swatch--away {
+  background: var(--ink-secondary);
+}
+
+.prob__legend-label {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.prob__legend-pct {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.prob__legend-item.is-actual {
+  color: var(--ink);
+  font-weight: 600;
+}
+/* Neutral — green is role-locked to group data, so the result marker stays ink */
+.prob__check {
+  color: var(--ink);
+}

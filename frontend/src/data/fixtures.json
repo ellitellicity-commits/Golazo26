@@ -1,0 +1,2094 @@
+{
+  "generated": "2026-06-28",
+  "count": 72,
+  "fixtures": [
+    {
+      "id": 1,
+      "date": "2026-06-11",
+      "kickoff": "19:00",
+      "group": "A",
+      "venue": {
+        "stadium": "Mexico City Stadium (Estadio Azteca)",
+        "city": "Mexico City"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Mexico",
+        "code": "MEX",
+        "championship_odds": 0.0165
+      },
+      "away": {
+        "name": "South Africa",
+        "code": "RSA",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.526,
+        "draw": 0.371,
+        "away_win": 0.103
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 2,
+      "date": "2026-06-11",
+      "kickoff": "23:00",
+      "group": "A",
+      "venue": {
+        "stadium": "Guadalajara Stadium (Estadio Akron)",
+        "city": "Zapopan"
+      },
+      "status": "completed",
+      "home": {
+        "name": "South Korea",
+        "code": "KOR",
+        "championship_odds": 0.002
+      },
+      "away": {
+        "name": "Czechia",
+        "code": "CZE",
+        "championship_odds": 0.0011
+      },
+      "prediction": {
+        "home_win": 0.382,
+        "draw": 0.341,
+        "away_win": 0.276
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 3,
+      "date": "2026-06-12",
+      "kickoff": "19:00",
+      "group": "B",
+      "venue": {
+        "stadium": "Toronto Stadium (BMO Field)",
+        "city": "Toronto"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Canada",
+        "code": "CAN",
+        "championship_odds": 0.0093
+      },
+      "away": {
+        "name": "Bosnia and Herzegovina",
+        "code": "BIH",
+        "championship_odds": 0.0001
+      },
+      "prediction": {
+        "home_win": 0.64,
+        "draw": 0.216,
+        "away_win": 0.145
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 4,
+      "date": "2026-06-12",
+      "kickoff": "23:00",
+      "group": "C",
+      "venue": {
+        "stadium": "Los Angeles Stadium (SoFi Stadium)",
+        "city": "Inglewood"
+      },
+      "status": "completed",
+      "home": {
+        "name": "United States",
+        "code": "USA",
+        "championship_odds": 0.0027
+      },
+      "away": {
+        "name": "Paraguay",
+        "code": "PAR",
+        "championship_odds": 0.0043
+      },
+      "prediction": {
+        "home_win": 0.367,
+        "draw": 0.281,
+        "away_win": 0.352
+      },
+      "result": {
+        "home_score": 4,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 5,
+      "date": "2026-06-13",
+      "kickoff": "15:00",
+      "group": "B",
+      "venue": {
+        "stadium": "Boston Stadium (Gillette Stadium)",
+        "city": "Foxborough"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Qatar",
+        "code": "QAT",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Switzerland",
+        "code": "SUI",
+        "championship_odds": 0.0307
+      },
+      "prediction": {
+        "home_win": 0.062,
+        "draw": 0.253,
+        "away_win": 0.685
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 8,
+      "date": "2026-06-13",
+      "kickoff": "23:59",
+      "group": "C",
+      "venue": {
+        "stadium": "Seattle Stadium (Lumen Field)",
+        "city": "Seattle"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Australia",
+        "code": "AUS",
+        "championship_odds": 0.0023
+      },
+      "away": {
+        "name": "Turkey",
+        "code": "TUR",
+        "championship_odds": 0.0148
+      },
+      "prediction": {
+        "home_win": 0.225,
+        "draw": 0.373,
+        "away_win": 0.401
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 6,
+      "date": "2026-06-13",
+      "kickoff": "18:00",
+      "group": "D",
+      "venue": {
+        "stadium": "New York New Jersey Stadium (MetLife Stadium)",
+        "city": "East Rutherford"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Brazil",
+        "code": "BRA",
+        "championship_odds": 0.1148
+      },
+      "away": {
+        "name": "Morocco",
+        "code": "MAR",
+        "championship_odds": 0.0051
+      },
+      "prediction": {
+        "home_win": 0.533,
+        "draw": 0.321,
+        "away_win": 0.146
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 7,
+      "date": "2026-06-13",
+      "kickoff": "21:00",
+      "group": "D",
+      "venue": {
+        "stadium": "Philadelphia Stadium (Lincoln Financial Field)",
+        "city": "Philadelphia"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Haiti",
+        "code": "HAI",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Scotland",
+        "code": "SCO",
+        "championship_odds": 0.0019
+      },
+      "prediction": {
+        "home_win": 0.149,
+        "draw": 0.256,
+        "away_win": 0.595
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 9,
+      "date": "2026-06-14",
+      "kickoff": "15:00",
+      "group": "E",
+      "venue": {
+        "stadium": "Atlanta Stadium (Mercedes-Benz Stadium)",
+        "city": "Atlanta"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Germany",
+        "code": "GER",
+        "championship_odds": 0.0197
+      },
+      "away": {
+        "name": "Cura\u00e7ao",
+        "code": "CUW",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.699,
+        "draw": 0.214,
+        "away_win": 0.087
+      },
+      "result": {
+        "home_score": 7,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 11,
+      "date": "2026-06-14",
+      "kickoff": "21:00",
+      "group": "E",
+      "venue": {
+        "stadium": "Houston Stadium (NRG Stadium)",
+        "city": "Houston"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Ivory Coast",
+        "code": "CIV",
+        "championship_odds": 0.0001
+      },
+      "away": {
+        "name": "Ecuador",
+        "code": "ECU",
+        "championship_odds": 0.02
+      },
+      "prediction": {
+        "home_win": 0.167,
+        "draw": 0.321,
+        "away_win": 0.512
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 10,
+      "date": "2026-06-14",
+      "kickoff": "18:00",
+      "group": "F",
+      "venue": {
+        "stadium": "San Francisco Bay Area Stadium (Levi's Stadium)",
+        "city": "Santa Clara"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Netherlands",
+        "code": "NED",
+        "championship_odds": 0.0412
+      },
+      "away": {
+        "name": "Japan",
+        "code": "JPN",
+        "championship_odds": 0.0252
+      },
+      "prediction": {
+        "home_win": 0.342,
+        "draw": 0.306,
+        "away_win": 0.352
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 2
+      }
+    },
+    {
+      "id": 12,
+      "date": "2026-06-14",
+      "kickoff": "23:59",
+      "group": "F",
+      "venue": {
+        "stadium": "Kansas City Stadium (Arrowhead Stadium)",
+        "city": "Kansas City"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Sweden",
+        "code": "SWE",
+        "championship_odds": 0.0001
+      },
+      "away": {
+        "name": "Tunisia",
+        "code": "TUN",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.519,
+        "draw": 0.214,
+        "away_win": 0.266
+      },
+      "result": {
+        "home_score": 5,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 13,
+      "date": "2026-06-15",
+      "kickoff": "15:00",
+      "group": "G",
+      "venue": {
+        "stadium": "Miami Stadium (Hard Rock Stadium)",
+        "city": "Miami Gardens"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Spain",
+        "code": "ESP",
+        "championship_odds": 0.0678
+      },
+      "away": {
+        "name": "Cape Verde",
+        "code": "CPV",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.813,
+        "draw": 0.109,
+        "away_win": 0.078
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 15,
+      "date": "2026-06-15",
+      "kickoff": "21:00",
+      "group": "G",
+      "venue": {
+        "stadium": "Monterrey Stadium (Estadio BBVA)",
+        "city": "Guadalupe"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Saudi Arabia",
+        "code": "KSA",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Uruguay",
+        "code": "URU",
+        "championship_odds": 0.0097
+      },
+      "prediction": {
+        "home_win": 0.168,
+        "draw": 0.279,
+        "away_win": 0.553
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 14,
+      "date": "2026-06-15",
+      "kickoff": "18:00",
+      "group": "H",
+      "venue": {
+        "stadium": "Dallas Stadium (AT&T Stadium)",
+        "city": "Arlington"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Belgium",
+        "code": "BEL",
+        "championship_odds": 0.0246
+      },
+      "away": {
+        "name": "Egypt",
+        "code": "EGY",
+        "championship_odds": 0.0007
+      },
+      "prediction": {
+        "home_win": 0.423,
+        "draw": 0.382,
+        "away_win": 0.195
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 16,
+      "date": "2026-06-15",
+      "kickoff": "23:59",
+      "group": "H",
+      "venue": {
+        "stadium": "Vancouver Stadium (BC Place)",
+        "city": "Vancouver"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Iran",
+        "code": "IRN",
+        "championship_odds": 0.001
+      },
+      "away": {
+        "name": "New Zealand",
+        "code": "NZL",
+        "championship_odds": 0.0001
+      },
+      "prediction": {
+        "home_win": 0.43,
+        "draw": 0.367,
+        "away_win": 0.203
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 2
+      }
+    },
+    {
+      "id": 17,
+      "date": "2026-06-16",
+      "kickoff": "15:00",
+      "group": "I",
+      "venue": {
+        "stadium": "New York New Jersey Stadium (MetLife Stadium)",
+        "city": "East Rutherford"
+      },
+      "status": "completed",
+      "home": {
+        "name": "France",
+        "code": "FRA",
+        "championship_odds": 0.1364
+      },
+      "away": {
+        "name": "Senegal",
+        "code": "SEN",
+        "championship_odds": 0.0102
+      },
+      "prediction": {
+        "home_win": 0.555,
+        "draw": 0.283,
+        "away_win": 0.163
+      },
+      "result": {
+        "home_score": 3,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 18,
+      "date": "2026-06-16",
+      "kickoff": "18:00",
+      "group": "I",
+      "venue": {
+        "stadium": "Boston Stadium (Gillette Stadium)",
+        "city": "Foxborough"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Iraq",
+        "code": "IRQ",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Norway",
+        "code": "NOR",
+        "championship_odds": 0.0306
+      },
+      "prediction": {
+        "home_win": 0.089,
+        "draw": 0.213,
+        "away_win": 0.698
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 4
+      }
+    },
+    {
+      "id": 19,
+      "date": "2026-06-16",
+      "kickoff": "21:00",
+      "group": "J",
+      "venue": {
+        "stadium": "Los Angeles Stadium (SoFi Stadium)",
+        "city": "Inglewood"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Argentina",
+        "code": "ARG",
+        "championship_odds": 0.1939
+      },
+      "away": {
+        "name": "Algeria",
+        "code": "ALG",
+        "championship_odds": 0.0011
+      },
+      "prediction": {
+        "home_win": 0.667,
+        "draw": 0.252,
+        "away_win": 0.082
+      },
+      "result": {
+        "home_score": 3,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 20,
+      "date": "2026-06-16",
+      "kickoff": "23:59",
+      "group": "J",
+      "venue": {
+        "stadium": "San Francisco Bay Area Stadium (Levi's Stadium)",
+        "city": "Santa Clara"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Austria",
+        "code": "AUT",
+        "championship_odds": 0.0044
+      },
+      "away": {
+        "name": "Jordan",
+        "code": "JOR",
+        "championship_odds": 0.0002
+      },
+      "prediction": {
+        "home_win": 0.475,
+        "draw": 0.388,
+        "away_win": 0.137
+      },
+      "result": {
+        "home_score": 3,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 21,
+      "date": "2026-06-17",
+      "kickoff": "15:00",
+      "group": "K",
+      "venue": {
+        "stadium": "Atlanta Stadium (Mercedes-Benz Stadium)",
+        "city": "Atlanta"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Portugal",
+        "code": "POR",
+        "championship_odds": 0.0558
+      },
+      "away": {
+        "name": "DR Congo",
+        "code": "COD",
+        "championship_odds": 0.0003
+      },
+      "prediction": {
+        "home_win": 0.59,
+        "draw": 0.303,
+        "away_win": 0.107
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 24,
+      "date": "2026-06-17",
+      "kickoff": "23:59",
+      "group": "K",
+      "venue": {
+        "stadium": "Seattle Stadium (Lumen Field)",
+        "city": "Seattle"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Uzbekistan",
+        "code": "UZB",
+        "championship_odds": 0.0004
+      },
+      "away": {
+        "name": "Colombia",
+        "code": "COL",
+        "championship_odds": 0.0502
+      },
+      "prediction": {
+        "home_win": 0.087,
+        "draw": 0.211,
+        "away_win": 0.703
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 3
+      }
+    },
+    {
+      "id": 22,
+      "date": "2026-06-17",
+      "kickoff": "18:00",
+      "group": "L",
+      "venue": {
+        "stadium": "Miami Stadium (Hard Rock Stadium)",
+        "city": "Miami Gardens"
+      },
+      "status": "completed",
+      "home": {
+        "name": "England",
+        "code": "ENG",
+        "championship_odds": 0.0864
+      },
+      "away": {
+        "name": "Croatia",
+        "code": "CRO",
+        "championship_odds": 0.0135
+      },
+      "prediction": {
+        "home_win": 0.461,
+        "draw": 0.293,
+        "away_win": 0.247
+      },
+      "result": {
+        "home_score": 4,
+        "away_score": 2
+      }
+    },
+    {
+      "id": 23,
+      "date": "2026-06-17",
+      "kickoff": "21:00",
+      "group": "L",
+      "venue": {
+        "stadium": "Houston Stadium (NRG Stadium)",
+        "city": "Houston"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Ghana",
+        "code": "GHA",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Panama",
+        "code": "PAN",
+        "championship_odds": 0.0008
+      },
+      "prediction": {
+        "home_win": 0.185,
+        "draw": 0.331,
+        "away_win": 0.484
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 25,
+      "date": "2026-06-18",
+      "kickoff": "15:00",
+      "group": "A",
+      "venue": {
+        "stadium": "Atlanta Stadium (Mercedes-Benz Stadium)",
+        "city": "Atlanta"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Mexico",
+        "code": "MEX",
+        "championship_odds": 0.0165
+      },
+      "away": {
+        "name": "South Korea",
+        "code": "KOR",
+        "championship_odds": 0.002
+      },
+      "prediction": {
+        "home_win": 0.4,
+        "draw": 0.428,
+        "away_win": 0.172
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 26,
+      "date": "2026-06-18",
+      "kickoff": "18:00",
+      "group": "A",
+      "venue": {
+        "stadium": "Los Angeles Stadium (SoFi Stadium)",
+        "city": "Inglewood"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Czechia",
+        "code": "CZE",
+        "championship_odds": 0.0011
+      },
+      "away": {
+        "name": "South Africa",
+        "code": "RSA",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.43,
+        "draw": 0.302,
+        "away_win": 0.268
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 27,
+      "date": "2026-06-18",
+      "kickoff": "21:00",
+      "group": "B",
+      "venue": {
+        "stadium": "Vancouver Stadium (BC Place)",
+        "city": "Vancouver"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Canada",
+        "code": "CAN",
+        "championship_odds": 0.0093
+      },
+      "away": {
+        "name": "Qatar",
+        "code": "QAT",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.689,
+        "draw": 0.209,
+        "away_win": 0.102
+      },
+      "result": {
+        "home_score": 6,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 28,
+      "date": "2026-06-18",
+      "kickoff": "23:59",
+      "group": "B",
+      "venue": {
+        "stadium": "Mexico City Stadium (Estadio Azteca)",
+        "city": "Mexico City"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Switzerland",
+        "code": "SUI",
+        "championship_odds": 0.0307
+      },
+      "away": {
+        "name": "Bosnia and Herzegovina",
+        "code": "BIH",
+        "championship_odds": 0.0001
+      },
+      "prediction": {
+        "home_win": 0.579,
+        "draw": 0.27,
+        "away_win": 0.151
+      },
+      "result": {
+        "home_score": 4,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 31,
+      "date": "2026-06-19",
+      "kickoff": "21:00",
+      "group": "C",
+      "venue": {
+        "stadium": "Toronto Stadium (BMO Field)",
+        "city": "Toronto"
+      },
+      "status": "completed",
+      "home": {
+        "name": "United States",
+        "code": "USA",
+        "championship_odds": 0.0027
+      },
+      "away": {
+        "name": "Australia",
+        "code": "AUS",
+        "championship_odds": 0.0023
+      },
+      "prediction": {
+        "home_win": 0.286,
+        "draw": 0.362,
+        "away_win": 0.352
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 32,
+      "date": "2026-06-19",
+      "kickoff": "23:59",
+      "group": "C",
+      "venue": {
+        "stadium": "Monterrey Stadium (Estadio BBVA)",
+        "city": "Guadalupe"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Turkey",
+        "code": "TUR",
+        "championship_odds": 0.0148
+      },
+      "away": {
+        "name": "Paraguay",
+        "code": "PAR",
+        "championship_odds": 0.0043
+      },
+      "prediction": {
+        "home_win": 0.456,
+        "draw": 0.28,
+        "away_win": 0.263
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 29,
+      "date": "2026-06-19",
+      "kickoff": "15:00",
+      "group": "D",
+      "venue": {
+        "stadium": "New York New Jersey Stadium (MetLife Stadium)",
+        "city": "East Rutherford"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Brazil",
+        "code": "BRA",
+        "championship_odds": 0.1148
+      },
+      "away": {
+        "name": "Haiti",
+        "code": "HAI",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.775,
+        "draw": 0.184,
+        "away_win": 0.04
+      },
+      "result": {
+        "home_score": 3,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 30,
+      "date": "2026-06-19",
+      "kickoff": "18:00",
+      "group": "D",
+      "venue": {
+        "stadium": "Dallas Stadium (AT&T Stadium)",
+        "city": "Arlington"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Scotland",
+        "code": "SCO",
+        "championship_odds": 0.0019
+      },
+      "away": {
+        "name": "Morocco",
+        "code": "MAR",
+        "championship_odds": 0.0051
+      },
+      "prediction": {
+        "home_win": 0.348,
+        "draw": 0.33,
+        "away_win": 0.322
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 33,
+      "date": "2026-06-20",
+      "kickoff": "15:00",
+      "group": "E",
+      "venue": {
+        "stadium": "Boston Stadium (Gillette Stadium)",
+        "city": "Foxborough"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Germany",
+        "code": "GER",
+        "championship_odds": 0.0197
+      },
+      "away": {
+        "name": "Ivory Coast",
+        "code": "CIV",
+        "championship_odds": 0.0001
+      },
+      "prediction": {
+        "home_win": 0.49,
+        "draw": 0.39,
+        "away_win": 0.12
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 34,
+      "date": "2026-06-20",
+      "kickoff": "18:00",
+      "group": "E",
+      "venue": {
+        "stadium": "Kansas City Stadium (Arrowhead Stadium)",
+        "city": "Kansas City"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Ecuador",
+        "code": "ECU",
+        "championship_odds": 0.02
+      },
+      "away": {
+        "name": "Cura\u00e7ao",
+        "code": "CUW",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.735,
+        "draw": 0.169,
+        "away_win": 0.096
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 35,
+      "date": "2026-06-20",
+      "kickoff": "21:00",
+      "group": "F",
+      "venue": {
+        "stadium": "Philadelphia Stadium (Lincoln Financial Field)",
+        "city": "Philadelphia"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Netherlands",
+        "code": "NED",
+        "championship_odds": 0.0412
+      },
+      "away": {
+        "name": "Sweden",
+        "code": "SWE",
+        "championship_odds": 0.0001
+      },
+      "prediction": {
+        "home_win": 0.708,
+        "draw": 0.181,
+        "away_win": 0.112
+      },
+      "result": {
+        "home_score": 5,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 36,
+      "date": "2026-06-20",
+      "kickoff": "23:59",
+      "group": "F",
+      "venue": {
+        "stadium": "Seattle Stadium (Lumen Field)",
+        "city": "Seattle"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Tunisia",
+        "code": "TUN",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Japan",
+        "code": "JPN",
+        "championship_odds": 0.0252
+      },
+      "prediction": {
+        "home_win": 0.11,
+        "draw": 0.209,
+        "away_win": 0.681
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 4
+      }
+    },
+    {
+      "id": 39,
+      "date": "2026-06-21",
+      "kickoff": "21:00",
+      "group": "G",
+      "venue": {
+        "stadium": "San Francisco Bay Area Stadium (Levi's Stadium)",
+        "city": "Santa Clara"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Spain",
+        "code": "ESP",
+        "championship_odds": 0.0678
+      },
+      "away": {
+        "name": "Saudi Arabia",
+        "code": "KSA",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.794,
+        "draw": 0.123,
+        "away_win": 0.083
+      },
+      "result": {
+        "home_score": 4,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 40,
+      "date": "2026-06-21",
+      "kickoff": "23:59",
+      "group": "G",
+      "venue": {
+        "stadium": "New York New Jersey Stadium (MetLife Stadium)",
+        "city": "East Rutherford"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Uruguay",
+        "code": "URU",
+        "championship_odds": 0.0097
+      },
+      "away": {
+        "name": "Cape Verde",
+        "code": "CPV",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.544,
+        "draw": 0.251,
+        "away_win": 0.205
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 2
+      }
+    },
+    {
+      "id": 37,
+      "date": "2026-06-21",
+      "kickoff": "15:00",
+      "group": "H",
+      "venue": {
+        "stadium": "Houston Stadium (NRG Stadium)",
+        "city": "Houston"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Belgium",
+        "code": "BEL",
+        "championship_odds": 0.0246
+      },
+      "away": {
+        "name": "Iran",
+        "code": "IRN",
+        "championship_odds": 0.001
+      },
+      "prediction": {
+        "home_win": 0.454,
+        "draw": 0.355,
+        "away_win": 0.191
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 38,
+      "date": "2026-06-21",
+      "kickoff": "18:00",
+      "group": "H",
+      "venue": {
+        "stadium": "Miami Stadium (Hard Rock Stadium)",
+        "city": "Miami Gardens"
+      },
+      "status": "completed",
+      "home": {
+        "name": "New Zealand",
+        "code": "NZL",
+        "championship_odds": 0.0001
+      },
+      "away": {
+        "name": "Egypt",
+        "code": "EGY",
+        "championship_odds": 0.0007
+      },
+      "prediction": {
+        "home_win": 0.264,
+        "draw": 0.326,
+        "away_win": 0.41
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 3
+      }
+    },
+    {
+      "id": 41,
+      "date": "2026-06-22",
+      "kickoff": "15:00",
+      "group": "I",
+      "venue": {
+        "stadium": "Dallas Stadium (AT&T Stadium)",
+        "city": "Arlington"
+      },
+      "status": "completed",
+      "home": {
+        "name": "France",
+        "code": "FRA",
+        "championship_odds": 0.1364
+      },
+      "away": {
+        "name": "Iraq",
+        "code": "IRQ",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.803,
+        "draw": 0.161,
+        "away_win": 0.037
+      },
+      "result": {
+        "home_score": 3,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 42,
+      "date": "2026-06-22",
+      "kickoff": "18:00",
+      "group": "I",
+      "venue": {
+        "stadium": "Toronto Stadium (BMO Field)",
+        "city": "Toronto"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Norway",
+        "code": "NOR",
+        "championship_odds": 0.0306
+      },
+      "away": {
+        "name": "Senegal",
+        "code": "SEN",
+        "championship_odds": 0.0102
+      },
+      "prediction": {
+        "home_win": 0.362,
+        "draw": 0.319,
+        "away_win": 0.319
+      },
+      "result": {
+        "home_score": 3,
+        "away_score": 2
+      }
+    },
+    {
+      "id": 43,
+      "date": "2026-06-22",
+      "kickoff": "21:00",
+      "group": "J",
+      "venue": {
+        "stadium": "Monterrey Stadium (Estadio BBVA)",
+        "city": "Guadalupe"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Argentina",
+        "code": "ARG",
+        "championship_odds": 0.1939
+      },
+      "away": {
+        "name": "Austria",
+        "code": "AUT",
+        "championship_odds": 0.0044
+      },
+      "prediction": {
+        "home_win": 0.482,
+        "draw": 0.401,
+        "away_win": 0.117
+      },
+      "result": {
+        "home_score": 2,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 44,
+      "date": "2026-06-22",
+      "kickoff": "23:59",
+      "group": "J",
+      "venue": {
+        "stadium": "Boston Stadium (Gillette Stadium)",
+        "city": "Foxborough"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Jordan",
+        "code": "JOR",
+        "championship_odds": 0.0002
+      },
+      "away": {
+        "name": "Algeria",
+        "code": "ALG",
+        "championship_odds": 0.0011
+      },
+      "prediction": {
+        "home_win": 0.284,
+        "draw": 0.323,
+        "away_win": 0.393
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 2
+      }
+    },
+    {
+      "id": 45,
+      "date": "2026-06-23",
+      "kickoff": "15:00",
+      "group": "K",
+      "venue": {
+        "stadium": "Kansas City Stadium (Arrowhead Stadium)",
+        "city": "Kansas City"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Portugal",
+        "code": "POR",
+        "championship_odds": 0.0558
+      },
+      "away": {
+        "name": "Uzbekistan",
+        "code": "UZB",
+        "championship_odds": 0.0004
+      },
+      "prediction": {
+        "home_win": 0.679,
+        "draw": 0.233,
+        "away_win": 0.088
+      },
+      "result": {
+        "home_score": 5,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 46,
+      "date": "2026-06-23",
+      "kickoff": "18:00",
+      "group": "K",
+      "venue": {
+        "stadium": "Philadelphia Stadium (Lincoln Financial Field)",
+        "city": "Philadelphia"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Colombia",
+        "code": "COL",
+        "championship_odds": 0.0502
+      },
+      "away": {
+        "name": "DR Congo",
+        "code": "COD",
+        "championship_odds": 0.0003
+      },
+      "prediction": {
+        "home_win": 0.585,
+        "draw": 0.313,
+        "away_win": 0.103
+      },
+      "result": {
+        "home_score": 1,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 47,
+      "date": "2026-06-23",
+      "kickoff": "21:00",
+      "group": "L",
+      "venue": {
+        "stadium": "Seattle Stadium (Lumen Field)",
+        "city": "Seattle"
+      },
+      "status": "completed",
+      "home": {
+        "name": "England",
+        "code": "ENG",
+        "championship_odds": 0.0864
+      },
+      "away": {
+        "name": "Ghana",
+        "code": "GHA",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.759,
+        "draw": 0.212,
+        "away_win": 0.029
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 0
+      }
+    },
+    {
+      "id": 48,
+      "date": "2026-06-23",
+      "kickoff": "23:59",
+      "group": "L",
+      "venue": {
+        "stadium": "Mexico City Stadium (Estadio Azteca)",
+        "city": "Mexico City"
+      },
+      "status": "completed",
+      "home": {
+        "name": "Panama",
+        "code": "PAN",
+        "championship_odds": 0.0008
+      },
+      "away": {
+        "name": "Croatia",
+        "code": "CRO",
+        "championship_odds": 0.0135
+      },
+      "prediction": {
+        "home_win": 0.204,
+        "draw": 0.266,
+        "away_win": 0.531
+      },
+      "result": {
+        "home_score": 0,
+        "away_score": 1
+      }
+    },
+    {
+      "id": 49,
+      "date": "2026-06-24",
+      "kickoff": "18:00",
+      "group": "A",
+      "venue": {
+        "stadium": "Mexico City Stadium (Estadio Azteca)",
+        "city": "Mexico City"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Czechia",
+        "code": "CZE",
+        "championship_odds": 0.0011
+      },
+      "away": {
+        "name": "Mexico",
+        "code": "MEX",
+        "championship_odds": 0.0165
+      },
+      "prediction": {
+        "home_win": 0.11,
+        "draw": 0.33,
+        "away_win": 0.56
+      },
+      "result": null
+    },
+    {
+      "id": 50,
+      "date": "2026-06-24",
+      "kickoff": "18:00",
+      "group": "A",
+      "venue": {
+        "stadium": "Guadalajara Stadium (Estadio Akron)",
+        "city": "Zapopan"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "South Africa",
+        "code": "RSA",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "South Korea",
+        "code": "KOR",
+        "championship_odds": 0.002
+      },
+      "prediction": {
+        "home_win": 0.108,
+        "draw": 0.327,
+        "away_win": 0.565
+      },
+      "result": null
+    },
+    {
+      "id": 51,
+      "date": "2026-06-24",
+      "kickoff": "22:00",
+      "group": "B",
+      "venue": {
+        "stadium": "Vancouver Stadium (BC Place)",
+        "city": "Vancouver"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Switzerland",
+        "code": "SUI",
+        "championship_odds": 0.0307
+      },
+      "away": {
+        "name": "Canada",
+        "code": "CAN",
+        "championship_odds": 0.0093
+      },
+      "prediction": {
+        "home_win": 0.332,
+        "draw": 0.331,
+        "away_win": 0.337
+      },
+      "result": null
+    },
+    {
+      "id": 52,
+      "date": "2026-06-24",
+      "kickoff": "22:00",
+      "group": "B",
+      "venue": {
+        "stadium": "Toronto Stadium (BMO Field)",
+        "city": "Toronto"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Bosnia and Herzegovina",
+        "code": "BIH",
+        "championship_odds": 0.0001
+      },
+      "away": {
+        "name": "Qatar",
+        "code": "QAT",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.491,
+        "draw": 0.285,
+        "away_win": 0.224
+      },
+      "result": null
+    },
+    {
+      "id": 55,
+      "date": "2026-06-25",
+      "kickoff": "22:00",
+      "group": "C",
+      "venue": {
+        "stadium": "Los Angeles Stadium (SoFi Stadium)",
+        "city": "Inglewood"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Turkey",
+        "code": "TUR",
+        "championship_odds": 0.0148
+      },
+      "away": {
+        "name": "United States",
+        "code": "USA",
+        "championship_odds": 0.0027
+      },
+      "prediction": {
+        "home_win": 0.394,
+        "draw": 0.326,
+        "away_win": 0.28
+      },
+      "result": null
+    },
+    {
+      "id": 56,
+      "date": "2026-06-25",
+      "kickoff": "22:00",
+      "group": "C",
+      "venue": {
+        "stadium": "San Francisco Bay Area Stadium (Levi's Stadium)",
+        "city": "Santa Clara"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Paraguay",
+        "code": "PAR",
+        "championship_odds": 0.0043
+      },
+      "away": {
+        "name": "Australia",
+        "code": "AUS",
+        "championship_odds": 0.0023
+      },
+      "prediction": {
+        "home_win": 0.345,
+        "draw": 0.334,
+        "away_win": 0.321
+      },
+      "result": null
+    },
+    {
+      "id": 53,
+      "date": "2026-06-25",
+      "kickoff": "18:00",
+      "group": "D",
+      "venue": {
+        "stadium": "New York New Jersey Stadium (MetLife Stadium)",
+        "city": "East Rutherford"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Scotland",
+        "code": "SCO",
+        "championship_odds": 0.0019
+      },
+      "away": {
+        "name": "Brazil",
+        "code": "BRA",
+        "championship_odds": 0.1148
+      },
+      "prediction": {
+        "home_win": 0.125,
+        "draw": 0.271,
+        "away_win": 0.604
+      },
+      "result": null
+    },
+    {
+      "id": 54,
+      "date": "2026-06-25",
+      "kickoff": "18:00",
+      "group": "D",
+      "venue": {
+        "stadium": "Boston Stadium (Gillette Stadium)",
+        "city": "Foxborough"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Morocco",
+        "code": "MAR",
+        "championship_odds": 0.0051
+      },
+      "away": {
+        "name": "Haiti",
+        "code": "HAI",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.605,
+        "draw": 0.251,
+        "away_win": 0.143
+      },
+      "result": null
+    },
+    {
+      "id": 57,
+      "date": "2026-06-26",
+      "kickoff": "18:00",
+      "group": "E",
+      "venue": {
+        "stadium": "Atlanta Stadium (Mercedes-Benz Stadium)",
+        "city": "Atlanta"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Ecuador",
+        "code": "ECU",
+        "championship_odds": 0.02
+      },
+      "away": {
+        "name": "Germany",
+        "code": "GER",
+        "championship_odds": 0.0197
+      },
+      "prediction": {
+        "home_win": 0.318,
+        "draw": 0.303,
+        "away_win": 0.379
+      },
+      "result": null
+    },
+    {
+      "id": 58,
+      "date": "2026-06-26",
+      "kickoff": "18:00",
+      "group": "E",
+      "venue": {
+        "stadium": "Houston Stadium (NRG Stadium)",
+        "city": "Houston"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Cura\u00e7ao",
+        "code": "CUW",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Ivory Coast",
+        "code": "CIV",
+        "championship_odds": 0.0001
+      },
+      "prediction": {
+        "home_win": 0.114,
+        "draw": 0.276,
+        "away_win": 0.61
+      },
+      "result": null
+    },
+    {
+      "id": 59,
+      "date": "2026-06-26",
+      "kickoff": "22:00",
+      "group": "F",
+      "venue": {
+        "stadium": "Kansas City Stadium (Arrowhead Stadium)",
+        "city": "Kansas City"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Tunisia",
+        "code": "TUN",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Netherlands",
+        "code": "NED",
+        "championship_odds": 0.0412
+      },
+      "prediction": {
+        "home_win": 0.093,
+        "draw": 0.183,
+        "away_win": 0.724
+      },
+      "result": null
+    },
+    {
+      "id": 60,
+      "date": "2026-06-26",
+      "kickoff": "22:00",
+      "group": "F",
+      "venue": {
+        "stadium": "Seattle Stadium (Lumen Field)",
+        "city": "Seattle"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Japan",
+        "code": "JPN",
+        "championship_odds": 0.0252
+      },
+      "away": {
+        "name": "Sweden",
+        "code": "SWE",
+        "championship_odds": 0.0001
+      },
+      "prediction": {
+        "home_win": 0.637,
+        "draw": 0.245,
+        "away_win": 0.118
+      },
+      "result": null
+    },
+    {
+      "id": 63,
+      "date": "2026-06-27",
+      "kickoff": "22:00",
+      "group": "G",
+      "venue": {
+        "stadium": "Miami Stadium (Hard Rock Stadium)",
+        "city": "Miami Gardens"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Uruguay",
+        "code": "URU",
+        "championship_odds": 0.0097
+      },
+      "away": {
+        "name": "Spain",
+        "code": "ESP",
+        "championship_odds": 0.0678
+      },
+      "prediction": {
+        "home_win": 0.155,
+        "draw": 0.297,
+        "away_win": 0.547
+      },
+      "result": null
+    },
+    {
+      "id": 64,
+      "date": "2026-06-27",
+      "kickoff": "22:00",
+      "group": "G",
+      "venue": {
+        "stadium": "Philadelphia Stadium (Lincoln Financial Field)",
+        "city": "Philadelphia"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Cape Verde",
+        "code": "CPV",
+        "championship_odds": 0.0
+      },
+      "away": {
+        "name": "Saudi Arabia",
+        "code": "KSA",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.302,
+        "draw": 0.345,
+        "away_win": 0.352
+      },
+      "result": null
+    },
+    {
+      "id": 61,
+      "date": "2026-06-27",
+      "kickoff": "18:00",
+      "group": "H",
+      "venue": {
+        "stadium": "Dallas Stadium (AT&T Stadium)",
+        "city": "Arlington"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "New Zealand",
+        "code": "NZL",
+        "championship_odds": 0.0001
+      },
+      "away": {
+        "name": "Belgium",
+        "code": "BEL",
+        "championship_odds": 0.0246
+      },
+      "prediction": {
+        "home_win": 0.134,
+        "draw": 0.255,
+        "away_win": 0.61
+      },
+      "result": null
+    },
+    {
+      "id": 62,
+      "date": "2026-06-27",
+      "kickoff": "18:00",
+      "group": "H",
+      "venue": {
+        "stadium": "Monterrey Stadium (Estadio BBVA)",
+        "city": "Guadalupe"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Egypt",
+        "code": "EGY",
+        "championship_odds": 0.0007
+      },
+      "away": {
+        "name": "Iran",
+        "code": "IRN",
+        "championship_odds": 0.001
+      },
+      "prediction": {
+        "home_win": 0.297,
+        "draw": 0.369,
+        "away_win": 0.335
+      },
+      "result": null
+    },
+    {
+      "id": 65,
+      "date": "2026-06-28",
+      "kickoff": "18:00",
+      "group": "I",
+      "venue": {
+        "stadium": "Boston Stadium (Gillette Stadium)",
+        "city": "Foxborough"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Norway",
+        "code": "NOR",
+        "championship_odds": 0.0306
+      },
+      "away": {
+        "name": "France",
+        "code": "FRA",
+        "championship_odds": 0.1364
+      },
+      "prediction": {
+        "home_win": 0.269,
+        "draw": 0.26,
+        "away_win": 0.471
+      },
+      "result": null
+    },
+    {
+      "id": 66,
+      "date": "2026-06-28",
+      "kickoff": "18:00",
+      "group": "I",
+      "venue": {
+        "stadium": "New York New Jersey Stadium (MetLife Stadium)",
+        "city": "East Rutherford"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Senegal",
+        "code": "SEN",
+        "championship_odds": 0.0102
+      },
+      "away": {
+        "name": "Iraq",
+        "code": "IRQ",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.686,
+        "draw": 0.194,
+        "away_win": 0.12
+      },
+      "result": null
+    },
+    {
+      "id": 67,
+      "date": "2026-06-28",
+      "kickoff": "22:00",
+      "group": "J",
+      "venue": {
+        "stadium": "San Francisco Bay Area Stadium (Levi's Stadium)",
+        "city": "Santa Clara"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Jordan",
+        "code": "JOR",
+        "championship_odds": 0.0002
+      },
+      "away": {
+        "name": "Argentina",
+        "code": "ARG",
+        "championship_odds": 0.1939
+      },
+      "prediction": {
+        "home_win": 0.074,
+        "draw": 0.145,
+        "away_win": 0.781
+      },
+      "result": null
+    },
+    {
+      "id": 68,
+      "date": "2026-06-28",
+      "kickoff": "22:00",
+      "group": "J",
+      "venue": {
+        "stadium": "Los Angeles Stadium (SoFi Stadium)",
+        "city": "Inglewood"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Algeria",
+        "code": "ALG",
+        "championship_odds": 0.0011
+      },
+      "away": {
+        "name": "Austria",
+        "code": "AUT",
+        "championship_odds": 0.0044
+      },
+      "prediction": {
+        "home_win": 0.283,
+        "draw": 0.37,
+        "away_win": 0.347
+      },
+      "result": null
+    },
+    {
+      "id": 69,
+      "date": "2026-06-29",
+      "kickoff": "18:00",
+      "group": "K",
+      "venue": {
+        "stadium": "Kansas City Stadium (Arrowhead Stadium)",
+        "city": "Kansas City"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Colombia",
+        "code": "COL",
+        "championship_odds": 0.0502
+      },
+      "away": {
+        "name": "Portugal",
+        "code": "POR",
+        "championship_odds": 0.0558
+      },
+      "prediction": {
+        "home_win": 0.342,
+        "draw": 0.304,
+        "away_win": 0.354
+      },
+      "result": null
+    },
+    {
+      "id": 70,
+      "date": "2026-06-29",
+      "kickoff": "18:00",
+      "group": "K",
+      "venue": {
+        "stadium": "Atlanta Stadium (Mercedes-Benz Stadium)",
+        "city": "Atlanta"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "DR Congo",
+        "code": "COD",
+        "championship_odds": 0.0003
+      },
+      "away": {
+        "name": "Uzbekistan",
+        "code": "UZB",
+        "championship_odds": 0.0004
+      },
+      "prediction": {
+        "home_win": 0.364,
+        "draw": 0.284,
+        "away_win": 0.352
+      },
+      "result": null
+    },
+    {
+      "id": 71,
+      "date": "2026-06-29",
+      "kickoff": "22:00",
+      "group": "L",
+      "venue": {
+        "stadium": "Seattle Stadium (Lumen Field)",
+        "city": "Seattle"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Panama",
+        "code": "PAN",
+        "championship_odds": 0.0008
+      },
+      "away": {
+        "name": "England",
+        "code": "ENG",
+        "championship_odds": 0.0864
+      },
+      "prediction": {
+        "home_win": 0.124,
+        "draw": 0.264,
+        "away_win": 0.611
+      },
+      "result": null
+    },
+    {
+      "id": 72,
+      "date": "2026-06-29",
+      "kickoff": "22:00",
+      "group": "L",
+      "venue": {
+        "stadium": "Houston Stadium (NRG Stadium)",
+        "city": "Houston"
+      },
+      "status": "scheduled",
+      "home": {
+        "name": "Croatia",
+        "code": "CRO",
+        "championship_odds": 0.0135
+      },
+      "away": {
+        "name": "Ghana",
+        "code": "GHA",
+        "championship_odds": 0.0
+      },
+      "prediction": {
+        "home_win": 0.619,
+        "draw": 0.279,
+        "away_win": 0.103
+      },
+      "result": null
+    }
+  ]
+}

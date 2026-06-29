@@ -1,0 +1,68 @@
+/* WorldCup 2026 Analytics — design tokens
+   Canonical source: DESIGN.md ("The 2026 Broadcast Desk"). Hex values are the
+   sRGB renderings of the canonical OKLCH; OKLCH is noted alongside for reference. */
+
+:root {
+  /* --- Surfaces (tonal layering, hue 250, cool near-black) --- */
+  --studio-black: #080c0f;        /* oklch(15% 0.01 250)  — body, 70%+ of any view */
+  --surface-card: #101419;        /* oklch(19% 0.012 250) — cards */
+  --surface-elevated: #181e23;    /* oklch(23% 0.014 250) — hover / raised */
+  --surface-overlay: #21272d;     /* oklch(27% 0.014 250) — popovers */
+  --border-divider: #292e34;      /* oklch(30% 0.012 250) — structural lines */
+  --border-strong: #3a4047;       /* hover border */
+
+  /* --- Ink --- */
+  --ink: #f3f5f8;                 /* oklch(97% 0.005 250) — headings, scores */
+  --ink-secondary: #a5acb2;       /* oklch(74% 0.012 250) — supporting data */
+  --ink-muted: #8a9096;           /* oklch(65% 0.012 250) — quietest legible text */
+
+  /* --- Host nation data roles (role-locked) --- */
+  --mexican-green: #35c26d;       /* group-stage data */
+  --mexican-green-deep: #00a24f;
+  --canadian-red: #ed4a49;        /* live state */
+  --canadian-red-deep: #cc272e;
+  --american-blue: #439bf7;       /* predictions / probability */
+  --american-blue-deep: #217fd8;
+
+  /* --- Championship --- */
+  --trophy-gold: #e7bf4a;         /* championship moments only */
+  --trophy-gold-deep: #c7a01e;
+
+  /* --- Type --- */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --text-display: clamp(2.5rem, 5vw, 4.5rem);
+  --text-headline: 1.75rem;
+  --text-title: 1.125rem;
+  --text-body: 1rem;
+  --text-label: 0.8125rem;
+  --text-meta: 0.6875rem;
+
+  /* --- Spacing --- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+
+  /* --- Radius --- */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* --- Elevation (state feedback only; flat at rest) --- */
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --focus-ring: 0 0 0 2px var(--studio-black), 0 0 0 4px var(--ink);
+
+  /* --- Motion --- */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-ui: 180ms;        /* working-UI state transitions */
+  --dur-cinematic: 640ms; /* focal-moment choreography */
+
+  /* --- Z-index scale --- */
+  --z-sticky: 100;
+  --z-tooltip: 600;
+}

@@ -21,10 +21,10 @@ colors:
 typography:
   display:
     fontFamily: "'Barlow Condensed', 'Arial Narrow', sans-serif"
-    fontSize: "clamp(2.5rem, 5vw, 4.5rem)"
+    fontSize: "clamp(3.5rem, 13vw, 5.5rem)"
     fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: "-0.01em"
+    lineHeight: 0.9
+    letterSpacing: "-0.02em"
   headline:
     fontFamily: "'Barlow Condensed', 'Arial Narrow', sans-serif"
     fontSize: "1.75rem"
@@ -94,14 +94,8 @@ components:
     rounded: "{rounded.sm}"
     padding: "4px 8px"
   chip-group:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.mexican-green}"
-    typography: "{typography.label}"
-    rounded: "{rounded.sm}"
-    padding: "4px 8px"
-  chip-prediction:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.american-blue}"
+    backgroundColor: "{colors.mexican-green}"
+    textColor: "{colors.studio-black}"
     typography: "{typography.label}"
     rounded: "{rounded.sm}"
     padding: "4px 8px"
@@ -140,10 +134,10 @@ Four deliberate roles on a cool near-black ground. Every chromatic color encodes
 
 - **Mexican Green** (`#35c26d` / oklch(72% 0.17 152); deep `#00a24f`): Group data — standings tables, group-phase records, team groupings. Contrast on black: 8.5:1.
 - **Canadian Red** (`#ed4a49` / oklch(64% 0.20 25); deep `#cc272e`): Live state — active-match indicators, real-time score changes, the "LIVE" chip, current-round markers. Contrast on black: 5.3:1.
-- **American Blue** (`#439bf7` / oklch(68% 0.16 252); deep `#217fd8`): Predictions and probability — win odds, Monte Carlo outputs, confidence bars, projected bracket paths. Contrast on black: 6.8:1.
+- **American Blue** (`#439bf7` / oklch(68% 0.16 252); deep `#217fd8`): Predictions and probability — the win/draw/win probability bar is its primary home. **Concentrate it:** secondary probability figures (e.g. championship odds in a card footer) use neutral ink, so blue stays the one prediction signal per card rather than coating every number. Contrast on black: 6.8:1.
 
 ### Tertiary
-- **Trophy Gold** (`#e7bf4a` / oklch(82% 0.14 90); deep `#c7a01e`): Championship moments only — the final winner reveal, the champion card, the single top-odds callout. **One deliberate use per full-screen view, maximum.** Contrast on black: 11.2:1.
+- **Trophy Gold** (`#e7bf4a` / oklch(82% 0.14 90); deep `#c7a01e`): Championship moments only — the final winner reveal, the champion card, the masthead **favourite** odds (the predictor's single "who wins it" statement). **One deliberate use per full-screen view, maximum.** Contrast on black: 11.2:1.
 
 ### Neutral
 - **Ink** (`#f3f5f8` / oklch(97% 0.005 250)): Headlines, team names, scores. 18.0:1.
@@ -168,7 +162,7 @@ Four deliberate roles on a cool near-black ground. Every chromatic color encodes
 **Character:** Barlow Condensed is a broadcast-grade condensed grotesque — tall, tight, built for score cards, team names, and matchup headlines. Inter is a humanist UI sans with first-class tabular figures for everything the user reads or scans: analysis prose, labels, and every number. The pairing sits on a real contrast axis (condensed display vs. humanist UI); the two voices never blur.
 
 ### Hierarchy
-- **Display** (Barlow Condensed 800, `clamp(2.5rem, 5vw, 4.5rem)`, lh 0.95, ls −0.01em): Match scores, hero matchup team names, the champion reveal. The one fluid tier — these are the cinematic focal moments. Ceiling 4.5rem; never shouts past it.
+- **Display** (Barlow Condensed 800, lh 0.9, ls −0.02em): The cinematic focal tier, and the only fluid one. Two scales: **scoreboard** for match scores — `clamp(3.5rem, 13vw, 5.5rem)`, sized to dwarf everything else on the card like a stadium board — and the **page hero** ("Match Predictor" masthead) at `clamp(3.25rem, 10vw, 5.75rem)`. Ceiling 5.75rem; never past 6rem.
 - **Headline** (Barlow Condensed 700, `1.75rem`, lh 1.05): Section titles, tournament round labels, feature-card player names. Fixed size.
 - **Title** (Inter 600, `1.125rem`, lh 1.3): Card headers, panel section labels, stat-group headings.
 - **Body** (Inter 400, `1rem`, lh 1.6, max 70ch): Analysis text, model explanations, match notes. Never condensed.
@@ -197,7 +191,7 @@ The system is dark and layered. Depth comes from lightness delta between tonal s
 
 ## 5. Components
 
-No component library exists in code yet; these are the canonical primitives synthesized from the tokens above. Build to them.
+Built in `frontend/src/components/` (`MatchCard`, `ProbabilityBar`, `FixturesRail`). The specs below are normative; the code follows them.
 
 ### Buttons
 - **Shape:** Slightly squared (4px radius, `{rounded.md}`). Broadcast-sharp, not pill-soft.
@@ -206,13 +200,14 @@ No component library exists in code yet; these are the canonical primitives synt
 - **Hover:** Primary → `#ffffff`; Secondary → `#181e23` fill. Both 150 ms; cards/nodes add the Hover Lift. **Focus:** the neutral Focus Ring.
 
 ### Chips (status / category)
-- **Live:** `#101419` surface, `#ed4a49` text + a leading 6px red dot (the non-color signal). Uppercase Label.
-- **Group:** `#101419` surface, `#35c26d` text, leading group letter (A–L).
-- **Prediction:** `#101419` surface, `#439bf7` text, leading "%" or odds glyph.
-- **Shape:** 2px radius (`{rounded.sm}`), 4px 8px padding. Each chip carries a non-color signal so it survives CVD.
+- **Group:** bold, the boldest the green gets. The group letter (A–L) is a **filled green badge** — `#35c26d` fill, `#080c0f` text, 22px, weight 800 — with "GROUP" in green Label beside it. This is green's primary on-screen presence; every card carries it. The letter itself is the per-group differentiator (CVD-safe); groups are *not* hue-coded individually.
+- **Today / Live:** `#ed4a49` text on a 12% red tint, with a leading **pulsing red dot** (the non-color signal). Marks matches kicking off today — red's role-locked live/now use. Uppercase Label.
+- **Shape:** 2px radius (`{rounded.sm}`). Each chip carries a non-color signal (badge letter, pulsing dot) so it survives CVD.
 
-### Cards / Match Containers
-- **Corner:** 8px (`{rounded.lg}`). **Background:** `#101419` on the `#080c0f` body. **Border:** 1px `#292e34`. **Shadow:** none at rest; Hover Lift if interactive. **Padding:** 16–24px. Never nest a card in a card.
+### Match Card (scoreboard layout)
+- **Corner:** 8px (`{rounded.lg}`). **Background:** `#101419` on the `#080c0f` body. **Border:** 1px `#292e34`. **Shadow:** none at rest; Hover Lift only if interactive. **Padding:** generous — `clamp(24px, 4vw, 36px)` — the data breathes like a broadcast graphic, never a data table. Never nest a card in a card.
+- **Team row:** FIFA code (small, muted label) stacked above the full team **name** (Display, wraps — never truncates, so "Bosnia and Herzegovina" shows whole), with the big number right-aligned. **Score** in scoreboard Display (`clamp(3.5rem, 13vw, 5.5rem)`); for scheduled fixtures the **win %** takes that slot (slightly smaller, Inter tabular). The winner's score is `#f3f5f8`, the loser's `#8a9096` + row dimmed.
+- **Footer:** venue, and each team's championship odds in **neutral ink** (not blue — blue stays in the probability bar).
 
 ### Probability Bar (signature component)
 A horizontal three-segment bar for Home / Draw / Away (or projected outcomes). Home = American Blue, Draw = Ink Muted, Away = Ink Secondary — **blue marks the model's prediction channel**, neutrals carry the rest. Each segment is labeled with its tabular-nums percentage *inside or above the segment*, so the bar is never color-only. Segments animate width on mount (count-up), respecting reduced motion.
