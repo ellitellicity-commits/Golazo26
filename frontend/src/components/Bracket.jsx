@@ -395,6 +395,11 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
         </div>
       )}
 
+      <p className="bk__legend">
+        <span className="bk__legend-dot" aria-hidden="true" />
+        Gold dot marks a match played in the host nation’s own country (USA · Canada · Mexico) — where the venue advantage applies.
+      </p>
+
       <div className="bk__scroller">
         <div className="bk__canvas">
           <BracketTexture />

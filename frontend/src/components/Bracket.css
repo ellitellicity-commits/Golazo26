@@ -38,6 +38,23 @@
   color: var(--ink-secondary);
 }
 
+/* Key for the host dot, sitting just above the bracket framework. */
+.bk__legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-label);
+  color: var(--ink-secondary);
+}
+.bk__legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--trophy-gold);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
 .bk__controls {
   display: flex;
   align-items: center;
