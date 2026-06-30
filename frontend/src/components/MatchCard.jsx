@@ -1,8 +1,10 @@
 import ProbabilityBar from './ProbabilityBar'
 import './MatchCard.css'
 
-const DATE_FMT = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
-const TIME_FMT = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })
+// Fixture kickoffs/dates are UTC; format in UTC so US-local timezones don't
+// shift the day backwards (off-by-one).
+const DATE_FMT = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
+const TIME_FMT = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })
 
 function kickoffTime(fixture) {
   if (!fixture.kickoff) return null

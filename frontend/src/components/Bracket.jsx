@@ -11,7 +11,9 @@ import {
 import Confetti from './Confetti'
 import './Bracket.css'
 
-const DATE_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' })
+// All fixture dates are stored as UTC instants; format in UTC so US-local
+// timezones don't shift them back a day.
+const DATE_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })
 const fmtDay = (iso) => DATE_FMT.format(new Date(`${iso}T00:00:00Z`))
 const pct = (v) => `${Math.round(v * 100)}%`
 const fmtOdds = (v) => {

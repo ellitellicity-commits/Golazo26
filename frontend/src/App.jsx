@@ -44,9 +44,12 @@ const upcoming = scheduled.filter((f) => f.date !== TODAY)
 const groupStageRail = [...completed.slice(-3), ...upcoming.slice(0, 5)]
 
 const champion = oddsData.teams[0]
-const updated = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(
-  new Date(`${TODAY}T00:00:00Z`),
-)
+const updated = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+}).format(new Date(`${TODAY}T00:00:00Z`))
 
 // Card-states gallery is a component demo, not part of the product page.
 // Reachable at ?demo for design review; off the main page by default.
