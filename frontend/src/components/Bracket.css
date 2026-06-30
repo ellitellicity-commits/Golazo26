@@ -158,6 +158,8 @@
 .bk__scroller {
   overflow-x: auto;
   overflow-y: hidden;
+  /* Keep horizontal panning inside the bracket; don't trigger a history swipe. */
+  overscroll-behavior-x: contain;
   margin-inline: calc(-1 * var(--page-pad, 16px));
   padding-inline: var(--page-pad, 16px);
   padding-block: var(--space-xs);
@@ -249,8 +251,10 @@
 
 .bk-match__cap {
   position: absolute;
-  left: 2px;
-  right: 2px;
+  /* Inset from the box edges so the match number clears the vertical join /
+     connector lines that attach at the sides (6-8px breathing room). */
+  left: 9px;
+  right: 9px;
   bottom: calc(50% + var(--bk-box-h) / 2 + 6px);
   display: flex;
   align-items: center;
@@ -378,15 +382,16 @@
   font-weight: 800;
   line-height: 1;
 }
+/* Host nation at home: a compact gold dot rather than a "HOST" text pill, so the
+   win % always stays right-aligned inside the card (down to 390px). The dot
+   carries a ring for contrast on the elevated surface; the SR label + title
+   carry the meaning (not colour-only). */
 .bk-team__host {
-  font-size: 0.5rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--studio-black);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: var(--trophy-gold);
-  padding: 1px 3px;
-  border-radius: var(--radius-sm);
-  line-height: 1;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
   flex-shrink: 0;
 }
 .bk-team__val {
@@ -497,8 +502,32 @@
   border-color: color-mix(in oklab, var(--trophy-gold) 35%, var(--border-divider));
   background: var(--surface-overlay);
 }
-.bk-final-wrap .bk-match__cap {
-  justify-content: center;
+/* Dedicated "Final" heading right above the M103 box (mirrors the column
+   stage headers, emphasised at the box itself). Absolute so it doesn't shift
+   the box off the 50% line where the semi-final connectors meet it. */
+.bk-final-head {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.bk-final-head__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+}
+.bk-final-head__meta {
+  font-size: 0.6rem;
+  color: var(--ink-muted);
+  line-height: 1;
 }
 
 .bk-trophy-wrap {

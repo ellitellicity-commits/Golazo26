@@ -1,0 +1,407 @@
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--space-lg), 4vw, var(--space-xl));
+}
+
+/* --- Header --- */
+.groups__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+.groups__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 64ch;
+}
+.groups__title {
+  font-size: var(--text-display);
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+.groups__sub {
+  font-size: var(--text-body);
+  color: var(--ink-secondary);
+}
+.groups__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* --- Shared button vocabulary (neutral chrome — colour belongs to data) --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background var(--dur-ui) var(--ease-out-quint), border-color var(--dur-ui) var(--ease-out-quint),
+    color var(--dur-ui) var(--ease-out-quint);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--border-divider);
+}
+.btn--ghost:hover {
+  background: var(--surface-elevated);
+  border-color: var(--border-strong);
+}
+.btn--solid {
+  background: var(--ink);
+  color: var(--studio-black);
+}
+.btn--solid:hover {
+  background: #ffffff;
+}
+.btn--sim svg {
+  margin-left: -2px;
+}
+
+/* --- Legend --- */
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+}
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-label);
+  color: var(--ink-secondary);
+}
+
+/* --- Group list (expandable rows) --- */
+.groups__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.grow {
+  background: var(--surface-card);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.grow.is-open {
+  border-color: var(--border-strong);
+}
+
+.grow__btn {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto auto;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+  transition: background var(--dur-ui) var(--ease-out-quint);
+}
+.grow__btn:hover {
+  background: var(--surface-elevated);
+}
+.grow__badge {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.grow__id {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.grow__lead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  min-width: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-label);
+  overflow: hidden;
+}
+.grow__lead-team {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5ch;
+  white-space: nowrap;
+}
+.grow__lead-code {
+  color: var(--ink);
+  font-weight: 600;
+}
+.grow__lead-pts {
+  color: var(--ink-muted);
+}
+.grow__lead-sep {
+  margin-left: 0.5ch;
+  color: var(--border-strong);
+}
+.grow__played {
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.grow__chev {
+  color: var(--ink-muted);
+  transition: transform var(--dur-ui) var(--ease-out-quint);
+}
+.grow.is-open .grow__chev {
+  transform: rotate(180deg);
+}
+
+/* --- Collapsible panel --- */
+.grow__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-cinematic) var(--ease-out-quint);
+}
+.grow__panel.is-open {
+  grid-template-rows: 1fr;
+}
+.grow__panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* --- Standings table --- */
+.gtable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-label);
+}
+.gtable caption {
+  text-align: left;
+}
+.gtable thead th {
+  padding: var(--space-sm) var(--space-sm);
+  border-top: 1px solid var(--border-divider);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  text-align: right;
+}
+.gtable thead th abbr {
+  text-decoration: none;
+  cursor: help;
+}
+.gtable th.gtable__pos,
+.gtable td.gtable__pos {
+  text-align: center;
+  width: 40px;
+}
+.gtable th.gtable__team,
+.gtable td.gtable__team {
+  text-align: left;
+}
+.gtable tbody td {
+  padding: var(--space-sm);
+  border-top: 1px solid var(--border-divider);
+  text-align: right;
+  color: var(--ink-secondary);
+  vertical-align: middle;
+}
+.gtable tbody tr.is-q td,
+.gtable tbody tr.is-q3in td {
+  color: var(--ink);
+}
+.gtable__pts {
+  color: var(--ink);
+  font-weight: 700;
+}
+.gtable tbody td.gtable__pts {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Position chip — green fill marks a direct qualifying slot (group-data role);
+   the number + bold row are the non-colour signals (Colour-Blind Contract). */
+.gpos {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+/* Legend swatches: the colour alone carries the key (the adjacent text labels
+   each status), so no number inside. */
+.gpos--key {
+  min-width: 16px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+}
+.gpos.is-q {
+  background: var(--mexican-green);
+  color: var(--studio-black);
+}
+/* Third place, currently above the best-8 cut — on the bubble to advance.
+   Trophy gold is used here as a deliberate "on track to qualify" status (the
+   page carries no champion moment); the number + legend are the non-colour
+   signals that keep it Colour-Blind-Contract safe. */
+.gpos.is-q3 {
+  background: var(--trophy-gold);
+  color: var(--studio-black);
+}
+/* Third place below the cut, or fourth — provisionally out. */
+.gpos.is-out {
+  background: transparent;
+  color: var(--ink-muted);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+/* Team cell */
+.gtable__team {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.gtable__flag {
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.gtable__code {
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: var(--text-meta);
+  letter-spacing: 0.02em;
+}
+.gtable__name {
+  color: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groups__foot {
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+  max-width: 72ch;
+}
+
+/* --- Third-place race (single expandable panel) --- */
+.third {
+  background: var(--surface-card);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.third.is-open {
+  border-color: var(--border-strong);
+}
+.third__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+  transition: background var(--dur-ui) var(--ease-out-quint);
+}
+.third__btn:hover {
+  background: var(--surface-elevated);
+}
+.third.is-open .grow__chev {
+  transform: rotate(180deg);
+}
+.third__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.third__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+.third__note {
+  font-size: var(--text-label);
+  color: var(--ink-secondary);
+}
+.third__table th.third__grp,
+.third__table td.third__grp {
+  text-align: center;
+  width: 36px;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+.third__cut td {
+  padding: 6px var(--space-sm);
+  text-align: center;
+  font-size: var(--text-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--trophy-gold);
+  border-top: 1px solid var(--trophy-gold-deep);
+  background: color-mix(in srgb, var(--trophy-gold) 8%, transparent);
+}
+
+/* On narrow screens, drop the per-result columns; keep P, GD, Pts. */
+@media (max-width: 560px) {
+  .gtable__opt {
+    display: none;
+  }
+  .grow__lead {
+    display: none; /* the badge + id + count carry the collapsed row */
+  }
+  .grow__btn {
+    grid-template-columns: auto 1fr auto auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grow__panel {
+    transition: none;
+  }
+  .grow__chev,
+  .grow__btn,
+  .btn {
+    transition: none;
+  }
+}

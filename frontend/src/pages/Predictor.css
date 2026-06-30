@@ -1,0 +1,60 @@
+.predictor {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--space-2xl), 7vw, 80px);
+}
+
+.predictor__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 70ch;
+}
+.predictor__title {
+  font-size: var(--text-display);
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+.predictor__sub {
+  font-size: var(--text-body);
+  color: var(--ink-secondary);
+}
+
+/* --- ?demo states gallery (moved verbatim from the old single-page App) --- */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.gallery__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 60ch;
+}
+.gallery__title {
+  font-size: var(--text-headline);
+  text-transform: uppercase;
+}
+.gallery__sub {
+  font-size: var(--text-body);
+  color: var(--ink-secondary);
+}
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+.gallery__cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+}
+.gallery__caption {
+  font-size: var(--text-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  font-weight: 500;
+}

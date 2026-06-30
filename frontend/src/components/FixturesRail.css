@@ -29,6 +29,8 @@
   padding: 0 0 var(--space-sm);
   margin: 0;
   overflow-x: auto;
+  /* Don't let reaching the end of the rail chain into a browser history swipe. */
+  overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   /* fade the right edge to signal more content without a glass panel */
   scrollbar-width: thin;

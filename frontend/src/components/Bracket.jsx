@@ -67,7 +67,7 @@ function TeamLine({ c, prob, score, decided, isWinner, isLoser, championGold, ho
       </span>
       {host && (
         <span className="bk-team__host" title="Host nation playing at home — venue advantage applied">
-          HOST
+          <span className="visually-hidden">Host nation at home</span>
         </span>
       )}
       <span className="bk-team__val">
@@ -212,8 +212,8 @@ function Trophy({ lit }) {
   )
 }
 
-function Bracket({ groups }) {
-  const [mode, setMode] = useState('live')
+function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
+  const [mode, setMode] = useState(initialMode)
   const [simResults, setSimResults] = useState(null)
   const [revealed, setRevealed] = useState(() => new Set())
   const [running, setRunning] = useState(false)
@@ -264,9 +264,9 @@ function Bracket({ groups }) {
     }
 
     setRevealed(new Set())
-    let delay = 280
-    const perItem = 68
-    const roundPause = 480
+    let delay = 260
+    const perItem = 60
+    const roundPause = 380
     REVEAL_ORDER.forEach((round) => {
       round.forEach((id) => {
         const d = delay
@@ -290,6 +290,17 @@ function Bracket({ groups }) {
       }, delay),
     )
   }
+
+  // Deep-link from the Groups view: land in Simulate mode and play one bracket
+  // out automatically on mount. No ref guard here — under StrictMode the mount
+  // effects run twice with the clearTimers cleanup firing BETWEEN them, which
+  // cancels the first run's reveal timers. A persistent guard would then block
+  // re-scheduling on the second mount and leave the bracket stuck "Simulating…"
+  // forever. Re-running after the cleanup is correct and costs ~0.01ms.
+  useEffect(() => {
+    if (autoSimulate && initialMode === 'simulate') runSimulation()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Render-time helpers ------------------------------------------------------
   const revealedForMatch = mode === 'simulate' ? revealed : null
@@ -396,11 +407,18 @@ function Bracket({ groups }) {
             <div className="bk-stage bk-stage--final">Final</div>
             <div className="bk-center__body">
               <div className="bk-final-wrap">
+                <div className="bk-final-head">
+                  <span className="bk-final-head__label">Final</span>
+                  <span className="bk-final-head__meta">
+                    {META.final.city} · {fmtDay(META.final.date)}
+                  </span>
+                </div>
                 <BracketMatch
                   view={finalView}
                   side="center"
                   revealed={revealedForMatch}
                   championName={champion}
+                  hideCaption
                 />
               </div>
               <div className={`bk-trophy-wrap${champion ? ' is-won' : ''}`}>

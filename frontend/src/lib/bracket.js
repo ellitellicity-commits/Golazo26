@@ -27,13 +27,31 @@ const HOST_BONUS = 0.62 // log-odds rating units → ~+6-9pt swing at K below
 // Logistic on the rating gap. K tuned so clear favourites sit ~80–90% (a single
 // knockout match is never a sure thing); clamped so nothing reads as a lock.
 const K = 0.46
-export function winProb(home, away, venueCountry = null) {
+
+// Matchup probabilities are pure functions of (home, away, venue) and the same
+// pairings recur thousands of times across a Monte Carlo run. Memoise them into
+// a lookup table so a simulation loop is table reads, not repeated Math.exp —
+// the same precompute-the-matchups trick the offline notebook uses. Keyed by
+// venue too, because the host bonus is venue-specific.
+const PROB_CACHE = new Map()
+
+function computeWinProb(home, away, venueCountry) {
   let rh = RATING[home] ?? Math.log(FLOOR)
   let ra = RATING[away] ?? Math.log(FLOOR)
   if (venueCountry && HOST_OF[home] === venueCountry) rh += HOST_BONUS
   if (venueCountry && HOST_OF[away] === venueCountry) ra += HOST_BONUS
   const p = 1 / (1 + Math.exp(-K * (rh - ra)))
   return Math.min(0.9, Math.max(0.1, p))
+}
+
+export function winProb(home, away, venueCountry = null) {
+  const key = `${home}␟${away}␟${venueCountry || ''}`
+  let p = PROB_CACHE.get(key)
+  if (p === undefined) {
+    p = computeWinProb(home, away, venueCountry)
+    PROB_CACHE.set(key, p)
+  }
+  return p
 }
 
 // Is `name` a host nation playing at home at this venue country?
@@ -288,4 +306,25 @@ export const META = {
 // Title odds for a team name (for the champion card), formatted like the rest.
 export function titleOdds(name) {
   return ODDS[name] ?? 0
+}
+
+// The earliest knockout round that isn't fully decided in the real results —
+// the tournament's live stage. Derived from the same data the bracket renders,
+// so the home hub and the bracket never disagree.
+const STAGE_LABELS = ['Round of 32', 'Round of 16', 'Quarter-finals', 'Semi-finals', 'Third place', 'Final']
+export function currentStageLabel() {
+  const live = liveResults()
+  for (let i = 0; i < REVEAL_ORDER.length; i++) {
+    if (!REVEAL_ORDER[i].every((id) => live[id])) return STAGE_LABELS[i]
+  }
+  return 'Final'
+}
+
+// Whole days from the bracket's reference "today" to the final. Pinned to the
+// data's date (UTC) rather than the wall clock, so the count is reproducible
+// and consistent with every other date in the product.
+export function daysToFinal() {
+  const today = new Date(`${META.today}T00:00:00Z`)
+  const final = new Date(`${META.final.date}T00:00:00Z`)
+  return Math.round((final - today) / 86_400_000)
 }

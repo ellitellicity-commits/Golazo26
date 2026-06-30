@@ -1,0 +1,223 @@
+/* ============================================================================
+   Persistent chrome — sticky masthead (all viewports) + bottom tab bar (mobile)
+   ========================================================================== */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--studio-black);
+  border-bottom: 1px solid var(--border-divider);
+}
+
+.nav__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: clamp(var(--space-md), 4vw, var(--space-2xl));
+  row-gap: var(--space-sm);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--space-md) var(--page-pad);
+}
+
+/* --- Brand lockup --- */
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  min-width: 0;
+}
+.nav__mark {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.nav__wordmark {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.nav__title {
+  font-size: 1.4rem;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.nav__26 {
+  color: var(--trophy-gold);
+}
+.nav__hosts {
+  font-size: var(--text-meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* --- Desktop tab row --- */
+.nav__tabs {
+  display: none; /* shown ≥ 860px; mobile uses the bottom tab bar */
+  justify-self: center;
+  align-items: stretch;
+  gap: clamp(var(--space-md), 2vw, var(--space-xl));
+}
+.nav__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-sm) 2px;
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  transition: color var(--dur-ui) var(--ease-out-quint);
+}
+.nav__tab::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px; /* sit on the header divider */
+  height: 2px;
+  background: var(--american-blue);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--dur-ui) var(--ease-out-quint);
+}
+.nav__tab:hover {
+  color: var(--ink);
+}
+.nav__tab.is-active {
+  color: var(--ink);
+}
+.nav__tab.is-active::after {
+  transform: scaleX(1);
+}
+
+/* --- Model badge (persistent on every route) --- */
+.nav__badge {
+  justify-self: end;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4ch;
+  padding: 5px 10px;
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-full);
+  font-size: var(--text-label);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+.nav__badge-engine {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.nav__badge-dot {
+  color: var(--ink-muted);
+}
+.nav__badge-sims {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ============================================================================
+   Bottom tab bar — fixed, mobile only
+   ========================================================================== */
+.tabbar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: var(--z-sticky);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: color-mix(in srgb, var(--studio-black) 92%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-divider);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tabbar__tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 56px;
+  padding: var(--space-sm) 4px;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color var(--dur-ui) var(--ease-out-quint);
+}
+.tabbar__tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 26px;
+  height: 2px;
+  background: var(--american-blue);
+  border-radius: 0 0 2px 2px;
+  transform: translateX(-50%) scaleX(0);
+  transition: transform var(--dur-ui) var(--ease-out-quint);
+}
+.tabbar__tab:hover {
+  color: var(--ink-secondary);
+}
+.tabbar__tab.is-active {
+  color: var(--ink);
+}
+.tabbar__tab.is-active::before {
+  transform: translateX(-50%) scaleX(1);
+}
+.tabbar__icon {
+  display: block;
+}
+.tabbar__label {
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* ============================================================================
+   Breakpoint: desktop tabs in, bottom bar out
+   ========================================================================== */
+@media (min-width: 860px) {
+  .nav__tabs {
+    display: inline-flex;
+  }
+  .tabbar {
+    display: none;
+  }
+}
+
+/* Tighten the masthead on the narrowest phones so brand + badge still fit. */
+@media (max-width: 400px) {
+  .nav__inner {
+    column-gap: var(--space-sm);
+  }
+  .nav__title {
+    font-size: 1.2rem;
+  }
+  .nav__badge {
+    padding: 4px 8px;
+    gap: 0.3ch;
+  }
+  .nav__badge-unit {
+    display: none; /* keep "XGBoost · 10,000" — drop the trailing word only */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav__tab,
+  .nav__tab::after,
+  .tabbar__tab,
+  .tabbar__tab::before {
+    transition: none;
+  }
+}
