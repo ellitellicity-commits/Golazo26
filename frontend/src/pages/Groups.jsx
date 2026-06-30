@@ -1,5 +1,4 @@
 import { Fragment, useId, useState } from 'react'
-import { Link } from 'react-router-dom'
 import {
   getGroupStandings,
   getThirdPlaceRace,
@@ -205,12 +204,6 @@ function Groups() {
           <button type="button" className="btn btn--ghost" onClick={toggleAll} aria-pressed={allOpen}>
             {allOpen ? 'Collapse all' : 'Expand all'}
           </button>
-          <Link to="/bracket?sim=1" className="btn btn--solid btn--sim">
-            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
-              <path d="M5 3.5v9l7-4.5z" fill="currentColor" />
-            </svg>
-            Simulate from here
-          </Link>
         </div>
       </header>
 
@@ -229,8 +222,8 @@ function Groups() {
       <ThirdPlaceRace open={thirdOpen} onToggle={() => setThirdOpen((v) => !v)} />
 
       <p className="groups__foot">
-        Statuses are derived from completed results only and shift as remaining matches are played.
-        “Simulate from here” runs a Monte Carlo play-out of the knockout bracket these groups feed.
+        Statuses are derived from completed results only and shift as remaining matches are played. To play
+        the rest of the tournament out, use “Run Your Own Simulation” on the Bracket.
       </p>
     </section>
   )

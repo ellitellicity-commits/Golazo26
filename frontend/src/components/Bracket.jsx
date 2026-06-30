@@ -369,7 +369,7 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
               role="tab"
               aria-selected={mode === 'simulate'}
               className={`bk__mode${mode === 'simulate' ? ' is-on' : ''}`}
-              onClick={() => switchMode('simulate')}
+              onClick={() => (mode === 'simulate' ? runSimulation() : switchMode('simulate'))}
             >
               Run Your Own Simulation
             </button>
