@@ -88,12 +88,14 @@ function resolveSameGroupClashes(matches) {
 }
 
 /**
+ * @param {boolean} [fromScratch]  re-roll the whole tournament including played
+ *   group matches ("Reimagine"); default respects real results so far.
  * @returns {{ r32: object[], results: Object<number,object> }}
  *   r32: the seeded R32 matchups ({id, home, away, venue, date, kickoff, status})
  *   results: winner/loser for every knockout match id (R32 → final + third)
  */
-export function runFullSimulation(fixturesData) {
-  const { winners, runners, thirdsRanked } = simulateGroupQualifiers(fixturesData)
+export function runFullSimulation(fixturesData, fromScratch = false) {
+  const { winners, runners, thirdsRanked } = simulateGroupQualifiers(fixturesData, fromScratch)
   const slotToTeam = {}
   for (const g of Object.keys(winners)) slotToTeam[`1${g}`] = winners[g]
   for (const g of Object.keys(runners)) slotToTeam[`2${g}`] = runners[g]

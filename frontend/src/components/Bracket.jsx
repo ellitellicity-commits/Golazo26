@@ -261,14 +261,15 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
     setRevealed(new Set())
     setRunning(false)
     setChampion(null)
-    // "Run Your Own Simulation" runs immediately on selection; "Run Again"
-    // re-randomises. The Real Tournament view needs no run.
-    if (next === 'simulate') runSimulation()
+    // Both simulate modes run immediately on selection; "Run again" re-randomises.
+    // Reimagine re-rolls reality too (fromScratch). Real Tournament needs no run.
+    if (next === 'simulate') runSimulation(false)
+    else if (next === 'reimagine') runSimulation(true)
   }
 
-  const runSimulation = () => {
+  const runSimulation = (fromScratch = false) => {
     clearTimers()
-    const { r32, results } = runFullSimulation(fixtures)
+    const { r32, results } = runFullSimulation(fixtures, fromScratch)
     setSimR32(r32)
     setSimResults(results)
     setChampion(null)
@@ -323,7 +324,8 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
   }, [])
 
   // Render-time helpers ------------------------------------------------------
-  const revealedForMatch = mode === 'simulate' ? revealed : null
+  const isSim = mode === 'simulate' || mode === 'reimagine'
+  const revealedForMatch = isSim ? revealed : null
   const finalView = views[LAYOUT.finalId]
   const thirdView = views[LAYOUT.thirdId]
   const championTeam = champion ? views[LAYOUT.finalId].home.name === champion ? views[LAYOUT.finalId].home : views[LAYOUT.finalId].away : null
@@ -363,7 +365,9 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
           <p className="bk__sub">
             {mode === 'live'
               ? `The real tournament — ${META.final.stadium} final on ${fmtDay(META.final.date)}. Played matches show the result; upcoming ties show the model’s win probability.`
-              : 'A what-if run: the remaining group matches and the full knockout bracket are randomised from the model, so the qualifiers and their seeds change every run.'}
+              : mode === 'reimagine'
+                ? 'A from-scratch re-roll: every match — including the group games already played — is randomised, so the whole tournament diverges from what really happened.'
+                : 'A what-if from today: real results so far stand, and everything still to play is randomised from the model — so the knockout bracket changes every run.'}
           </p>
         </div>
 
@@ -383,20 +387,29 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
               role="tab"
               aria-selected={mode === 'simulate'}
               className={`bk__mode${mode === 'simulate' ? ' is-on' : ''}`}
-              onClick={() => (mode === 'simulate' ? runSimulation() : switchMode('simulate'))}
+              onClick={() => (mode === 'simulate' ? runSimulation(false) : switchMode('simulate'))}
             >
               Run Your Own Simulation
             </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'reimagine'}
+              className={`bk__mode${mode === 'reimagine' ? ' is-on' : ''}`}
+              onClick={() => (mode === 'reimagine' ? runSimulation(true) : switchMode('reimagine'))}
+            >
+              Reimagine Tournament
+            </button>
           </div>
-          {mode === 'simulate' && (
-            <button type="button" className="bk__run" onClick={runSimulation} disabled={running}>
+          {isSim && (
+            <button type="button" className="bk__run" onClick={() => runSimulation(mode === 'reimagine')} disabled={running}>
               {running ? 'Simulating…' : simResults ? 'Run again' : 'Run simulation'}
             </button>
           )}
         </div>
       </div>
 
-      {mode === 'simulate' && champion && championTeam && (
+      {isSim && champion && championTeam && (
         <div className="bk__champ" role="status">
           <span className="bk__champ-label">Simulated champion</span>
           <span className="bk__champ-team">

@@ -89,6 +89,9 @@ function buildGroups(scoreOf, fixtures) {
 // outcome probabilities), so each run produces a different but plausible table.
 const realScoreOf = (f) => (f.status === 'completed' && f.result ? f.result : null)
 const simScoreOf = (f) => (f.status === 'completed' && f.result ? f.result : simulateScore(f))
+// "Reimagine": ignore reality entirely and sample every fixture, so even played
+// group matches are re-rolled and the whole tournament diverges from history.
+const scratchScoreOf = (f) => simulateScore(f)
 
 function pick(weights) {
   const total = weights.reduce((s, [, w]) => s + w, 0)
@@ -269,14 +272,17 @@ export const QUALIFY_SLOTS = AUTO_SLOTS
 export const THIRD_PLACE_QUALIFIERS = THIRD_PLACE_SLOTS
 
 /**
- * One Monte Carlo realisation of how the group stage finishes: real results
- * stand, every remaining fixture is sampled, then the FIFA tiebreakers decide
- * each group and the third-place race. Returns the 32 qualifiers by slot —
- * different teams and seeds essentially every run.
+ * One Monte Carlo realisation of how the group stage finishes, then the FIFA
+ * tiebreakers decide each group and the third-place race. Returns the 32
+ * qualifiers by slot — different teams and seeds essentially every run.
+ * @param {boolean} [fromScratch]  when true, re-roll every match including
+ *   already-played ones (the "Reimagine" mode); otherwise real results stand and
+ *   only unplayed fixtures are sampled.
  * @returns {{winners:Object<string,string>, runners:Object<string,string>, thirdsRanked:string[]}}
  */
-export function simulateGroupQualifiers(fixturesData) {
-  const { ranked, thirdTable } = rankAll(simScoreOf, fixturesData.fixtures)
+export function simulateGroupQualifiers(fixturesData, fromScratch = false) {
+  const scoreOf = fromScratch ? scratchScoreOf : simScoreOf
+  const { ranked, thirdTable } = rankAll(scoreOf, fixturesData.fixtures)
   const winners = {}
   const runners = {}
   for (const g of ranked) {
