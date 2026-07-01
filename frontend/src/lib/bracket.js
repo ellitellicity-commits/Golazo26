@@ -331,8 +331,11 @@ export function buildViews(results, mode, r32 = bracketData.r32) {
       round: ROUND_OF[id],
       home,
       away,
-      homeHost: bothKnown && isHostAtHome(home.name, vc),
-      awayHost: bothKnown && isHostAtHome(away.name, vc),
+      // Host status depends only on THIS team being known and playing in its own
+      // country — not on the opponent being decided. A host that has advanced to
+      // a home venue keeps its badge even while it awaits an opponent.
+      homeHost: home.kind === 'team' && isHostAtHome(home.name, vc),
+      awayHost: away.kind === 'team' && isHostAtHome(away.name, vc),
       pHome: bothKnown ? winProb(home.name, away.name, vc) : null,
       venue,
       status: r ? 'decided' : 'pending',
