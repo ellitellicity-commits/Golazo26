@@ -1,9 +1,35 @@
 import { NavLink } from 'react-router-dom'
 import { Mark26 } from './BrandMarks'
-import { loadOdds } from '../lib/data'
+import { useTournamentData } from '../lib/tournamentData'
 import './AppNav.css'
 
-const oddsData = loadOdds()
+/**
+ * Data-source indicator. Red is the app's live-state channel (DESIGN.md §5), so
+ * a live feed reads as a pulsing red "LIVE" chip; the static snapshot reads as a
+ * quiet neutral "SNAPSHOT" with a hollow dot. The dot (filled vs hollow) carries
+ * the state without relying on colour alone.
+ */
+function DataSourceChip({ source }) {
+  const live = source === 'live'
+  return (
+    <span
+      className={`nav__source${live ? ' is-live' : ''}`}
+      aria-label={
+        live
+          ? 'Live results from football-data.org'
+          : 'Static snapshot — set FOOTBALL_DATA_API_KEY for live results'
+      }
+      title={
+        live
+          ? 'Live results from football-data.org'
+          : 'Static snapshot — set FOOTBALL_DATA_API_KEY for live results'
+      }
+    >
+      <span className="nav__source-dot" aria-hidden="true" />
+      <span className="nav__source-text" aria-hidden="true">{live ? 'Live' : 'Snapshot'}</span>
+    </span>
+  )
+}
 
 // Coherent hand-drawn line-icon set (matches the project's inline-SVG idiom:
 // 1.6px stroke, round joins). One glyph per destination — icons reinforce the
@@ -40,7 +66,8 @@ const TABS = [
  * (DESIGN.md §5); trophy gold stays reserved for genuine championship moments.
  */
 function AppNav() {
-  const sims = oddsData.simulations.toLocaleString('en-GB')
+  const { odds, source } = useTournamentData()
+  const sims = odds.simulations.toLocaleString('en-GB')
 
   return (
     <>
@@ -69,12 +96,15 @@ function AppNav() {
             ))}
           </nav>
 
-          <p className="nav__badge" title="Predictions from a gradient-boosted model over 10,000 Monte Carlo tournament runs">
-            <span className="nav__badge-engine">XGBoost</span>
-            <span className="nav__badge-dot" aria-hidden="true">·</span>
-            <span className="nav__badge-sims tnum">{sims}</span>
-            <span className="nav__badge-unit"> simulations</span>
-          </p>
+          <div className="nav__meta">
+            <DataSourceChip source={source} />
+            <p className="nav__badge" title="Predictions from a gradient-boosted model over 10,000 Monte Carlo tournament runs">
+              <span className="nav__badge-engine">XGBoost</span>
+              <span className="nav__badge-dot" aria-hidden="true">·</span>
+              <span className="nav__badge-sims tnum">{sims}</span>
+              <span className="nav__badge-unit"> simulations</span>
+            </p>
+          </div>
         </div>
       </header>
 

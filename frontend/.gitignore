@@ -11,6 +11,11 @@ node_modules
 dist
 dist-ssr
 
+# Local env — holds the football-data.org API key. Never commit; use .env.example.
+.env
+.env.local
+.env.*.local
+
 # Re-include src/lib: the repo-root .gitignore ignores `lib/` (a Python convention),
 # which would otherwise silently drop this React app's src/lib utilities.
 !src/lib/

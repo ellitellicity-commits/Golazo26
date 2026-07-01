@@ -4,10 +4,10 @@
 // odds.json (the same 10k-sim output the rest of the product shows).
 
 import bracketData from '../data/bracket.json'
-import { loadOdds } from './data'
+import { getOdds } from './data'
 import { teamMeta, flagUrl } from './teams'
 
-const oddsData = loadOdds()
+const oddsData = getOdds()
 
 // --- Strength ratings ------------------------------------------------------
 // A team's knockout strength is the log of its championship odds (the canonical

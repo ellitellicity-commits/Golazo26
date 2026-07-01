@@ -8,6 +8,7 @@ import {
   titleOdds,
 } from '../lib/bracket'
 import { runFullSimulation } from '../lib/simulation'
+import { useTournamentData } from '../lib/tournamentData'
 import Confetti from './Confetti'
 import './Bracket.css'
 
@@ -213,6 +214,7 @@ function Trophy({ lit }) {
 }
 
 function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
+  const { fixtures } = useTournamentData()
   const [mode, setMode] = useState(initialMode)
   const [simResults, setSimResults] = useState(null)
   const [simR32, setSimR32] = useState(null)
@@ -254,7 +256,7 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
 
   const runSimulation = () => {
     clearTimers()
-    const { r32, results } = runFullSimulation()
+    const { r32, results } = runFullSimulation(fixtures)
     setSimR32(r32)
     setSimResults(results)
     setChampion(null)

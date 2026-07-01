@@ -1,15 +1,13 @@
-import { Fragment, useId, useState } from 'react'
+import { Fragment, useId, useMemo, useState } from 'react'
 import {
   getGroupStandings,
   getThirdPlaceRace,
   QUALIFY_SLOTS,
   THIRD_PLACE_QUALIFIERS,
 } from '../lib/standings'
+import { useTournamentData } from '../lib/tournamentData'
 import { teamMeta } from '../lib/teams'
 import './Groups.css'
-
-const groups = getGroupStandings()
-const thirdRace = getThirdPlaceRace()
 
 const fmtGD = (gd) => (gd > 0 ? `+${gd}` : String(gd))
 
@@ -107,7 +105,7 @@ function GroupRow({ group, open, onToggle }) {
   )
 }
 
-function ThirdPlaceRace({ open, onToggle }) {
+function ThirdPlaceRace({ thirdRace, open, onToggle }) {
   const panelId = useId()
   const { rows, slots, complete } = thirdRace
   return (
@@ -175,6 +173,10 @@ function ThirdPlaceRace({ open, onToggle }) {
 }
 
 function Groups() {
+  const { fixtures } = useTournamentData()
+  const groups = useMemo(() => getGroupStandings(fixtures), [fixtures])
+  const thirdRace = useMemo(() => getThirdPlaceRace(fixtures), [fixtures])
+
   const [openSet, setOpenSet] = useState(() => new Set([groups[0]?.letter]))
   const [thirdOpen, setThirdOpen] = useState(false)
   const allOpen = openSet.size === groups.length
@@ -219,7 +221,7 @@ function Groups() {
         ))}
       </ul>
 
-      <ThirdPlaceRace open={thirdOpen} onToggle={() => setThirdOpen((v) => !v)} />
+      <ThirdPlaceRace thirdRace={thirdRace} open={thirdOpen} onToggle={() => setThirdOpen((v) => !v)} />
 
       <p className="groups__foot">
         Statuses are derived from completed results only and shift as remaining matches are played. To play

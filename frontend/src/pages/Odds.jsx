@@ -1,10 +1,9 @@
 import ChampionshipOdds from '../components/ChampionshipOdds'
-import { loadOdds } from '../lib/data'
-
-const oddsData = loadOdds()
+import { useTournamentData } from '../lib/tournamentData'
 
 function Odds() {
-  return <ChampionshipOdds odds={oddsData} />
+  const { odds } = useTournamentData()
+  return <ChampionshipOdds odds={odds} />
 }
 
 export default Odds

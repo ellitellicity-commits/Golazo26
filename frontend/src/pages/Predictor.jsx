@@ -1,17 +1,8 @@
+import { useMemo } from 'react'
 import FixturesRail from '../components/FixturesRail'
 import MatchCard from '../components/MatchCard'
-import { loadFixtures } from '../lib/data'
+import { useTournamentData } from '../lib/tournamentData'
 import './Predictor.css'
-
-const fixturesData = loadFixtures()
-const TODAY = fixturesData.generated
-const fixtures = fixturesData.fixtures
-const completed = fixtures.filter((f) => f.status === 'completed')
-const scheduled = fixtures.filter((f) => f.status === 'scheduled')
-
-const todaysMatches = scheduled.filter((f) => f.date === TODAY)
-const upcoming = scheduled.filter((f) => f.date !== TODAY)
-const groupStageRail = [...completed.slice(-3), ...upcoming.slice(0, 5)]
 
 // --- ?demo: the card-states gallery (component review, not the product page) --
 const showDemo = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('demo')
@@ -39,7 +30,7 @@ function probOfActual(f) {
   return f.prediction.draw
 }
 
-function buildDemoItems() {
+function buildDemoItems({ completed, fixtures, todaysMatches }) {
   const calledIt = completed
     .filter((f) => modelCalledIt(f))
     .sort((a, b) => Math.max(b.prediction.home_win, b.prediction.away_win) - Math.max(a.prediction.home_win, a.prediction.away_win))[0]
@@ -54,6 +45,19 @@ function buildDemoItems() {
 }
 
 function Predictor() {
+  const { fixtures: fixturesData } = useTournamentData()
+  const view = useMemo(() => {
+    const TODAY = fixturesData.generated
+    const fixtures = fixturesData.fixtures
+    const completed = fixtures.filter((f) => f.status === 'completed')
+    const scheduled = fixtures.filter((f) => f.status === 'scheduled')
+    const todaysMatches = scheduled.filter((f) => f.date === TODAY)
+    const upcoming = scheduled.filter((f) => f.date !== TODAY)
+    const groupStageRail = [...completed.slice(-3), ...upcoming.slice(0, 5)]
+    return { TODAY, fixtures, completed, scheduled, todaysMatches, groupStageRail }
+  }, [fixturesData])
+  const { TODAY, completed, scheduled, todaysMatches, groupStageRail } = view
+
   return (
     <div className="predictor">
       <header className="predictor__head">
@@ -82,7 +86,7 @@ function Predictor() {
             <p className="gallery__sub">Component demo — every state driven by the same card and real model output.</p>
           </div>
           <div className="gallery__grid">
-            {buildDemoItems().map((item) => (
+            {buildDemoItems(view).map((item) => (
               <figure className="gallery__cell" key={item.label}>
                 <figcaption className="gallery__caption">{item.label}</figcaption>
                 <MatchCard fixture={item.fixture} isToday={item.today} />

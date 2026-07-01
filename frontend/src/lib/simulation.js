@@ -4,12 +4,12 @@
 // run produces different qualifiers in different seeded positions.
 
 import bracketData from '../data/bracket.json'
-import { loadOdds } from './data'
+import { getOdds } from './data'
 import { teamMeta } from './teams'
 import { simulateKnockout } from './bracket'
 import { simulateGroupQualifiers } from './standings'
 
-const ODDS = Object.fromEntries(loadOdds().teams.map((t) => [t.team, t.championship_odds]))
+const ODDS = Object.fromEntries(getOdds().teams.map((t) => [t.team, t.championship_odds]))
 const groupOf = (name) => teamMeta(name).group
 
 // --- R32 slot template -----------------------------------------------------
@@ -92,8 +92,8 @@ function resolveSameGroupClashes(matches) {
  *   r32: the seeded R32 matchups ({id, home, away, venue, date, kickoff, status})
  *   results: winner/loser for every knockout match id (R32 → final + third)
  */
-export function runFullSimulation() {
-  const { winners, runners, thirdsRanked } = simulateGroupQualifiers()
+export function runFullSimulation(fixturesData) {
+  const { winners, runners, thirdsRanked } = simulateGroupQualifiers(fixturesData)
   const slotToTeam = {}
   for (const g of Object.keys(winners)) slotToTeam[`1${g}`] = winners[g]
   for (const g of Object.keys(runners)) slotToTeam[`2${g}`] = runners[g]

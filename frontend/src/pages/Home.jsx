@@ -1,61 +1,56 @@
+import { useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
 import { BrandField } from '../components/BrandMarks'
 import { currentStageLabel, daysToFinal } from '../lib/bracket'
 import { teamMeta, flagUrl } from '../lib/teams'
-import { loadFixtures, loadOdds } from '../lib/data'
+import { useTournamentData } from '../lib/tournamentData'
 import './Home.css'
-
-const oddsData = loadOdds()
-const fixturesData = loadFixtures()
-
-const favourite = oddsData.teams[0]
-const favMeta = teamMeta(favourite.team)
-const stage = currentStageLabel()
-const countdown = daysToFinal()
 
 // Dates are stored as UTC instants; format in UTC (matches the rest of the app).
 const DATE_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
-const updated = DATE_FMT.format(new Date(`${fixturesData.generated}T00:00:00Z`))
-
-const fixtures = fixturesData.fixtures
-const scheduled = fixtures.filter((f) => f.status === 'scheduled')
-const playedCount = fixtures.filter((f) => f.status === 'completed').length
-const todaysCount = scheduled.filter((f) => f.date === fixturesData.generated).length
 
 // One broadcast-rundown row per destination — a meta figure that actually means
 // something, a condensed title, a one-line read. Not a card grid (a hub menu).
-const DESTINATIONS = [
-  {
-    to: '/odds',
-    title: 'Championship Odds',
-    blurb: 'All 48 nations ranked by their Monte Carlo chance of lifting the trophy.',
-    meta: '48',
-    metaLabel: 'nations',
-  },
-  {
-    to: '/predictor',
-    title: 'Match Predictor',
-    blurb: 'Win, draw and loss probabilities for every fixture, match by match.',
-    meta: todaysCount > 0 ? String(todaysCount) : String(scheduled.length),
-    metaLabel: todaysCount > 0 ? 'today' : 'upcoming',
-  },
-  {
-    to: '/bracket',
-    title: 'Tournament Bracket',
-    blurb: 'The locked 32-team knockout — or simulate every tie to the final.',
-    meta: '32',
-    metaLabel: 'knockout',
-  },
-  {
-    to: '/groups',
-    title: 'Group Tables',
-    blurb: 'Standings and qualification probability for all twelve groups.',
-    meta: '12',
-    metaLabel: 'groups',
-  },
-]
+// The Predictor figure is fixture-derived, so the list is built per render.
+function buildDestinations({ todaysCount, upcomingCount }) {
+  return [
+    {
+      to: '/odds',
+      title: 'Championship Odds',
+      blurb: 'All 48 nations ranked by their Monte Carlo chance of lifting the trophy.',
+      meta: '48',
+      metaLabel: 'nations',
+    },
+    {
+      to: '/predictor',
+      title: 'Match Predictor',
+      blurb: 'Win, draw and loss probabilities for every fixture, match by match.',
+      meta: todaysCount > 0 ? String(todaysCount) : String(upcomingCount),
+      metaLabel: todaysCount > 0 ? 'today' : 'upcoming',
+    },
+    {
+      to: '/bracket',
+      title: 'Tournament Bracket',
+      blurb: 'The locked 32-team knockout — or simulate every tie to the final.',
+      meta: '32',
+      metaLabel: 'knockout',
+    },
+    {
+      to: '/groups',
+      title: 'Group Tables',
+      blurb: 'Standings and qualification probability for all twelve groups.',
+      meta: '12',
+      metaLabel: 'groups',
+    },
+  ]
+}
 
 function Snapshot() {
+  const { odds } = useTournamentData()
+  const favourite = odds.teams[0]
+  const favMeta = teamMeta(favourite.team)
+  const stage = currentStageLabel()
+  const countdown = daysToFinal()
   const favPct = (favourite.championship_odds * 100).toFixed(1)
   const flag = flagUrl(favMeta.iso)
   return (
@@ -84,6 +79,19 @@ function Snapshot() {
 }
 
 function Home() {
+  const { fixtures: fixturesData } = useTournamentData()
+  const { destinations, playedCount, updated } = useMemo(() => {
+    const fixtures = fixturesData.fixtures
+    const scheduled = fixtures.filter((f) => f.status === 'scheduled')
+    const playedCount = fixtures.filter((f) => f.status === 'completed').length
+    const todaysCount = scheduled.filter((f) => f.date === fixturesData.generated).length
+    return {
+      destinations: buildDestinations({ todaysCount, upcomingCount: scheduled.length }),
+      playedCount,
+      updated: DATE_FMT.format(new Date(`${fixturesData.generated}T00:00:00Z`)),
+    }
+  }, [fixturesData])
+
   return (
     <div className="home">
       <section className="home-hero">
@@ -101,7 +109,7 @@ function Home() {
       <nav className="home-menu" aria-label="Sections">
         <h2 className="home-menu__title">Explore the desk</h2>
         <ul className="home-menu__list">
-          {DESTINATIONS.map((d) => (
+          {destinations.map((d) => (
             <li key={d.to}>
               <NavLink to={d.to} className="dest">
                 <span className="dest__meta">

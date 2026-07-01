@@ -6,12 +6,9 @@
 //
 // Tiebreakers follow the 2026 FIFA regulations (see comparators below).
 
-import { loadFixtures } from './data'
 import { teamMeta, flagUrl } from './teams'
 import { GROUP_COLOR, onColor } from './bracket'
 import fifaRankings from '../data/fifa_rankings.json'
-
-const fixturesData = loadFixtures()
 
 const TEAMS_PER_GROUP = 4
 const MATCHES_PER_GROUP = (TEAMS_PER_GROUP * (TEAMS_PER_GROUP - 1)) / 2 // round-robin = 6
@@ -56,9 +53,9 @@ function blankRow(side) {
 // per group (head-to-head needs them). `scoreOf(fixture)` returns the result to
 // count, or null to skip — the real table counts completed results only; the
 // simulator also counts a sampled score for each remaining fixture.
-function buildGroups(scoreOf) {
+function buildGroups(scoreOf, fixtures) {
   const groups = {}
-  for (const f of fixturesData.fixtures) {
+  for (const f of fixtures) {
     const letter = f.group
     if (!letter) continue
     const g = (groups[letter] ||= { letter, teams: {}, matches: [] })
@@ -191,8 +188,8 @@ function rankThirdPlace(thirds) {
 
 // Rank every group and build the cross-group third-place table from a given
 // score provider. The shared core behind both the live table and the simulator.
-function rankAll(scoreOf) {
-  const groups = buildGroups(scoreOf)
+function rankAll(scoreOf, fixtures) {
+  const groups = buildGroups(scoreOf, fixtures)
   const ranked = Object.keys(groups)
     .sort()
     .map((letter) => ({ letter, rows: rankGroup(groups[letter]) }))
@@ -213,8 +210,8 @@ function rankAll(scoreOf) {
 //   q3in  — third place, currently inside the best-8 cut: provisionally through
 //   q3out — third place, currently outside the cut: provisionally out
 //   out   — fourth place: eliminated
-function compute() {
-  const { ranked, thirdTable } = rankAll(realScoreOf)
+function compute(fixtures) {
+  const { ranked, thirdTable } = rankAll(realScoreOf, fixtures)
   const thirdStatusByGroup = Object.fromEntries(
     thirdTable.map((t) => [t.group, { thirdRank: t.thirdRank, qualified: t.qualified }]),
   )
@@ -244,20 +241,27 @@ function compute() {
   return { groups: groupsOut, thirdTable, groupStageComplete }
 }
 
-// Memoised — fixtures.json is static within a session; recomputing per render
-// would be wasteful.
+// Memoised by fixtures-object identity. The loaded fixtures are stable for a
+// session (one object from loadFixtures), so this recomputes once when the data
+// resolves — but re-derives correctly if a different fixtures set is passed
+// (e.g. static → live).
 let _cache = null
-function data() {
-  return (_cache ||= compute())
+let _cacheFor = null
+function data(fixturesData) {
+  if (_cacheFor !== fixturesData) {
+    _cache = compute(fixturesData.fixtures)
+    _cacheFor = fixturesData
+  }
+  return _cache
 }
 
-export function getGroupStandings() {
-  return data().groups
+export function getGroupStandings(fixturesData) {
+  return data(fixturesData).groups
 }
 
 /** @returns {{rows:object[], slots:number, complete:boolean}} the third-place race */
-export function getThirdPlaceRace() {
-  const { thirdTable, groupStageComplete } = data()
+export function getThirdPlaceRace(fixturesData) {
+  const { thirdTable, groupStageComplete } = data(fixturesData)
   return { rows: thirdTable, slots: THIRD_PLACE_SLOTS, complete: groupStageComplete }
 }
 
@@ -271,8 +275,8 @@ export const THIRD_PLACE_QUALIFIERS = THIRD_PLACE_SLOTS
  * different teams and seeds essentially every run.
  * @returns {{winners:Object<string,string>, runners:Object<string,string>, thirdsRanked:string[]}}
  */
-export function simulateGroupQualifiers() {
-  const { ranked, thirdTable } = rankAll(simScoreOf)
+export function simulateGroupQualifiers(fixturesData) {
+  const { ranked, thirdTable } = rankAll(simScoreOf, fixturesData.fixtures)
   const winners = {}
   const runners = {}
   for (const g of ranked) {
