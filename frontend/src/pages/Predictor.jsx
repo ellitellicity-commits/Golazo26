@@ -1,11 +1,17 @@
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import FixturesRail from '../components/FixturesRail'
 import MatchCard from '../components/MatchCard'
+import KnockoutCard from '../components/KnockoutCard'
+import { buildViews, liveResults } from '../lib/bracket'
 import { useTournamentData } from '../lib/tournamentData'
 import './Predictor.css'
 
 // --- ?demo: the card-states gallery (component review, not the product page) --
 const showDemo = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('demo')
+
+const ROUND_LABEL = { r32: 'Round of 32', r16: 'Round of 16', qf: 'Quarter-final', sf: 'Semi-final', final: 'Final', third: 'Third place' }
+const ROUND_RANK = { r32: 0, r16: 1, qf: 2, sf: 3, third: 4, final: 5 }
 
 function modelCalledIt(f) {
   if (f.status !== 'completed' || !f.result) return null
@@ -30,12 +36,12 @@ function probOfActual(f) {
   return f.prediction.draw
 }
 
-function buildDemoItems({ completed, fixtures, todaysMatches }) {
+function buildDemoItems({ completed, allFixtures, todaysMatches }) {
   const calledIt = completed
     .filter((f) => modelCalledIt(f))
     .sort((a, b) => Math.max(b.prediction.home_win, b.prediction.away_win) - Math.max(a.prediction.home_win, a.prediction.away_win))[0]
   const upset = completed.filter((f) => modelCalledIt(f) === false).sort((a, b) => probOfActual(a) - probOfActual(b))[0]
-  const longName = [...fixtures].sort((a, b) => b.home.name.length + b.away.name.length - (a.home.name.length + a.away.name.length))[0]
+  const longName = [...allFixtures].sort((a, b) => b.home.name.length + b.away.name.length - (a.home.name.length + a.away.name.length))[0]
   return [
     { label: 'Today — live indicator', fixture: todaysMatches[0], today: true },
     { label: 'Completed — model called it', fixture: calledIt },
@@ -44,40 +50,93 @@ function buildDemoItems({ completed, fixtures, todaysMatches }) {
   ].filter((i) => i.fixture)
 }
 
+// Rail of upcoming knockout ties (reuses the shared .rail layout from FixturesRail).
+function KnockoutRail({ title, ties }) {
+  return (
+    <section className="rail" aria-label={title}>
+      <div className="rail__head">
+        <h2 className="rail__title display">{title}</h2>
+        <span className="rail__eyebrow">{ties.length} knockout {ties.length === 1 ? 'tie' : 'ties'}</span>
+      </div>
+      <ul className="rail__track">
+        {ties.map((v) => (
+          <li className="rail__item" key={v.id}>
+            <KnockoutCard view={v} roundLabel={ROUND_LABEL[v.round]} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
 function Predictor() {
-  const { fixtures: fixturesData } = useTournamentData()
+  const { fixtures: data } = useTournamentData()
+
   const view = useMemo(() => {
-    const TODAY = fixturesData.generated
-    const fixtures = fixturesData.fixtures
-    const completed = fixtures.filter((f) => f.status === 'completed')
-    const scheduled = fixtures.filter((f) => f.status === 'scheduled')
+    const TODAY = data.generated
+    const allFixtures = data.fixtures
+    const completed = allFixtures.filter((f) => f.status === 'completed')
+    const scheduled = allFixtures.filter((f) => f.status === 'scheduled')
     const todaysMatches = scheduled.filter((f) => f.date === TODAY)
-    const upcoming = scheduled.filter((f) => f.date !== TODAY)
-    const groupStageRail = [...completed.slice(-3), ...upcoming.slice(0, 5)]
-    return { TODAY, fixtures, completed, scheduled, todaysMatches, groupStageRail }
-  }, [fixturesData])
-  const { TODAY, completed, scheduled, todaysMatches, groupStageRail } = view
+    // Upcoming group matches: today first, then chronological.
+    const upcomingGroup = [...scheduled].sort(
+      (a, b) => (b.date === TODAY) - (a.date === TODAY) || a.date.localeCompare(b.date) || (a.kickoff || '').localeCompare(b.kickoff || ''),
+    )
+    // Finished group matches: most recent first.
+    const finished = [...completed].reverse()
+
+    // Upcoming knockout ties: both teams known, not yet decided (the real
+    // "upcoming matches" once the group stage is over). Predictions come from the
+    // same win-probability model the bracket uses.
+    const koViews = buildViews(liveResults(data.knockout), 'live', data.knockout.r32)
+    const upcomingKO = Object.values(koViews)
+      .filter((v) => v.home?.kind === 'team' && v.away?.kind === 'team' && !v.winner && v.status !== 'completed')
+      .sort((a, b) => ROUND_RANK[a.round] - ROUND_RANK[b.round] || a.id - b.id)
+
+    return { TODAY, allFixtures, completed, todaysMatches, upcomingGroup, upcomingKO, finished }
+  }, [data])
+
+  const { TODAY, upcomingGroup, upcomingKO, finished } = view
+  const nothingUpcoming = upcomingGroup.length === 0 && upcomingKO.length === 0
 
   return (
     <div className="predictor">
       <header className="predictor__head">
         <h1 className="predictor__title display">Match Predictor</h1>
         <p className="predictor__sub">
-          The model’s win, draw and loss probabilities for every fixture. Each card opens on the matchup;
-          the probability bar carries the prediction. Completed ties show the result against the call.
+          The model’s win probabilities for what’s next, up top. Completed matches — with the result against the
+          call — sit in Finished Matches below.
         </p>
       </header>
 
-      {todaysMatches.length > 0 && (
-        <FixturesRail title="Today" eyebrow={`${todaysMatches.length} matches`} fixtures={todaysMatches} todayDate={TODAY} />
+      {upcomingKO.length > 0 && <KnockoutRail title="Upcoming" ties={upcomingKO} />}
+
+      {upcomingGroup.length > 0 && (
+        <FixturesRail
+          title={upcomingKO.length > 0 ? 'Upcoming — Group Stage' : 'Upcoming'}
+          eyebrow={`${upcomingGroup.length} to play`}
+          fixtures={upcomingGroup}
+          todayDate={TODAY}
+        />
       )}
 
-      <FixturesRail
-        title="Group Stage"
-        eyebrow={`${completed.length} played · ${scheduled.length} to come`}
-        fixtures={groupStageRail}
-        todayDate={TODAY}
-      />
+      {nothingUpcoming && (
+        <section className="predictor__empty">
+          <p className="predictor__empty-title">No matches left to play.</p>
+          <p className="predictor__empty-body">
+            The tournament is complete. Revisit the run on the <Link to="/bracket">Tournament Bracket</Link>.
+          </p>
+        </section>
+      )}
+
+      {finished.length > 0 && (
+        <FixturesRail
+          title="Finished Matches"
+          eyebrow={`${finished.length} played`}
+          fixtures={finished}
+          todayDate={TODAY}
+        />
+      )}
 
       {showDemo && (
         <section className="gallery" aria-label="Match card states">

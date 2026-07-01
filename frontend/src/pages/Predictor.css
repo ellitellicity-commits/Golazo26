@@ -20,6 +20,29 @@
   color: var(--ink-secondary);
 }
 
+.predictor__empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: clamp(var(--space-xl), 6vw, 56px);
+  background: var(--surface-card);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+.predictor__empty-title {
+  font-size: var(--text-title);
+  font-weight: 600;
+  color: var(--ink);
+}
+.predictor__empty-body {
+  font-size: var(--text-body);
+  color: var(--ink-secondary);
+}
+.predictor__empty-body a {
+  color: var(--american-blue);
+}
+
 /* --- ?demo states gallery (moved verbatim from the old single-page App) --- */
 .gallery {
   display: flex;
