@@ -212,11 +212,15 @@ export function liveResults(knockout = STATIC_KNOCKOUT) {
   const r32 = knockout.r32 || bracketData.r32
   for (const m of r32) {
     if (m.status !== 'completed' || !m.result) continue
-    const homeWins = m.result.home_score > m.result.away_score
+    const r = m.result
+    // A knockout can be level after 90/120' and settled on penalties, so decide
+    // by the shootout when regulation was a draw — not by the (equal) score.
+    const homeWon =
+      r.home_score !== r.away_score ? r.home_score > r.away_score : r.penalties ? r.penalties.home_score > r.penalties.away_score : true
     results[m.id] = {
-      winner: homeWins ? m.home : m.away,
-      loser: homeWins ? m.away : m.home,
-      score: m.result,
+      winner: homeWon ? m.home : m.away,
+      loser: homeWon ? m.away : m.home,
+      score: r,
     }
   }
 
@@ -233,7 +237,13 @@ export function liveResults(knockout = STATIC_KNOCKOUT) {
     results[id] = {
       winner: hit.winner,
       loser: hit.winner === homeName ? awayName : homeName,
-      score: { home_score: hit.scores[homeName], away_score: hit.scores[awayName] },
+      score: {
+        home_score: hit.scores[homeName],
+        away_score: hit.scores[awayName],
+        ...(hit.penalties
+          ? { penalties: { home_score: hit.penalties[homeName], away_score: hit.penalties[awayName] } }
+          : {}),
+      },
     }
   }
   return results

@@ -102,22 +102,39 @@ function indexFinished(matches) {
     if (m.status !== 'FINISHED') continue
     const home = resolveTeamName(m.homeTeam?.name)
     const away = resolveTeamName(m.awayTeam?.name)
-    const hs = m.score?.fullTime?.home
-    const as = m.score?.fullTime?.away
+    const s = m.score || {}
+
+    // On a shootout, football-data.org's `fullTime` is the COMBINED total
+    // (regulation + extra time + penalties), so the match score to display is
+    // regulation+extra (falling back to fullTime minus the shootout). Group and
+    // regulation knockouts have no penalties, so fullTime is used directly.
+    const pens =
+      s.penalties && typeof s.penalties.home === 'number' && typeof s.penalties.away === 'number' ? s.penalties : null
+    let hs, as
+    if (pens && typeof s.regularTime?.home === 'number') {
+      hs = s.regularTime.home + (s.extraTime?.home || 0)
+      as = s.regularTime.away + (s.extraTime?.away || 0)
+    } else if (pens && typeof s.fullTime?.home === 'number') {
+      hs = s.fullTime.home - pens.home
+      as = s.fullTime.away - pens.away
+    } else {
+      hs = s.fullTime?.home
+      as = s.fullTime?.away
+    }
     if (!home || !away || typeof hs !== 'number' || typeof as !== 'number') continue
 
     let winner = null
-    const w = m.score?.winner
-    if (w === 'HOME_TEAM') winner = home
-    else if (w === 'AWAY_TEAM') winner = away
+    if (s.winner === 'HOME_TEAM') winner = home
+    else if (s.winner === 'AWAY_TEAM') winner = away
     else if (hs > as) winner = home
     else if (as > hs) winner = away
-    else {
-      const ph = m.score?.penalties?.home
-      const pa = m.score?.penalties?.away
-      if (typeof ph === 'number' && typeof pa === 'number' && ph !== pa) winner = ph > pa ? home : away
-    }
-    idx.set(pairKey(home, away), { scores: { [home]: hs, [away]: as }, winner })
+    else if (pens && pens.home !== pens.away) winner = pens.home > pens.away ? home : away
+
+    idx.set(pairKey(home, away), {
+      scores: { [home]: hs, [away]: as },
+      winner,
+      penalties: pens ? { [home]: pens.home, [away]: pens.away } : null,
+    })
   }
   return idx
 }
@@ -135,7 +152,11 @@ function overlayResults(list, index, nameOf) {
     return {
       ...m,
       status: 'completed',
-      result: { home_score: hit.scores[home], away_score: hit.scores[away] },
+      result: {
+        home_score: hit.scores[home],
+        away_score: hit.scores[away],
+        ...(hit.penalties ? { penalties: { home_score: hit.penalties[home], away_score: hit.penalties[away] } } : {}),
+      },
     }
   })
   return { out, applied }

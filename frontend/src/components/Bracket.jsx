@@ -87,7 +87,19 @@ function TeamLine({ c, prob, score, decided, isWinner, isLoser, championGold, ho
   )
 }
 
+// Penalty-shootout note, e.g. "PAR win 4–3 pens". The team lines already show
+// the regulation/extra-time score; this reports who won the shootout separately
+// (never a combined number). Null when the tie wasn't decided on penalties.
+function penNote(view) {
+  const p = view.score?.penalties
+  if (!p) return null
+  const homeWon = p.home_score > p.away_score
+  const winCode = homeWon ? view.home.code : view.away.code
+  return `${winCode} win ${Math.max(p.home_score, p.away_score)}–${Math.min(p.home_score, p.away_score)} pens`
+}
+
 function MatchCaption({ view, mode }) {
+  const pens = penNote(view)
   if (view.round === 'r32') {
     return (
       <div className="bk-match__cap">
@@ -98,7 +110,7 @@ function MatchCaption({ view, mode }) {
             Today
           </span>
         ) : view.status === 'completed' ? (
-          <span className="bk-match__ft">Full time</span>
+          <span className="bk-match__ft">{pens || 'Full time'}</span>
         ) : (
           <span className="bk-match__when">
             {fmtDay(view.date)} · {view.venue.city}
@@ -110,7 +122,7 @@ function MatchCaption({ view, mode }) {
   return (
     <div className="bk-match__cap">
       <span className="bk-match__no">M{view.id}</span>
-      {view.venue && <span className="bk-match__when">{view.venue.city}</span>}
+      {pens ? <span className="bk-match__ft">{pens}</span> : view.venue && <span className="bk-match__when">{view.venue.city}</span>}
     </div>
   )
 }
