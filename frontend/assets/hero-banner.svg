@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" fill="none" role="img" aria-label="World Cup 2026 animated banner">
+  <defs>
+    <linearGradient id="g26" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5aa2ff"/>
+      <stop offset="1" stop-color="#1e5fbf"/>
+    </linearGradient>
+    <linearGradient id="shine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="220" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffd84d" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+      <animateTransform attributeName="gradientTransform" type="translate" from="-320 0" to="1200 0" dur="3.2s" repeatCount="indefinite"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b">
+        <animate attributeName="stdDeviation" values="3;9;3" dur="2.6s" repeatCount="indefinite"/>
+      </feGaussianBlur>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="clip26">
+      <text x="600" y="215" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="230" text-anchor="middle">26</text>
+    </clipPath>
+  </defs>
+
+  <text x="600" y="215" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="230" text-anchor="middle" fill="url(#g26)" filter="url(#glow)">26</text>
+  <g clip-path="url(#clip26)">
+    <rect x="0" y="0" width="1200" height="300" fill="url(#shine)"/>
+  </g>
+
+  <g>
+    <g>
+      <circle r="22" fill="#ffffff" stroke="#0a0a0a" stroke-width="2"/>
+      <polygon points="0,-8 7.6,-2.5 4.7,6.5 -4.7,6.5 -7.6,-2.5" fill="#0a0a0a"/>
+      <g stroke="#0a0a0a" stroke-width="2">
+        <line x1="0" y1="-8" x2="0" y2="-20"/>
+        <line x1="7.6" y1="-2.5" x2="19" y2="-6.2"/>
+        <line x1="4.7" y1="6.5" x2="11.8" y2="16.2"/>
+        <line x1="-4.7" y1="6.5" x2="-11.8" y2="16.2"/>
+        <line x1="-7.6" y1="-2.5" x2="-19" y2="-6.2"/>
+      </g>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1.6s" repeatCount="indefinite"/>
+    </g>
+    <animateTransform attributeName="transform" type="translate" from="-40 262" to="1240 262" dur="7s" repeatCount="indefinite"/>
+  </g>
+</svg>
