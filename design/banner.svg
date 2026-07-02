@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" role="img" aria-label="World Cup 2026 Analytics — USA, Canada, Mexico">
+  <title>World Cup 2026 Analytics</title>
+  <defs>
+    <!-- Palette gradient across the 26 (Mexican green → American blue → trophy gold → Canadian red). -->
+    <linearGradient id="palette" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00a24f"/>
+      <stop offset="0.38" stop-color="#439bf7"/>
+      <stop offset="0.68" stop-color="#e7bf4a"/>
+      <stop offset="1" stop-color="#ed4a49"/>
+    </linearGradient>
+
+    <!-- One reusable 7-segment glyph per digit, thick + capsule-rounded to echo
+         the FWC2026 numeral treatment. Segments overlap so joins read continuous. -->
+    <g id="d2">
+      <rect x="110" y="40" width="150" height="46" rx="23"/>            <!-- top -->
+      <rect x="214" y="40" width="46" height="115" rx="23"/>            <!-- top-right -->
+      <rect x="110" y="132" width="150" height="46" rx="23"/>           <!-- middle -->
+      <rect x="110" y="155" width="46" height="115" rx="23"/>           <!-- bottom-left -->
+      <rect x="110" y="224" width="150" height="46" rx="23"/>           <!-- bottom -->
+    </g>
+    <g id="d6">
+      <rect x="294" y="40" width="150" height="46" rx="23"/>            <!-- top -->
+      <rect x="294" y="40" width="46" height="115" rx="23"/>            <!-- top-left -->
+      <rect x="294" y="132" width="150" height="46" rx="23"/>           <!-- middle -->
+      <rect x="294" y="155" width="46" height="115" rx="23"/>           <!-- bottom-left -->
+      <rect x="398" y="155" width="46" height="115" rx="23"/>           <!-- bottom-right -->
+      <rect x="294" y="224" width="150" height="46" rx="23"/>           <!-- bottom -->
+    </g>
+    <g id="num26"><use href="#d2"/><use href="#d6"/></g>
+
+    <!-- Clip the shimmer band to the exact 26 shape. -->
+    <clipPath id="clip26"><use href="#num26"/></clipPath>
+
+    <!-- Reusable badge silhouette + a white star for the USA shield. -->
+    <path id="shield" d="M0 0 H44 V30 C44 46 33 54 22 58 C11 54 0 46 0 30 Z"/>
+    <clipPath id="shieldClip"><use href="#shield"/></clipPath>
+    <g id="star" fill="#ffffff">
+      <path d="M0 -5 L1.18 -1.62 L4.76 -1.55 L1.9 0.62 L2.94 4.05 L0 2 L-2.94 4.05 L-1.9 0.62 L-4.76 -1.55 L-1.18 -1.62 Z"/>
+    </g>
+
+    <style>
+      /* Broadcast shimmer: a bright band sweeps across the 26, then rests. */
+      .shine { fill: #ffffff; opacity: 0; animation: sweep 4.2s ease-in-out infinite; }
+      @keyframes sweep {
+        0%   { transform: translateX(-320px); opacity: 0; }
+        10%  { opacity: 0.5; }
+        34%  { transform: translateX(560px); opacity: 0; }
+        100% { transform: translateX(560px); opacity: 0; }
+      }
+      /* Ball rolls across the 26 (translate + matched rotation), looping off-screen. */
+      .ball { animation: roll 6.5s linear infinite; }
+      @keyframes roll {
+        0%   { transform: translateX(-70px) rotate(0deg); }
+        100% { transform: translateX(1270px) rotate(1440deg); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .shine { animation: none; opacity: 0; }
+        .ball  { animation: none; transform: translateX(360px); }
+      }
+    </style>
+  </defs>
+
+  <!-- Studio-black field with a faint palette wash for depth. -->
+  <rect width="1200" height="300" rx="26" fill="#080c0f"/>
+  <g opacity="0.13">
+    <circle cx="150" cy="250" r="150" fill="#00a24f"/>
+    <path d="M1200 0 a150 150 0 0 1 -150 150 H1200 Z" fill="#439bf7"/>
+    <circle cx="1040" cy="300" r="120" fill="#ed4a49"/>
+  </g>
+  <rect x="4" y="4" width="1192" height="292" rx="24" fill="none" stroke="#292e34" stroke-width="1.5"/>
+
+  <!-- The 26 -->
+  <use href="#num26" fill="url(#palette)"/>
+  <g clip-path="url(#clip26)">
+    <rect class="shine" x="0" y="-40" width="150" height="380" transform="skewX(-18)"/>
+  </g>
+
+  <!-- Rolling soccer ball, along the baseline of the 26 -->
+  <g transform="translate(0,246)">
+    <g class="ball">
+      <circle r="24" fill="#f3f5f8" stroke="#080c0f" stroke-width="2"/>
+      <path d="M0 -10 L9.5 -3.1 L5.9 8 L-5.9 8 L-9.5 -3.1 Z" fill="#080c0f"/>
+      <path d="M0 -10 V-22 M9.5 -3.1 L20 -7 M5.9 8 L12 18 M-5.9 8 L-12 18 M-9.5 -3.1 L-20 -7"
+            fill="none" stroke="#080c0f" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Wordmark -->
+  <g font-family="'Arial Narrow', 'Helvetica Neue', Arial, sans-serif">
+    <text x="500" y="130" font-size="66" font-weight="800" letter-spacing="1" fill="#f3f5f8">WORLD CUP 2026</text>
+    <text x="502" y="178" font-size="34" font-weight="700" letter-spacing="7" fill="#e7bf4a">ANALYTICS</text>
+    <line x1="503" y1="200" x2="880" y2="200" stroke="#292e34" stroke-width="2"/>
+    <text x="503" y="230" font-size="19" font-weight="600" letter-spacing="3" fill="#a5acb2">PREDICTOR · SIMULATOR · DASHBOARD</text>
+  </g>
+
+  <!-- Host-nation shields (top-right): USA · Canada · Mexico -->
+  <g font-family="'Arial Narrow', Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1" fill="#a5acb2" text-anchor="middle">
+    <!-- USA -->
+    <g transform="translate(998,26)">
+      <g clip-path="url(#shieldClip)"><rect width="44" height="58" fill="#217fd8"/></g>
+      <use href="#star" transform="translate(14,17) scale(1.1)"/>
+      <use href="#star" transform="translate(30,17) scale(1.1)"/>
+      <use href="#star" transform="translate(22,33) scale(1.1)"/>
+      <path d="M0 0 H44 V30 C44 46 33 54 22 58 C11 54 0 46 0 30 Z" fill="none" stroke="#0b0f12" stroke-width="2"/>
+      <text x="22" y="76">USA</text>
+    </g>
+    <!-- Canada -->
+    <g transform="translate(1053,26)">
+      <g clip-path="url(#shieldClip)">
+        <rect width="44" height="58" fill="#ffffff"/>
+        <rect width="12" height="58" fill="#ed4a49"/>
+        <rect x="32" width="12" height="58" fill="#ed4a49"/>
+      </g>
+      <path d="M22 12 l2.2 4.3 4.8 -1 -1.6 4.1 4 2.3 -3.3 2 1.5 4.4 -4.7 -1.2 -0.6 4.7 -2.3 -3.6 -2.3 3.6 -0.6 -4.7 -4.7 1.2 1.5 -4.4 -3.3 -2 4 -2.3 -1.6 -4.1 4.8 1 z" fill="#ed4a49"/>
+      <path d="M0 0 H44 V30 C44 46 33 54 22 58 C11 54 0 46 0 30 Z" fill="none" stroke="#0b0f12" stroke-width="2"/>
+      <text x="22" y="76">CANADA</text>
+    </g>
+    <!-- Mexico -->
+    <g transform="translate(1108,26)">
+      <g clip-path="url(#shieldClip)">
+        <rect width="14.7" height="58" fill="#00a24f"/>
+        <rect x="14.7" width="14.6" height="58" fill="#ffffff"/>
+        <rect x="29.3" width="14.7" height="58" fill="#ed4a49"/>
+      </g>
+      <circle cx="22" cy="26" r="5.5" fill="#7a5a2e"/>
+      <path d="M0 0 H44 V30 C44 46 33 54 22 58 C11 54 0 46 0 30 Z" fill="none" stroke="#0b0f12" stroke-width="2"/>
+      <text x="22" y="76">MEXICO</text>
+    </g>
+  </g>
+</svg>

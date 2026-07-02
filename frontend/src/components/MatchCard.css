@@ -121,6 +121,7 @@
 
 /* --- Teams (stadium scoreboard) --- */
 .mc__teams {
+  position: relative; /* anchors the goal-burst overlay */
   display: flex;
   flex-direction: column;
   gap: var(--space-md);

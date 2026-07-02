@@ -78,6 +78,12 @@ function MatchCard({ fixture, isToday = false }) {
 
   const pred = { homeWin: prediction.home_win, draw: prediction.draw, awayWin: prediction.away_win }
 
+  const [burst, clearBurst] = useGoalBurst({
+    live: isLive,
+    homeScore: result?.home_score,
+    awayScore: result?.away_score,
+  })
+
   return (
     <article
       className={`mc${isCompleted ? ' mc--completed' : ''}${isLive ? ' mc--live' : ''}`}
@@ -110,6 +116,7 @@ function MatchCard({ fixture, isToday = false }) {
       </header>
 
       <div className="mc__teams">
+        {burst && <GoalBurst side={burst.side} key={burst.key} onDone={clearBurst} />}
         <TeamRow
           team={home}
           winProb={prediction.home_win}
@@ -165,9 +172,14 @@ function MatchCard({ fixture, isToday = false }) {
         </dl>
       </footer>
 
-      {isLive && (
-        <LiveStatsPanel homeName={home.name} awayName={away.name} homeTeam={home.name} awayTeam={away.name} />
-      )}
+      <MatchStatsPanel
+        homeName={home.name}
+        awayName={away.name}
+        homeTeam={home.name}
+        awayTeam={away.name}
+        status={status}
+        date={fixture.date}
+      />
     </article>
   )
 }

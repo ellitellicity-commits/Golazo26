@@ -1,4 +1,5 @@
-import LiveStatsPanel from './LiveStatsPanel'
+import MatchStatsPanel from './MatchStatsPanel'
+import GoalBurst, { useGoalBurst } from './GoalBurst'
 import { liveClock } from '../lib/live'
 import './KnockoutCard.css'
 
@@ -51,6 +52,12 @@ function KnockoutCard({ view, roundLabel }) {
   const live = view.status === 'live'
   const when = whenLabel(view)
 
+  const [burst, clearBurst] = useGoalBurst({
+    live,
+    homeScore: view.score?.home_score,
+    awayScore: view.score?.away_score,
+  })
+
   return (
     <article className={`koc${live ? ' koc--live' : ''}`} aria-label={`${view.home.name} versus ${view.away.name}, ${roundLabel}`}>
       <header className="koc__head">
@@ -66,6 +73,7 @@ function KnockoutCard({ view, roundLabel }) {
       </header>
 
       <div className="koc__teams">
+        {burst && <GoalBurst side={burst.side} key={burst.key} onDone={clearBurst} />}
         <TeamRow team={view.home} pct={homePct} favored={homePct >= awayPct} score={live ? view.score.home_score : null} />
         <TeamRow team={view.away} pct={awayPct} favored={awayPct > homePct} score={live ? view.score.away_score : null} />
       </div>
@@ -96,14 +104,14 @@ function KnockoutCard({ view, roundLabel }) {
         </footer>
       )}
 
-      {live && (
-        <LiveStatsPanel
-          homeName={view.home.name}
-          awayName={view.away.name}
-          homeTeam={view.home.name}
-          awayTeam={view.away.name}
-        />
-      )}
+      <MatchStatsPanel
+        homeName={view.home.name}
+        awayName={view.away.name}
+        homeTeam={view.home.name}
+        awayTeam={view.away.name}
+        status={view.status}
+        date={view.date}
+      />
     </article>
   )
 }
