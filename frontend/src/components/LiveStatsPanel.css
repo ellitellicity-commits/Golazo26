@@ -149,10 +149,15 @@
 .lsp-event__marker {
   flex: none;
   width: 14px;
-  text-align: center;
-  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-/* Cards are literal coloured rectangles; a goal gets the gold key-moment accent. */
+/* A goal gets the gold key-moment accent (inherited by the ball's currentColor);
+   cards are literal coloured rectangles. */
+.lsp-event__marker--goal {
+  color: var(--trophy-gold);
+}
 .lsp-event__marker--yellow,
 .lsp-event__marker--red {
   width: 10px;

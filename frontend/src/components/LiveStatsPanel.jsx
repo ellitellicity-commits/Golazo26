@@ -97,8 +97,27 @@ function StatRow({ row, home, away }) {
   )
 }
 
-const EVENT_GLYPH = { goal: '⚽', yellow: '', red: '', sub: '⇄' }
 const EVENT_LABEL = { goal: 'Goal', yellow: 'Yellow card', red: 'Red card', sub: 'Substitution' }
+
+// Inline soccer-ball glyph in the project icon idiom (stroke circle + filled
+// pentagon + spokes). Cards render as coloured rectangles via CSS, so only the
+// goal marker needs a glyph.
+function GoalBall() {
+  return (
+    <svg className="lsp-event__ball" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+      <circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M8 5.7 10.19 7.29 9.35 9.86 6.65 9.86 5.81 7.29Z" fill="currentColor" />
+      <path
+        d="M8 5.7V1.9M10.19 7.29 13.8 6.12M9.35 9.86 11.59 12.93M6.65 9.86 4.41 12.93M5.81 7.29 2.2 6.12"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
 
 function EventRow({ ev, homeTeam, awayTeam }) {
   const team = ev.side === 'home' ? homeTeam : ev.side === 'away' ? awayTeam : ''
@@ -106,7 +125,7 @@ function EventRow({ ev, homeTeam, awayTeam }) {
     <li className={`lsp-event lsp-event--${ev.kind}`}>
       <span className="lsp-event__min tnum">{ev.minute}</span>
       <span className={`lsp-event__marker lsp-event__marker--${ev.kind}`} aria-hidden="true">
-        {EVENT_GLYPH[ev.kind]}
+        {ev.kind === 'goal' && <GoalBall />}
       </span>
       <span className="lsp-event__player">
         <span className="visually-hidden">{EVENT_LABEL[ev.kind]} — </span>
