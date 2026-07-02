@@ -1,7 +1,8 @@
-/* Expandable live stats panel. Lives in the footer of a live match card. Sits
-   on a dark surface with a faint green "under-lights pitch" wash — green stays
-   atmospheric here, never a data channel (home stats are blue, away neutral;
-   red stays the live signal; gold marks goals). */
+/* Expandable match-detail panel (pre-match / live / final). Lives in the footer
+   of a match card. Sits on a dark surface with a faint green "under-lights pitch"
+   wash — green stays atmospheric here, never a data channel (home stats are blue,
+   away neutral; red stays the live signal; gold marks goals). The .lsp- prefix is
+   the panel's own stable token (legacy of its live-only origin). */
 .lsp {
   border-top: 1px solid var(--border-divider);
   margin-top: var(--space-sm);
@@ -29,6 +30,49 @@
 }
 .lsp__summary-label {
   flex: 1;
+}
+
+/* State badge — neutral for pre/final, role-locked red for live (the one place
+   the panel's chrome carries colour). Each badge reads as text, not just a hue. */
+.lsp__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-meta);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.lsp__badge--pre {
+  color: var(--ink-secondary);
+  background: var(--surface-overlay);
+}
+.lsp__badge--final {
+  color: var(--ink);
+  background: var(--surface-overlay);
+}
+.lsp__badge--live {
+  color: var(--canadian-red);
+  background: color-mix(in oklab, var(--canadian-red) 14%, transparent);
+}
+.lsp__badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--canadian-red);
+  animation: lsp-pulse 1.6s var(--ease-out-quint) infinite;
+}
+@keyframes lsp-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
 .lsp__minute {
   color: var(--canadian-red);

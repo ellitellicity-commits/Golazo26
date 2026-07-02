@@ -1,12 +1,24 @@
 import { useEffect, useState } from 'react'
-import { loadLiveMatch } from '../lib/espn'
-import './LiveStatsPanel.css'
+import { loadMatchSummaryByTeams } from '../lib/espn'
+import './MatchStatsPanel.css'
 
-// Live stats panel for an in-play tie. Collapsed by default; only when opened
-// does it fetch ESPN's live summary (lineups, team stats, events, minute) and
-// poll it every 60s while open and the tab is visible. Data source is unofficial
-// (see lib/espn.js), so every failure resolves to an "unavailable" state.
+// Expandable match-detail panel for a fixture in any state. Collapsed by default;
+// only when opened does it fetch ESPN's summary (line-ups, team stats, events,
+// minute). What it shows follows the match state:
+//   pre    → confirmed line-ups (no stats, no events)
+//   live   → live stats + a recent goals/cards strip + the running minute; polls
+//   final  → final stats + the full chronological goal/card summary; no polling
+// Data source is unofficial (see lib/espn.js), so every failure resolves to an
+// "unavailable"/pre-match state rather than breaking the card.
 const POLL_MS = 60_000
+
+const STATE_META = {
+  pre: { label: 'Pre-Match', credit: 'Line-ups · ESPN', empty: 'Line-ups will be confirmed before kickoff.' },
+  live: { label: 'Live', credit: 'Live data · ESPN', empty: 'Live stats aren’t available for this match right now.' },
+  final: { label: 'Final', credit: 'Final data · ESPN', empty: 'Match stats aren’t available for this match.' },
+}
+
+const stateOf = (status) => (status === 'live' ? 'live' : status === 'completed' ? 'final' : 'pre')
 
 function initialsOf(name) {
   const parts = name.trim().split(/\s+/)
@@ -136,41 +148,66 @@ function EventRow({ ev, homeTeam, awayTeam }) {
   )
 }
 
-function LiveStatsPanel({ homeName, awayName, homeTeam, awayTeam }) {
+/**
+ * @param {object} p
+ * @param {string} p.homeName  canonical home team name (for ESPN reconciliation)
+ * @param {string} p.awayName  canonical away team name
+ * @param {string} p.homeTeam  display name for the home team
+ * @param {string} p.awayTeam  display name for the away team
+ * @param {'scheduled'|'live'|'completed'} p.status  fixture state (drives the panel)
+ * @param {string|null} [p.date]  fixture date (ISO) — lets a finished match resolve
+ */
+function MatchStatsPanel({ homeName, awayName, homeTeam, awayTeam, status, date = null }) {
+  const stateKey = stateOf(status)
+  const meta = STATE_META[stateKey]
   const [open, setOpen] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [data, setData] = useState(null)
+  const [tab, setTab] = useState(stateKey === 'pre' ? 'lineups' : 'stats')
 
   useEffect(() => {
     if (!open) return
     let cancelled = false
     let timer
+    const poll = stateKey === 'live' // pre/final are static; only a live tie polls
     const tick = async () => {
       if (document.visibilityState === 'hidden') {
-        timer = setTimeout(tick, POLL_MS)
+        if (poll) timer = setTimeout(tick, POLL_MS)
         return
       }
-      const d = await loadLiveMatch(homeName, awayName)
+      const d = await loadMatchSummaryByTeams(homeName, awayName, date)
       if (cancelled) return
       setData(d)
       setLoaded(true)
-      timer = setTimeout(tick, POLL_MS)
+      if (poll) timer = setTimeout(tick, POLL_MS)
     }
     tick()
     return () => {
       cancelled = true
       clearTimeout(timer)
     }
-  }, [open, homeName, awayName])
+  }, [open, homeName, awayName, date, stateKey])
 
-  // Recent goals + cards only (subs are noise for the highlight strip).
-  const highlights = data ? data.events.filter((e) => e.kind !== 'sub').slice(0, 4) : []
+  // Which tabs the fetched data can actually fill, and the resolved active one.
+  const tabs = []
+  if (data?.hasLineups) tabs.push('lineups')
+  if (data?.hasStats) tabs.push('stats')
+  const activeTab = tabs.includes(tab) ? tab : tabs[0]
+
+  // Goals + cards (subs are noise). Live shows a most-recent-first strip; a
+  // finished match shows the whole thing in chronological (kickoff→final) order.
+  const goalsCards = data ? data.events.filter((e) => e.kind !== 'sub') : []
+  const eventList = stateKey === 'live' ? goalsCards.slice(0, 6) : [...goalsCards].reverse()
 
   return (
-    <details className="lsp" onToggle={(e) => setOpen(e.currentTarget.open)}>
+    <details className={`lsp lsp--${stateKey}`} onToggle={(e) => setOpen(e.currentTarget.open)}>
       <summary className="lsp__summary">
-        <span className="lsp__summary-label">Live match stats</span>
-        {open && loaded && data?.minute && <span className="lsp__minute tnum">{data.minute}</span>}
+        <span className={`lsp__badge lsp__badge--${stateKey}`}>
+          {stateKey === 'live' && <span className="lsp__badge-dot" aria-hidden="true" />}
+          {meta.label}
+        </span>
+        <span className="lsp__summary-label">Match details</span>
+        {stateKey === 'live' && open && loaded && data?.minute && <span className="lsp__minute tnum">{data.minute}</span>}
         <svg className="lsp__chevron" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
           <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -178,31 +215,38 @@ function LiveStatsPanel({ homeName, awayName, homeTeam, awayTeam }) {
 
       <div className="lsp__body">
         {!loaded ? (
-          <p className="lsp__note">Loading live data…</p>
-        ) : !data ? (
-          <p className="lsp__note">Live stats aren’t available for this match right now.</p>
+          <p className="lsp__note">Loading match data…</p>
+        ) : !data || (!data.hasLineups && !data.hasStats) ? (
+          <p className="lsp__note">{meta.empty}</p>
         ) : (
           <>
-            <section className="lsp__stats" aria-label="Team statistics">
-              {data.statRows.map((row) => (
-                <StatRow key={row.key} row={row} home={data.stats.home} away={data.stats.away} />
-              ))}
-            </section>
+            {tabs.length > 1 && (
+              <div className="lsp__tabs" role="tablist" aria-label="Match detail view">
+                {tabs.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeTab === t}
+                    className={`lsp__tab${activeTab === t ? ' is-on' : ''}`}
+                    onClick={() => setTab(t)}
+                  >
+                    {t === 'lineups' ? 'Line-ups' : 'Stats'}
+                  </button>
+                ))}
+              </div>
+            )}
 
-            {highlights.length > 0 && (
-              <section className="lsp__events" aria-label="Recent goals and cards">
-                <h4 className="lsp__section-title">Recent</h4>
-                <ul className="lsp__event-list">
-                  {highlights.map((ev, i) => (
-                    <EventRow key={`${ev.clockValue}-${i}`} ev={ev} homeTeam={homeTeam} awayTeam={awayTeam} />
-                  ))}
-                </ul>
+            {activeTab === 'stats' && data.hasStats && (
+              <section className="lsp__stats" aria-label="Team statistics">
+                {data.statRows.map((row) => (
+                  <StatRow key={row.key} row={row} home={data.stats.home} away={data.stats.away} />
+                ))}
               </section>
             )}
 
-            {(data.lineups.home.starters.length > 0 || data.lineups.away.starters.length > 0) && (
+            {activeTab === 'lineups' && data.hasLineups && (
               <section className="lsp__lineups" aria-label="Line-ups">
-                <h4 className="lsp__section-title">Line-ups</h4>
                 <div className="lsp__lineups-grid">
                   <Lineup side="home" team={homeTeam} lineup={data.lineups.home} />
                   <Lineup side="away" team={awayTeam} lineup={data.lineups.away} />
@@ -210,7 +254,18 @@ function LiveStatsPanel({ homeName, awayName, homeTeam, awayTeam }) {
               </section>
             )}
 
-            <p className="lsp__credit">Live data · ESPN</p>
+            {stateKey !== 'pre' && eventList.length > 0 && (
+              <section className="lsp__events" aria-label={stateKey === 'live' ? 'Recent goals and cards' : 'Match summary'}>
+                <h4 className="lsp__section-title">{stateKey === 'live' ? 'Recent' : 'Match summary'}</h4>
+                <ul className="lsp__event-list">
+                  {eventList.map((ev, i) => (
+                    <EventRow key={`${ev.clockValue}-${i}`} ev={ev} homeTeam={homeTeam} awayTeam={awayTeam} />
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <p className="lsp__credit">{meta.credit}</p>
           </>
         )}
       </div>
@@ -218,4 +273,4 @@ function LiveStatsPanel({ homeName, awayName, homeTeam, awayTeam }) {
   )
 }
 
-export default LiveStatsPanel
+export default MatchStatsPanel

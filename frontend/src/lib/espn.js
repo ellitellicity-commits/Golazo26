@@ -1,15 +1,21 @@
-// ESPN's free, keyless, CORS-open hidden API — the live-stats source (lineups,
-// team statistics, events, live minute) for the expandable stats panel.
+// ESPN's free, keyless, CORS-open hidden API — the match-detail source (lineups,
+// team statistics, events, live minute) for the expandable stats panel across ALL
+// three match states: pre-match (confirmed line-ups), in-play (live stats + the
+// running minute), and finished (final stats + the full goal/card summary).
 // football-data.org's free tier exposes none of this (see lib/data.js), so ESPN
-// is layered on ONLY for the expanded live panel; scores/results stay on
+// is layered on ONLY for the expanded panel; scores/results stay on
 // football-data.org. The browser calls ESPN directly (no key, no proxy).
 //
 // ESPN uses its own event ids, so a match is reconciled to an ESPN event by
 // team pair — its team names use the same long-forms we already alias in
 // lib/data.js, so resolveTeamName() maps both sides back to our canonical names.
+// A finished match drops off the live scoreboard, so when a fixture date is known
+// we query that day's board first (which still lists it), then fall back to the
+// live board.
 //
 // This is an unofficial API: everything degrades to null on any failure, timeout,
-// or shape change, and the panel renders an "unavailable" state rather than break.
+// or shape change, and the panel renders an "unavailable"/pre-match state rather
+// than break.
 
 import { resolveTeamName } from './data'
 
@@ -20,6 +26,12 @@ const TIMEOUT_MS = 6000
 const SCOREBOARD_TTL_MS = 20_000
 
 const pairKey = (a, b) => [a, b].sort().join('|')
+// A fixture date (ISO, "2026-06-11" or a full instant) → ESPN's "YYYYMMDD" board
+// filter. Null when there's no usable date, so the caller falls back to the board.
+const boardDate = (iso) => (typeof iso === 'string' && /^\d{4}-\d{2}-\d{2}/.test(iso) ? iso.slice(0, 10).replace(/-/g, '') : null)
+
+// ESPN's competition.status.type.state is the clean tri-state signal.
+const STATE_MAP = { pre: 'pre', in: 'live', post: 'final' }
 
 async function fetchJson(url) {
   const controller = new AbortController()
@@ -33,27 +45,25 @@ async function fetchJson(url) {
   }
 }
 
-// Short-lived scoreboard cache: several panels can be open at once, and the
-// scoreboard changes slowly, so one shared fetch every 20s serves them all.
-let scoreboardCache = { at: 0, promise: null }
+// Short-lived scoreboard cache, keyed by day ("today" for the live board, or a
+// "YYYYMMDD" for a specific date): several panels can be open at once and the
+// board changes slowly, so one shared fetch per day serves them all.
+const scoreboardCache = new Map()
 
-function getScoreboard() {
+function getScoreboard(dateKey) {
+  const key = dateKey || 'today'
   const now = Date.now()
-  if (!scoreboardCache.promise || now - scoreboardCache.at > SCOREBOARD_TTL_MS) {
-    scoreboardCache = {
-      at: now,
-      promise: fetchJson(SCOREBOARD_URL).catch(() => null),
-    }
-  }
-  return scoreboardCache.promise
+  const hit = scoreboardCache.get(key)
+  if (hit && now - hit.at <= SCOREBOARD_TTL_MS) return hit.promise
+  const url = dateKey ? `${SCOREBOARD_URL}?dates=${dateKey}` : SCOREBOARD_URL
+  const entry = { at: now, promise: fetchJson(url).catch(() => null) }
+  scoreboardCache.set(key, entry)
+  return entry.promise
 }
 
-// Resolve an ESPN event id for a fixture from its two canonical team names.
-async function findEventId(homeName, awayName) {
-  const board = await getScoreboard()
+function matchEvent(board, want) {
   const events = board?.events
   if (!Array.isArray(events)) return null
-  const want = pairKey(homeName, awayName)
   for (const ev of events) {
     const cs = ev.competitions?.[0]?.competitors
     if (!Array.isArray(cs) || cs.length < 2) continue
@@ -62,6 +72,19 @@ async function findEventId(homeName, awayName) {
     if (a && b && pairKey(a, b) === want) return ev.id
   }
   return null
+}
+
+// Resolve an ESPN event id for a fixture from its two canonical team names. When
+// a fixture date is known, that day's board is tried first (a finished match has
+// dropped off the live board), then the live/today board as a fallback.
+async function findEventId(homeName, awayName, dateISO) {
+  const want = pairKey(homeName, awayName)
+  const dk = boardDate(dateISO)
+  if (dk) {
+    const id = matchEvent(await getScoreboard(dk), want)
+    if (id) return id
+  }
+  return matchEvent(await getScoreboard(null), want)
 }
 
 // --- Summary normalisation --------------------------------------------------
@@ -103,7 +126,9 @@ function lineupForTeam(rosterNode) {
   }
 }
 
-// Goals and cards, most recent first, tagged with the side that they belong to.
+// Goals, cards and substitutions, most recent first, tagged with the side they
+// belong to. The panel slices this for a live "recent" strip or reverses it for a
+// finished match's chronological summary.
 function eventsFor(summary, sideById) {
   const kindOf = (t) => {
     const type = t?.type || ''
@@ -130,11 +155,18 @@ function eventsFor(summary, sideById) {
 }
 
 /**
- * Full normalised live view for an ESPN event: side-keyed stats + lineups,
- * recent events, and the live minute. Returns null when the event can't be
- * fetched or lacks a boxscore yet (pre-kickoff).
+ * Full normalised view for an ESPN event across every match state. Returns an
+ * object whenever the summary is fetchable — even pre-kickoff with no line-ups
+ * yet (so the panel can show its "line-ups to be confirmed" state) — and null
+ * only when the event summary itself can't be fetched.
+ * @returns {Promise<null | {
+ *   state: 'pre'|'live'|'final', minute: string|null,
+ *   hasStats: boolean, hasLineups: boolean,
+ *   stats: {home:object, away:object}|null, statRows: object[],
+ *   lineups: {home:object, away:object}, events: object[],
+ * }>}
  */
-export async function loadLiveSummary(eventId) {
+export async function loadMatchSummary(eventId) {
   const d = await fetchJson(summaryUrl(eventId)).catch(() => null)
   if (!d) return null
 
@@ -149,26 +181,29 @@ export async function loadLiveSummary(eventId) {
   const rosters = d.rosters || []
   const rosterFor = (side) => rosters.find((r) => String(r.team?.id) === String(idFor(side)))
 
+  const lineups = { home: lineupForTeam(rosterFor('home')), away: lineupForTeam(rosterFor('away')) }
+  const hasLineups = lineups.home.starters.length > 0 || lineups.away.starters.length > 0
   const hasStats = (boxFor('home')?.statistics || []).length > 0
-  const hasLineups = (rosterFor('home')?.roster || []).length > 0
-  if (!hasStats && !hasLineups) return null // nothing useful yet
 
+  const status = comp?.status?.type || {}
   return {
-    minute: comp?.status?.type?.detail || null,
-    state: comp?.status?.type?.state || null,
-    stats: { home: statsForTeam(boxFor('home')), away: statsForTeam(boxFor('away')) },
+    state: STATE_MAP[status.state] || 'pre',
+    minute: status.shortDetail || status.detail || null,
+    hasStats,
+    hasLineups,
+    stats: hasStats ? { home: statsForTeam(boxFor('home')), away: statsForTeam(boxFor('away')) } : null,
     statRows: STAT_ROWS,
-    lineups: { home: lineupForTeam(rosterFor('home')), away: lineupForTeam(rosterFor('away')) },
+    lineups,
     events: eventsFor(d, sideById),
   }
 }
 
 /**
- * Reconcile a fixture (by canonical team names) to its ESPN event and return the
- * normalised live view. Null when there's no matching live/scheduled ESPN event.
+ * Reconcile a fixture (by canonical team names, optionally its date) to its ESPN
+ * event and return the normalised view. Null when there's no matching ESPN event.
  */
-export async function loadLiveMatch(homeName, awayName) {
-  const id = await findEventId(homeName, awayName)
+export async function loadMatchSummaryByTeams(homeName, awayName, dateISO = null) {
+  const id = await findEventId(homeName, awayName, dateISO)
   if (!id) return null
-  return loadLiveSummary(id)
+  return loadMatchSummary(id)
 }
