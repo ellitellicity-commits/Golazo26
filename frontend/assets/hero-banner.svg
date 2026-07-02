@@ -1,44 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" fill="none" role="img" aria-label="World Cup 2026 animated banner">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" fill="none" role="img" aria-label="FIFA World Cup 26 — trophy fused into the 26 emblem">
   <defs>
-    <linearGradient id="g26" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5aa2ff"/>
-      <stop offset="1" stop-color="#1e5fbf"/>
-    </linearGradient>
-    <linearGradient id="shine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="220" y2="0">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#ffd84d" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-      <animateTransform attributeName="gradientTransform" type="translate" from="-320 0" to="1200 0" dur="3.2s" repeatCount="indefinite"/>
-    </linearGradient>
-    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="5" result="b">
-        <animate attributeName="stdDeviation" values="3;9;3" dur="2.6s" repeatCount="indefinite"/>
-      </feGaussianBlur>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <clipPath id="clip26">
-      <text x="600" y="215" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="230" text-anchor="middle">26</text>
+    <clipPath id="panel"><rect width="1200" height="300" rx="22"/></clipPath>
+    <clipPath id="band"><rect x="1092" y="0" width="108" height="300"/></clipPath>
+    <clipPath id="num">
+      <text x="470" y="212" font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" font-weight="800" font-size="250" text-anchor="middle">2</text>
+      <text x="730" y="212" font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" font-weight="800" font-size="250" text-anchor="middle">6</text>
     </clipPath>
+    <radialGradient id="pool" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ecc94a" stop-opacity="0.30"/>
+      <stop offset="0.55" stop-color="#ecc94a" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#ecc94a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.45" stop-color="#ecc94a"/>
+      <stop offset="1" stop-color="#c9a227"/>
+    </linearGradient>
+    <linearGradient id="rainbow" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="150" spreadMethod="repeat">
+      <stop offset="0" stop-color="#6100eb"/>
+      <stop offset="0.1" stop-color="#304fff"/>
+      <stop offset="0.2" stop-color="#2196f2"/>
+      <stop offset="0.3" stop-color="#63ffd9"/>
+      <stop offset="0.4" stop-color="#00c752"/>
+      <stop offset="0.5" stop-color="#b0eb00"/>
+      <stop offset="0.6" stop-color="#edff42"/>
+      <stop offset="0.7" stop-color="#ff3d00"/>
+      <stop offset="0.8" stop-color="#d60000"/>
+      <stop offset="0.9" stop-color="#e81f63"/>
+      <stop offset="1" stop-color="#6100eb"/>
+      <animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="0 150" dur="5s" repeatCount="indefinite"/>
+    </linearGradient>
+    <linearGradient id="shine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="170" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+      <animateTransform attributeName="gradientTransform" type="translate" from="-240 0" to="900 0" dur="4.5s" repeatCount="indefinite"/>
+    </linearGradient>
   </defs>
 
-  <text x="600" y="215" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="230" text-anchor="middle" fill="url(#g26)" filter="url(#glow)">26</text>
-  <g clip-path="url(#clip26)">
-    <rect x="0" y="0" width="1200" height="300" fill="url(#shine)"/>
-  </g>
+  <g clip-path="url(#panel)">
+    <rect width="1200" height="300" fill="#0a0a0a"/>
+    <g clip-path="url(#band)"><rect x="1092" y="0" width="108" height="300" fill="url(#rainbow)"/></g>
 
-  <g>
-    <g>
-      <circle r="22" fill="#ffffff" stroke="#0a0a0a" stroke-width="2"/>
-      <polygon points="0,-8 7.6,-2.5 4.7,6.5 -4.7,6.5 -7.6,-2.5" fill="#0a0a0a"/>
-      <g stroke="#0a0a0a" stroke-width="2">
-        <line x1="0" y1="-8" x2="0" y2="-20"/>
-        <line x1="7.6" y1="-2.5" x2="19" y2="-6.2"/>
-        <line x1="4.7" y1="6.5" x2="11.8" y2="16.2"/>
-        <line x1="-4.7" y1="6.5" x2="-11.8" y2="16.2"/>
-        <line x1="-7.6" y1="-2.5" x2="-19" y2="-6.2"/>
-      </g>
-      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1.6s" repeatCount="indefinite"/>
+    <ellipse cx="600" cy="150" rx="150" ry="118" fill="url(#pool)"/>
+
+    <g fill="#f6f6f6" font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" font-weight="800" font-size="250" text-anchor="middle">
+      <text x="470" y="212">2</text>
+      <text x="730" y="212">6</text>
     </g>
-    <animateTransform attributeName="transform" type="translate" from="-40 262" to="1240 262" dur="7s" repeatCount="indefinite"/>
+    <g clip-path="url(#num)"><rect width="1200" height="300" fill="url(#shine)"/></g>
+
+    <g transform="translate(600 148)">
+      <g>
+        <path fill="url(#gold)" stroke="#a9861a" stroke-width="1.5" stroke-linejoin="round"
+          d="M-28,-50 C-32,-18 -12,-6 -7,8 L-6,34 L-20,46 L-20,56 L-27,56 L-27,72 L27,72 L27,56 L20,56 L20,46 L6,34 L7,8 C12,-6 32,-18 28,-50 C18,-66 -18,-66 -28,-50 Z"/>
+        <ellipse cx="0" cy="-54" rx="27" ry="23" fill="url(#gold)" stroke="#a9861a" stroke-width="1.5"/>
+        <path fill="#f9e9a8" opacity="0.55" d="M-19,-44 C-22,-16 -8,-4 -4,8 L-4,22 C-12,12 -17,-14 -14,-42 Z"/>
+        <animateTransform attributeName="transform" type="rotate" values="-4;4;-4" dur="5s" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" repeatCount="indefinite"/>
+      </g>
+    </g>
+
+    <text x="600" y="276" font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" font-weight="600" font-size="22" letter-spacing="7" text-anchor="middle" fill="#a8a8a8">FIFA WORLD CUP</text>
   </g>
 </svg>
