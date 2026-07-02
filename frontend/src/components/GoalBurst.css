@@ -1,0 +1,87 @@
+/* Goal animation — a soccer ball flies toward the goal on a live score change.
+   Overlays the score/teams area of a card; never blocks interaction. Gold is the
+   goal / key-moment accent (DESIGN.md), used here for a genuine landmark event. */
+.goal-burst {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 5;
+  color: var(--trophy-gold);
+}
+.goal-burst--home {
+  justify-content: flex-start;
+}
+.goal-burst--away {
+  justify-content: flex-end;
+}
+.goal-burst__ball {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.55));
+}
+
+/* Fly in (~0.6s) to the goal line, hold ~1s, fade out (~0.3s); ~1.6s total. */
+.goal-burst--home .goal-burst__ball {
+  animation: goal-fly-home 1600ms var(--ease-out-quint) forwards;
+}
+.goal-burst--away .goal-burst__ball {
+  animation: goal-fly-away 1600ms var(--ease-out-quint) forwards;
+}
+@keyframes goal-fly-home {
+  0% {
+    transform: translateX(-64px) scale(0.8);
+    opacity: 0;
+  }
+  19% {
+    opacity: 1;
+  }
+  37% {
+    transform: translateX(0) scale(1);
+  }
+  81% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 0;
+  }
+}
+@keyframes goal-fly-away {
+  0% {
+    transform: translateX(64px) scale(0.8);
+    opacity: 0;
+  }
+  19% {
+    opacity: 1;
+  }
+  37% {
+    transform: translateX(0) scale(1);
+  }
+  81% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: no flight, just a brief static fade so the moment still reads. */
+@media (prefers-reduced-motion: reduce) {
+  .goal-burst--home .goal-burst__ball,
+  .goal-burst--away .goal-burst__ball {
+    animation: goal-fade 1200ms linear forwards;
+  }
+  @keyframes goal-fade {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    20%,
+    80% {
+      opacity: 1;
+    }
+  }
+}

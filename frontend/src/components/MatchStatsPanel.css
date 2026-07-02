@@ -111,6 +111,38 @@
   color: var(--ink-muted);
   font-size: var(--text-label);
 }
+
+/* Line-ups | Stats tabs — neutral chrome (colour belongs to data). Active tab
+   carries a 2px ink underline, no hue. */
+.lsp__tabs {
+  display: flex;
+  gap: var(--space-lg);
+  border-bottom: 1px solid var(--border-divider);
+}
+.lsp__tab {
+  appearance: none;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0 0 var(--space-sm);
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--dur-ui) var(--ease-out-quint);
+}
+.lsp__tab:hover {
+  color: var(--ink-secondary);
+}
+.lsp__tab.is-on {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
 .lsp__section-title {
   margin: 0 0 var(--space-sm);
   font-family: var(--font-display);
@@ -345,8 +377,12 @@
   .lsp[open] .lsp__body {
     animation: none;
   }
+  .lsp__badge-dot {
+    animation: none;
+  }
   .lsp__chevron,
-  .lsp-stat__seg {
+  .lsp-stat__seg,
+  .lsp__tab {
     transition: none;
   }
 }

@@ -1,5 +1,6 @@
 import ProbabilityBar from './ProbabilityBar'
-import LiveStatsPanel from './LiveStatsPanel'
+import MatchStatsPanel from './MatchStatsPanel'
+import GoalBurst, { useGoalBurst } from './GoalBurst'
 import { liveClock } from '../lib/live'
 import './MatchCard.css'
 
