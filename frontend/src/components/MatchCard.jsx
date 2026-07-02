@@ -1,4 +1,5 @@
 import ProbabilityBar from './ProbabilityBar'
+import LiveStatsPanel from './LiveStatsPanel'
 import { liveClock } from '../lib/live'
 import './MatchCard.css'
 
@@ -162,6 +163,10 @@ function MatchCard({ fixture, isToday = false }) {
           </div>
         </dl>
       </footer>
+
+      {isLive && (
+        <LiveStatsPanel homeName={home.name} awayName={away.name} homeTeam={home.name} awayTeam={away.name} />
+      )}
     </article>
   )
 }

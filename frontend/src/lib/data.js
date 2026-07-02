@@ -68,7 +68,10 @@ const OUR_NAMES = new Set(Object.keys(TEAM_META))
 // concrete statuses so a single match object is enough to classify.
 const LIVE_STATUSES = new Set(['IN_PLAY', 'PAUSED'])
 
-function resolveTeamName(liveName) {
+// Reconcile a provider's team name to our canonical name (or null if unmapped).
+// Exported because the ESPN live-stats feed (lib/espn.js) needs the same mapping
+// to match its events back to our fixtures — ESPN uses the same long-forms.
+export function resolveTeamName(liveName) {
   if (!liveName) return null
   if (OUR_NAMES.has(liveName)) return liveName
   const aliased = NAME_ALIASES[liveName]

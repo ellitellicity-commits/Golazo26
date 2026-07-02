@@ -1,3 +1,4 @@
+import LiveStatsPanel from './LiveStatsPanel'
 import { liveClock } from '../lib/live'
 import './KnockoutCard.css'
 
@@ -93,6 +94,15 @@ function KnockoutCard({ view, roundLabel }) {
             {view.venue.stadium}
           </span>
         </footer>
+      )}
+
+      {live && (
+        <LiveStatsPanel
+          homeName={view.home.name}
+          awayName={view.away.name}
+          homeTeam={view.home.name}
+          awayTeam={view.away.name}
+        />
       )}
     </article>
   )
