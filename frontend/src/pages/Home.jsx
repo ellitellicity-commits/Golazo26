@@ -1,7 +1,7 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { BrandField } from '../components/BrandMarks'
-import { currentStageLabel, daysToFinal } from '../lib/bracket'
+import { currentStageLabel, finalCountdown } from '../lib/bracket'
 import { teamMeta, flagUrl } from '../lib/teams'
 import { useTournamentData } from '../lib/tournamentData'
 import './Home.css'
@@ -45,12 +45,24 @@ function buildDestinations({ todaysCount, upcomingCount }) {
   ]
 }
 
+// Live countdown to the final, recomputed hourly (per-second precision isn't
+// needed for a days/hours figure). Both this and the stage below re-read on every
+// live data refresh too, since the provider re-renders the tree.
+function useFinalCountdown() {
+  const [cd, setCd] = useState(finalCountdown)
+  useEffect(() => {
+    const id = setInterval(() => setCd(finalCountdown()), 3_600_000)
+    return () => clearInterval(id)
+  }, [])
+  return cd
+}
+
 function Snapshot() {
   const { odds, fixtures } = useTournamentData()
   const favourite = odds.teams[0]
   const favMeta = teamMeta(favourite.team)
   const stage = currentStageLabel(fixtures.knockout)
-  const countdown = daysToFinal()
+  const countdown = useFinalCountdown()
   const favPct = (favourite.championship_odds * 100).toFixed(1)
   const flag = flagUrl(favMeta.iso)
   return (
@@ -68,10 +80,10 @@ function Snapshot() {
         <dd className="snapshot__big">{stage}</dd>
       </div>
       <div className="snapshot__item">
-        <dt>Until the final</dt>
+        <dt>{countdown.label}</dt>
         <dd>
-          <span className="snapshot__big tnum">{countdown}</span>
-          <span className="snapshot__unit">days</span>
+          <span className="snapshot__big tnum">{countdown.big}</span>
+          {countdown.unit && <span className="snapshot__unit">{countdown.unit}</span>}
         </dd>
       </div>
     </dl>

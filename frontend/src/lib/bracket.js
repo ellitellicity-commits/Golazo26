@@ -376,11 +376,22 @@ export function currentStageLabel(knockout) {
   return 'Final'
 }
 
-// Whole days from the bracket's reference "today" to the final. Pinned to the
-// data's date (UTC) rather than the wall clock, so the count is reproducible
-// and consistent with every other date in the product.
-export function daysToFinal() {
-  const today = new Date(`${META.today}T00:00:00Z`)
-  const final = new Date(`${META.final.date}T00:00:00Z`)
-  return Math.round((final - today) / 86_400_000)
+// Live countdown to the final (kickoff 20:00 UTC, 19 July 2026). Reads the real
+// wall clock so the home hub ticks toward kickoff, and degrades through graceful
+// phases: days → hours in the last two days → "Live" during the match → done.
+// Returns { phase, big, unit, label } so the caller can render a headline figure
+// with a matching unit and heading. `now` is injectable for testing.
+const FINAL_MATCH_MS = 3 * 60 * 60 * 1000 // ~3h window: 90' + stoppage + ceremony
+export function finalCountdown(now = new Date()) {
+  const kickoff = new Date(`${META.final.date}T20:00:00Z`).getTime()
+  const nowMs = now.getTime()
+  if (nowMs >= kickoff + FINAL_MATCH_MS) return { phase: 'complete', big: 'Complete', unit: null, label: 'Tournament' }
+  if (nowMs >= kickoff) return { phase: 'live', big: 'Live', unit: 'now', label: 'The final' }
+  const hours = (kickoff - nowMs) / 3_600_000
+  if (hours <= 48) {
+    const h = Math.max(1, Math.ceil(hours))
+    return { phase: 'countdown', big: String(h), unit: h === 1 ? 'hour' : 'hours', label: 'Until the final' }
+  }
+  const days = Math.ceil(hours / 24)
+  return { phase: 'countdown', big: String(days), unit: days === 1 ? 'day' : 'days', label: 'Until the final' }
 }

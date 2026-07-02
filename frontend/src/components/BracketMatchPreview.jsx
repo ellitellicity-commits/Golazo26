@@ -111,8 +111,8 @@ function BracketMatchPreview({ view, className, style, children }) {
       className={className}
       style={style}
       tabIndex={0}
-      onPointerEnter={open}
-      onPointerLeave={close}
+      onPointerEnter={(e) => e.pointerType === 'mouse' && open()}
+      onPointerLeave={(e) => e.pointerType === 'mouse' && close()}
       onFocus={open}
       onBlur={close}
       onClick={() => (pos ? close() : open())}
