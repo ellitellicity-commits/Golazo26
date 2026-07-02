@@ -10,6 +10,7 @@ import {
 import { runFullSimulation } from '../lib/simulation'
 import { liveClock } from '../lib/live'
 import { useTournamentData } from '../lib/tournamentData'
+import BracketMatchPreview from './BracketMatchPreview'
 import Confetti from './Confetti'
 import './Bracket.css'
 
@@ -152,13 +153,16 @@ function BracketMatch({ view, side, revealed, championName, style, hideCaption =
   const hasJoin = view.round === 'r16' || view.round === 'qf' || view.round === 'sf'
   const justRevealed = revealed?.has?.(view.id)
 
-  return (
-    <div
-      className={`bk-match bk-match--${view.round}${decided ? ' is-decided' : ''}${
-        live ? ' is-live' : ''
-      }${justRevealed ? ' is-pop' : ''}`}
-      style={style}
-    >
+  // Live/finished R32 ties (real tournament only) reveal a compact hover/tap
+  // preview — state, score and a short line-up — without expanding the tree.
+  const previewable = revealed === null && view.round === 'r32' && (live || completed) && both
+
+  const className = `bk-match bk-match--${view.round}${decided ? ' is-decided' : ''}${
+    live ? ' is-live' : ''
+  }${justRevealed ? ' is-pop' : ''}${previewable ? ' is-previewable' : ''}`
+
+  const inner = (
+    <>
       {!hideCaption && <MatchCaption view={view} mode={revealed === null ? 'live' : 'sim'} />}
       <div className="bk-match__box">
         <TeamLine
@@ -184,6 +188,20 @@ function BracketMatch({ view, side, revealed, championName, style, hideCaption =
         />
       </div>
       {hasJoin && <i className={`bk-match__join bk-match__join--${side}`} aria-hidden="true" />}
+    </>
+  )
+
+  if (previewable) {
+    return (
+      <BracketMatchPreview view={view} className={className} style={style}>
+        {inner}
+      </BracketMatchPreview>
+    )
+  }
+
+  return (
+    <div className={className} style={style}>
+      {inner}
     </div>
   )
 }

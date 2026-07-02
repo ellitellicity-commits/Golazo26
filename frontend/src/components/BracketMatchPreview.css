@@ -1,0 +1,142 @@
+/* Compact bracket match preview (portal popup). Elevated overlay surface on the
+   studio ground; neutral chrome, red only for the live state, gold nowhere here.
+   Positioned fixed and centred on its node via a translateX(-50%). */
+.bmp {
+  position: fixed;
+  z-index: var(--z-tooltip);
+  transform: translateX(-50%);
+  width: 240px;
+  max-width: calc(100vw - 24px);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  background: var(--surface-overlay);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hover);
+  animation: bmp-in 140ms var(--ease-out-quint);
+  pointer-events: none; /* the popup is informational; hover lives on the node */
+}
+@keyframes bmp-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+}
+
+.bmp__head {
+  display: flex;
+  align-items: center;
+}
+.bmp__state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-meta);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+.bmp__state--live {
+  color: var(--canadian-red);
+}
+.bmp__state-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--canadian-red);
+  animation: bmp-pulse 1.6s var(--ease-out-quint) infinite;
+}
+@keyframes bmp-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.bmp__score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+.bmp__score-code {
+  font-size: var(--text-label);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+.bmp__score-num {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.bmp__score-dash {
+  margin-inline: 6px;
+  color: var(--ink-muted);
+}
+
+.bmp__lineups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-divider);
+}
+.bmp__lineup-team {
+  display: block;
+  font-size: var(--text-meta);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-secondary);
+  margin-bottom: 4px;
+}
+.bmp__lineup-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.bmp__lineup-player {
+  display: flex;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bmp__lineup-jersey {
+  color: var(--ink-muted);
+  min-width: 1.8ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bmp__note {
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+}
+.bmp__credit {
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  text-align: right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bmp {
+    animation: none;
+  }
+  .bmp__state-dot {
+    animation: none;
+  }
+}
