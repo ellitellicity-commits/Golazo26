@@ -220,3 +220,8 @@ __marimo__/
 # Claude Code (local machine config + vendored skill tooling)
 .claude/settings.local.json
 .claude/skills/
+**/.claude/
+
+# Playwright CLI (local browser state + captures)
+**/.playwright/
+**/.playwright-cli/

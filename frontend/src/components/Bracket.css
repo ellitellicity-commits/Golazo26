@@ -530,9 +530,16 @@
   position: relative;
   flex: 1;
 }
+/* Anchor the final box to the semi-final feeder line, not the center column's
+   own 50%. The grid's fixed rows overflow the canvas's padded content box, so
+   the SF match centre (grid centre) sits ~20px below where the flexible
+   center-body would centre this box — leaving the two SF connectors arriving
+   below the box's side stubs. 8 * row-h is the centre of the 16-row match area,
+   measured from the match-area top (which the final header aligns to), so the
+   box lands exactly on the incoming SF horizontals regardless of padding. */
 .bk-final-wrap {
   position: absolute;
-  top: 50%;
+  top: calc(var(--bk-row-h) * 8);
   left: 0;
   right: 0;
   transform: translateY(-50%);

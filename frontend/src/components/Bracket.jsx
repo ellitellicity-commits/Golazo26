@@ -225,9 +225,13 @@ function Trophy({ lit }) {
   )
 }
 
-function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
+function Bracket({ groups }) {
   const { fixtures } = useTournamentData()
-  const [mode, setMode] = useState(initialMode)
+  // Two modes only: 'live' (the real tournament — real results + model
+  // probabilities, the default that respects reality) and 'reimagine' (a
+  // full from-scratch re-roll what-if). The old respect-reality "simulate"
+  // playout was removed: the live view already respects reality.
+  const [mode, setMode] = useState('live')
   const [simResults, setSimResults] = useState(null)
   const [simR32, setSimR32] = useState(null)
   const [revealed, setRevealed] = useState(() => new Set())
@@ -261,10 +265,9 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
     setRevealed(new Set())
     setRunning(false)
     setChampion(null)
-    // Both simulate modes run immediately on selection; "Run again" re-randomises.
-    // Reimagine re-rolls reality too (fromScratch). Real Tournament needs no run.
-    if (next === 'simulate') runSimulation(false)
-    else if (next === 'reimagine') runSimulation(true)
+    // Reimagine runs a full from-scratch re-roll on selection; "Run again"
+    // re-randomises. Real Tournament is the static live view and needs no run.
+    if (next === 'reimagine') runSimulation(true)
   }
 
   const runSimulation = (fromScratch = false) => {
@@ -312,19 +315,8 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
     )
   }
 
-  // Deep-link from the Groups view: land in Simulate mode and play one bracket
-  // out automatically on mount. No ref guard here — under StrictMode the mount
-  // effects run twice with the clearTimers cleanup firing BETWEEN them, which
-  // cancels the first run's reveal timers. A persistent guard would then block
-  // re-scheduling on the second mount and leave the bracket stuck "Simulating…"
-  // forever. Re-running after the cleanup is correct and costs ~0.01ms.
-  useEffect(() => {
-    if (autoSimulate && initialMode === 'simulate') runSimulation()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   // Render-time helpers ------------------------------------------------------
-  const isSim = mode === 'simulate' || mode === 'reimagine'
+  const isSim = mode === 'reimagine'
   const revealedForMatch = isSim ? revealed : null
   const finalView = views[LAYOUT.finalId]
   const thirdView = views[LAYOUT.thirdId]
@@ -365,9 +357,7 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
           <p className="bk__sub">
             {mode === 'live'
               ? `The real tournament — ${META.final.stadium} final on ${fmtDay(META.final.date)}. Played matches show the result; upcoming ties show the model’s win probability.`
-              : mode === 'reimagine'
-                ? 'A from-scratch re-roll: every match — including the group games already played — is randomised, so the whole tournament diverges from what really happened.'
-                : 'A what-if from today: real results so far stand, and everything still to play is randomised from the model — so the knockout bracket changes every run.'}
+              : 'A from-scratch re-roll: every match — including the group games already played — is randomised, so the whole tournament diverges from what really happened. Run it again for a new what-if.'}
           </p>
         </div>
 
@@ -385,15 +375,6 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
             <button
               type="button"
               role="tab"
-              aria-selected={mode === 'simulate'}
-              className={`bk__mode${mode === 'simulate' ? ' is-on' : ''}`}
-              onClick={() => (mode === 'simulate' ? runSimulation(false) : switchMode('simulate'))}
-            >
-              Run Your Own Simulation
-            </button>
-            <button
-              type="button"
-              role="tab"
               aria-selected={mode === 'reimagine'}
               className={`bk__mode${mode === 'reimagine' ? ' is-on' : ''}`}
               onClick={() => (mode === 'reimagine' ? runSimulation(true) : switchMode('reimagine'))}
@@ -402,7 +383,7 @@ function Bracket({ groups, initialMode = 'live', autoSimulate = false }) {
             </button>
           </div>
           {isSim && (
-            <button type="button" className="bk__run" onClick={() => runSimulation(mode === 'reimagine')} disabled={running}>
+            <button type="button" className="bk__run" onClick={() => runSimulation(true)} disabled={running}>
               {running ? 'Simulating…' : simResults ? 'Run again' : 'Run simulation'}
             </button>
           )}
