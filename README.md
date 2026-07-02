@@ -1,12 +1,10 @@
 <div align="center">
-
-# ⚽ World Cup 2026 Predictor & Dashboard
-
-![USA](./assets/logos/usa-shield.svg)
-![Canada](./assets/logos/canada-shield.svg)
-![Mexico](./assets/logos/mexico-shield.svg)
-
-</div>
+   
+   # ⚽ World Cup 2026 Predictor & Dashboard
+   
+   ![FIFA World Cup 2026](./assets/wc-2026-animation-better.gif)
+   
+   </div>
 
 ## Overview
 
