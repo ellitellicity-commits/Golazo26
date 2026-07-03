@@ -10,7 +10,10 @@ import './MatchStatsPanel.css'
 //   final  → final stats + the full chronological goal/card summary; no polling
 // Data source is unofficial (see lib/espn.js), so every failure resolves to an
 // "unavailable"/pre-match state rather than breaking the card.
-const POLL_MS = 60_000
+// 30s while a live panel is open (ESPN is keyless, so no shared rate limit to
+// respect). The app-level score/status poll (tournamentData.jsx) stays at 60s to
+// protect football-data.org's shared 10 req/min free-tier key.
+const POLL_MS = 30_000
 
 const STATE_META = {
   pre: { label: 'Pre-Match', credit: 'Line-ups · ESPN', empty: 'Line-ups will be confirmed before kickoff.' },
