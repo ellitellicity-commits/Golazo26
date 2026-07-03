@@ -131,7 +131,7 @@ function Predictor() {
 
       {upcomingGroup.length > 0 && (
         <FixturesRail
-          title={upcomingKO.length > 0 ? 'Upcoming — Group Stage' : 'Upcoming'}
+          title="Upcoming"
           eyebrow={`${upcomingGroup.length} to play`}
           fixtures={upcomingGroup}
           todayDate={TODAY}
