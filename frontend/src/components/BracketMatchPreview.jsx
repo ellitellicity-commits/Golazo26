@@ -30,7 +30,7 @@ function LineupColumn({ team, lineup }) {
         {starters.map((p) => (
           <li key={`${p.jersey}-${p.name}`} className="bmp__lineup-player">
             <span className="bmp__lineup-jersey tnum">{p.jersey || '–'}</span>
-            {p.name}
+            <span className="bmp__lineup-name">{p.name}</span>
           </li>
         ))}
       </ul>

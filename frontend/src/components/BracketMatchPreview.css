@@ -90,6 +90,11 @@
   padding-top: var(--space-sm);
   border-top: 1px solid var(--border-divider);
 }
+/* Grid children default to min-width:auto and won't shrink below content —
+   min-width:0 lets each column (and its names) stay within the popup width. */
+.bmp__lineup {
+  min-width: 0;
+}
 .bmp__lineup-team {
   display: block;
   font-size: var(--text-meta);
@@ -109,17 +114,23 @@
 .bmp__lineup-player {
   display: flex;
   gap: 6px;
+  min-width: 0; /* let the name shrink/ellipsize instead of overflowing */
   font-size: 0.75rem;
   color: var(--ink-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .bmp__lineup-jersey {
+  flex: none;
   color: var(--ink-secondary);
   min-width: 1.8ch;
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+/* The truncatable element: needs min-width:0 to shrink inside the flex row. */
+.bmp__lineup-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bmp__note {
