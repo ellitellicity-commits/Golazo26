@@ -218,7 +218,7 @@ function MatchStatsPanel({ homeName, awayName, homeTeam, awayTeam, status, date 
 
       <div className="lsp__body">
         {!loaded ? (
-          <p className="lsp__note">Loading match data…</p>
+          <p className="lsp__note lsp__note--loading">Loading match data…</p>
         ) : !data || (!data.hasLineups && !data.hasStats) ? (
           <p className="lsp__note">{meta.empty}</p>
         ) : (
@@ -240,22 +240,25 @@ function MatchStatsPanel({ homeName, awayName, homeTeam, awayTeam, status, date 
               </div>
             )}
 
-            {activeTab === 'stats' && data.hasStats && (
-              <section className="lsp__stats" aria-label="Team statistics">
-                {data.statRows.map((row) => (
-                  <StatRow key={row.key} row={row} home={data.stats.home} away={data.stats.away} />
-                ))}
-              </section>
-            )}
+            {/* key={activeTab} replays the fade-in when the tab changes */}
+            <div className="lsp__tabpanel" key={activeTab}>
+              {activeTab === 'stats' && data.hasStats && (
+                <section className="lsp__stats" aria-label="Team statistics">
+                  {data.statRows.map((row) => (
+                    <StatRow key={row.key} row={row} home={data.stats.home} away={data.stats.away} />
+                  ))}
+                </section>
+              )}
 
-            {activeTab === 'lineups' && data.hasLineups && (
-              <section className="lsp__lineups" aria-label="Line-ups">
-                <div className="lsp__lineups-grid">
-                  <Lineup side="home" team={homeTeam} lineup={data.lineups.home} />
-                  <Lineup side="away" team={awayTeam} lineup={data.lineups.away} />
-                </div>
-              </section>
-            )}
+              {activeTab === 'lineups' && data.hasLineups && (
+                <section className="lsp__lineups" aria-label="Line-ups">
+                  <div className="lsp__lineups-grid">
+                    <Lineup side="home" team={homeTeam} lineup={data.lineups.home} />
+                    <Lineup side="away" team={awayTeam} lineup={data.lineups.away} />
+                  </div>
+                </section>
+              )}
+            </div>
 
             {stateKey !== 'pre' && eventList.length > 0 && (
               <section className="lsp__events" aria-label={stateKey === 'live' ? 'Recent goals and cards' : 'Match summary'}>

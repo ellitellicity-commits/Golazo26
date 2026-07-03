@@ -143,6 +143,31 @@
   color: var(--ink);
   border-bottom-color: var(--ink);
 }
+
+/* Tab content fades in on switch (keyed remount replays it). Subtle, working-UI
+   tier — opacity only, no layout shift. */
+.lsp__tabpanel {
+  animation: lsp-fade var(--dur-ui) var(--ease-out-quint);
+}
+@keyframes lsp-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* While ESPN data is in flight, the note pulses so the wait reads as active. */
+.lsp__note--loading {
+  animation: lsp-note-pulse 1.4s ease-in-out infinite;
+}
+@keyframes lsp-note-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
 .lsp__section-title {
   margin: 0 0 var(--space-sm);
   font-family: var(--font-display);
@@ -377,7 +402,9 @@
   .lsp[open] .lsp__body {
     animation: none;
   }
-  .lsp__badge-dot {
+  .lsp__badge-dot,
+  .lsp__tabpanel,
+  .lsp__note--loading {
     animation: none;
   }
   .lsp__chevron,
