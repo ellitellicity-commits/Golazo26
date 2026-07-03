@@ -27,7 +27,7 @@ const HAS_LIVE_DATA = typeof __HAS_LIVE_DATA__ !== 'undefined' && __HAS_LIVE_DAT
 
 // FIFA World Cup competition on football-data.org. Free tier permitting, this
 // returns every tournament match with live status and scores.
-const LIVE_MATCHES_URL = '/football-api/v4/competitions/WC/matches'
+const LIVE_MATCHES_URL = 'https://www.football-data.org/v4/competitions/WC/matches'
 const FETCH_TIMEOUT_MS = 6000
 
 // --- Team-name reconciliation ----------------------------------------------
@@ -88,9 +88,12 @@ async function fetchLiveMatches() {
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
   try {
     const res = await fetch(LIVE_MATCHES_URL, {
-      headers: { Accept: 'application/json' },
-      signal: controller.signal,
-    })
+  headers: {
+    'Accept': 'application/json',
+    'X-Auth-Token': import.meta.env.VITE_FOOTBALL_DATA_API_KEY,
+  },
+  signal: controller.signal,
+})
     if (!res.ok) throw new Error(`football-data.org responded ${res.status}`)
     const json = await res.json()
     if (!Array.isArray(json.matches)) throw new Error('unexpected API shape')
