@@ -10,3 +10,16 @@
 /data/
 /scripts/
 /src/
+
+# Defensive, unanchored: any Python source or manifest ANYWHERE in the tree.
+# Vercel's zero-config framework detection keys off files it finds in the upload;
+# a single stray .py or requirements.txt is enough to misdetect the project as
+# Python even with `framework: "vite"` set. There are no Python files under
+# frontend/, so these globs are safe to leave unanchored and stop a future stray
+# file (e.g. a new script dropped outside /scripts/) from re-triggering that.
+*.py
+requirements*.txt
+Pipfile
+Pipfile.lock
+pyproject.toml
+setup.py

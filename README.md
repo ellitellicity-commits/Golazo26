@@ -243,6 +243,21 @@ Standards: function components with hooks, one component and stylesheet pair per
 2. Set `FOOTBALL_DATA_API_KEY` (free key from football-data.org) in the Vercel project's environment variables. Optionally add `GOOGLE_CUSTOM_SEARCH_KEY` and `GOOGLE_CUSTOM_SEARCH_ENGINE_ID` for player headshots.
 3. Vercel builds with `cd frontend && npm install && npm run build` (see `vercel.json`) and auto-deploys on push to `main`.
 
+### Deployment config — three things that must not regress
+
+The repo root is the Vercel **Root Directory**; the root `vercel.json`, root `api/`, and root `.vercelignore` are authoritative. Three earlier failure modes are each fixed at the source — don't undo these:
+
+1. **Python misdetection.** `scripts/generate_fixtures.py` + `requirements.txt` at the repo root made Vercel's zero-config detection read the project as Python and skip the Vite build. Fixed by (a) `"framework": "vite"` explicit in `vercel.json`, and (b) `.vercelignore` excluding every Python/ML artifact from the upload (`/scripts/`, `/requirements.txt`, `/*.ipynb`, `/models/`, … plus an unanchored `*.py` / manifest catch-all for any future stray file). Keeping the `.py` files in the repo is fine; keeping them out of the upload is the fix.
+2. **The proxy must exist in production.** The football-data.org token can't reach the browser and the API sends no CORS headers, so the request is proxied server-side. In dev that's the Vite proxy (`frontend/vite.config.js`); in production it's the serverless function `api/index.js`, reached via the `vercel.json` rewrite `/football-api/:path* → /api?path=:path*`. `frontend/src/lib/data.js` calls the same `/football-api/*` path in both. (A stale first-attempt proxy under `frontend/api/` + `frontend/vercel.json` was removed — those only work if `frontend/` is the deploy root, which it isn't.)
+3. **The API key env var.** `FOOTBALL_DATA_API_KEY` (unprefixed — a `VITE_` var would inline into the client bundle) set in the Vercel project, Production scope. `api/index.js` 500s without it, and the build-time `__HAS_LIVE_DATA__` flag reads it too, so it must be present at both build and runtime.
+
+Local `vercel build` verification requires `vercel login` (interactive). The live proxy is verifiable without the CLI:
+
+```bash
+curl -s https://world-cup-2026-analytics-xi.vercel.app/football-api/v4/competitions/WC/matches | head -c 200
+# real data (a matches array) => proxy + env var are working; an error/HTML => one of the three above regressed
+```
+
 Local development:
 
 ```bash
