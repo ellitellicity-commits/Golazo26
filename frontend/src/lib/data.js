@@ -27,7 +27,7 @@ const HAS_LIVE_DATA = typeof __HAS_LIVE_DATA__ !== 'undefined' && __HAS_LIVE_DAT
 
 // FIFA World Cup competition on football-data.org. Free tier permitting, this
 // returns every tournament match with live status and scores.
-const LIVE_MATCHES_URL = '/api/football-api/v4/competitions/WC/matches'
+const LIVE_MATCHES_URL = '/football-api/v4/competitions/WC/matches'
 const FETCH_TIMEOUT_MS = 6000
 
 // --- Team-name reconciliation ----------------------------------------------
