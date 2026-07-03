@@ -8,7 +8,7 @@
    [![Status](https://img.shields.io/badge/Status-Live-28A745?style=flat-square)](https://world-cup-2026-analytics-xi.vercel.app)
    [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](#license)
    
-   **Status:** Live — [Play now →](https://world-cup-2026-analytics-xi.vercel.app)
+   **Status:** Live: [Play now! →](https://world-cup-2026-analytics-xi.vercel.app)
    
    </div>
 
