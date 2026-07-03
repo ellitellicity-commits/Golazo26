@@ -1,11 +1,4 @@
 {
-  "buildCommand": "cd frontend && npm ci && npm run build",
-  "outputDirectory": "frontend/dist",
-  "framework": "vite",
-  "rewrites": [
-    {
-      "source": "/api/football-api/:path*",
-      "destination": "/api/football-api/:path*"
-    }
-  ]
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist"
 }
