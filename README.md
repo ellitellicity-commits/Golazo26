@@ -8,7 +8,7 @@
    [![Status](https://img.shields.io/badge/Status-Live-28A745?style=flat-square)](https://world-cup-2026-analytics-xi.vercel.app)
    [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](#license)
    
-   **Status:** Live! (Release Phase v1): [World Cup 2026 Predictor and Dashboard](https://world-cup-2026-analytics-xi.vercel.app)
+   **Status:** Live! (Release Phase v1): [World Cup 2026 Predictor and Dashboard](https://world-cup-2026-analytics-akgkh0hom-ellisons-projects-627810fb.vercel.app/simulator)
    
    </div>
 
