@@ -1,14 +1,15 @@
 #!/usr/bin/env node
-// Playwright scenario: country emblems (session brief, Part B).
+// Playwright scenario: country emblems via the real simulator flow (Part B/C).
 //
-// Runs against `npm run dev`. Drives the global playwright-cli. Asserts:
-//   1. each-emblem-mounts   — CA / MX / US each mount their own emblem on trigger.
-//   2. no-cross-fire        — only one emblem is ever in the DOM at once.
-//   3. emblem-dismisses     — an emblem removes itself after its ~2.8s play.
-//   4. flight-crossing-fires— a real flight (Buenos Aires→New York) crosses US
-//                             airspace and fires the US emblem via the bounding
-//                             circle. Uses a MutationObserver (robust to the
-//                             variable headless frame rate), no console errors.
+// Runs against `npm run dev`. Each host emblem is triggered end-to-end: pick the
+// round whose venue sits in that host (Final→MetLife/US, Group→Azteca/MX,
+// Semi-final→BC Place/CA), simulate, and watch the flight cross into that host's
+// bounding circle and fire its emblem. Asserts, via a MutationObserver (robust to
+// the variable headless frame rate):
+//   1. us-emblem-fires / mx-emblem-fires / ca-emblem-fires — each host emblem
+//      appears during its flight.
+//   2. no-cross-fire — never more than one emblem in the DOM at once.
+// No console errors throughout.
 
 import { execFileSync } from 'node:child_process'
 
@@ -20,58 +21,62 @@ function cli(args, { raw = false } = {}) {
   if (raw) base.push('--raw')
   return execFileSync('playwright-cli', [...base, ...args], { encoding: 'utf8' }).trim()
 }
-const evalRaw = (expr) => cli(['eval', expr], { raw: true })
-// --raw JSON-encodes the result (a string comes back quoted); parse once.
-const evalJSON = (expr) => JSON.parse(evalRaw(expr))
-const clickEmblem = (code) => evalRaw(`(() => { document.querySelector('[data-emblem=${code}]').click(); return 1; })()`)
-const emblemCountry = () => evalJSON('document.querySelector(".emblem")?.dataset.country || "none"')
-const emblemCount = () => evalJSON('document.querySelectorAll(".emblem").length')
+const evalJSON = (expr) => JSON.parse(cli(['eval', expr], { raw: true }))
 const sleep = (ms) => cli(['run-code', `async page => { await page.waitForTimeout(${ms}) }`])
+
+// Set a React-controlled <select> by aria-label (native value setter + change).
+const setRound = (roundId) =>
+  evalJSON(`(() => {
+    const el = [...document.querySelectorAll('select')].find(s => s.getAttribute('aria-label') === 'Round');
+    const set = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set;
+    set.call(el, ${JSON.stringify(roundId)});
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    return el.value;
+  })()`)
+
+// Reset the observer, simulate, and return { seen, max } after the flight. A
+// persistent observer catches every emblem regardless of the headless frame
+// rate; the window is generous enough for the two-leg flight even when slow.
+function runFlight() {
+  evalJSON(`(() => {
+    window.__seen = new Set();
+    window.__max = 0;
+    const root = document.querySelector('.sim');
+    window.__obs && window.__obs.disconnect();
+    window.__obs = new MutationObserver(() => {
+      const n = document.querySelectorAll('.emblem').length;
+      window.__max = Math.max(window.__max, n);
+      const e = document.querySelector('.emblem');
+      if (e) window.__seen.add(e.dataset.country);
+    });
+    window.__obs.observe(root, { childList: true, subtree: true });
+    document.querySelector('.sim__go').click();
+    return 1;
+  })()`)
+  sleep(9000)
+  return { seen: evalJSON('[...(window.__seen||[])]'), max: evalJSON('window.__max||0') }
+}
 
 const results = []
 const record = (name, ok, detail) => results.push({ name, ok, detail })
 
 try {
   cli(['open', `${BASE_URL}/simulator`])
-  cli(['run-code', 'async page => { await page.waitForSelector(".sim__emblem-btn", { timeout: 15000 }) }'])
+  cli(['run-code', 'async page => { await page.waitForSelector(".sim__go", { timeout: 15000 }) }'])
 
-  // 1 + 2: each country mounts its own, one at a time.
-  const mounted = {}
-  let single = true
-  for (const code of ['CA', 'MX', 'US']) {
-    clickEmblem(code)
-    sleep(250)
-    mounted[code] = emblemCountry() === code
-    if (emblemCount() !== 1) single = false
-    sleep(3000) // let it fully dismiss before the next
+  let maxEver = 0
+  for (const [round, host, name] of [['final', 'US', 'us-emblem-fires'], ['group', 'MX', 'mx-emblem-fires'], ['sf', 'CA', 'ca-emblem-fires']]) {
+    setRound(round)
+    sleep(400)
+    const { seen, max } = runFlight()
+    maxEver = Math.max(maxEver, max)
+    record(name, seen.includes(host), `round=${round} emblems seen=${JSON.stringify(seen)} (want ${host})`)
+    sleep(500)
   }
-  record('each-emblem-mounts', mounted.CA && mounted.MX && mounted.US, `CA:${mounted.CA} MX:${mounted.MX} US:${mounted.US}`)
-  record('no-cross-fire', single, `exactly one emblem at a time: ${single}`)
+  record('no-cross-fire', maxEver <= 1, `max emblems on screen at once = ${maxEver}`)
 
-  // 3: dismissal within its lifetime.
-  clickEmblem('MX')
-  sleep(250)
-  const present = emblemCount() === 1
-  sleep(3200)
-  const gone = emblemCount() === 0
-  record('emblem-dismisses', present && gone, `present-then-gone: ${present} -> ${gone}`)
-
-  // 4: a real flight crossing fires the US emblem. Observe DOM mutations so a
-  // fast headless flight can't slip the emblem past a coarse poll.
-  evalRaw(`(() => {
-    window.__seen = new Set();
-    const root = document.querySelector('.sim');
-    new MutationObserver(() => {
-      const e = document.querySelector('.emblem');
-      if (e) window.__seen.add(e.dataset.country);
-    }).observe(root, { childList: true, subtree: true });
-    document.querySelector('.sim__btn').click();
-    return 1;
-  })()`)
-  sleep(6000)
-  const seen = evalJSON('[...window.__seen]')
   const noErr = /Errors:\s*0|Returning 0 messages/.test(cli(['console', 'error']))
-  record('flight-crossing-fires', seen.includes('US') && noErr, `emblems seen during flight=${JSON.stringify(seen)}, console ${noErr ? 'clean' : 'errors'}`)
+  record('no-console-errors', noErr, noErr ? 'clean' : 'errors present')
 } catch (err) {
   record('harness', false, err.message)
 } finally {

@@ -53,19 +53,18 @@ try {
     `mx=${geo.mx} us=${geo.us} ca=${geo.ca} none=${geo.none} arcLen=${geo.arcLen}`,
   )
 
-  // 2. Scripted flight completes.
+  // 2. Scripted flight completes → the result card renders (both legs flew and
+  // the matchup resolved).
   cli(['open', `${BASE_URL}/simulator`])
-  cli(['run-code', 'async page => { await page.waitForSelector(".sim__btn", { timeout: 15000 }) }'])
-  cli(['click', '.sim__btn'])
-  // Poll the arrival signal (flight is ~2.5s).
-  let arrived = false
+  cli(['run-code', 'async page => { await page.waitForSelector(".sim__go", { timeout: 15000 }) }'])
+  cli(['eval', '(() => { document.querySelector(".sim__go").click(); return 1; })()'], { raw: true })
+  let resulted = false
   const start = Date.now()
-  while (Date.now() - start < 10000) {
-    const v = cli(['eval', 'document.querySelector(".sim__status")?.dataset.arrived === "true"'], { raw: true })
-    if (v === 'true') { arrived = true; break }
+  while (Date.now() - start < 14000) {
+    if (cli(['eval', '!!document.querySelector(".sim-result")'], { raw: true }) === 'true') { resulted = true; break }
     cli(['run-code', 'async page => { await page.waitForTimeout(400) }'])
   }
-  record('flight-completes', arrived && errorsClean(), `arrived=${arrived}`)
+  record('flight-completes', resulted && errorsClean(), `result rendered=${resulted}`)
 } catch (err) {
   record('harness', false, err.message)
 } finally {
