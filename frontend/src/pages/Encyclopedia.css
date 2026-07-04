@@ -1,0 +1,24 @@
+.enc {
+  position: relative;
+}
+.enc__stage {
+  width: 100%;
+  height: min(72vh, 680px);
+}
+.enc__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(340px, 86vw);
+  background: var(--surface-card);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+.enc__panel-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-headline);
+  color: var(--ink);
+}

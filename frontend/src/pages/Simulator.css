@@ -1,0 +1,21 @@
+.sim {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  align-items: center;
+}
+.sim__stage {
+  width: 100%;
+  height: min(68vh, 620px);
+}
+.sim__btn {
+  background: var(--ink);
+  color: var(--studio-black);
+  font: 600 var(--text-label) / 1 var(--font-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: 12px 22px;
+  cursor: pointer;
+}
