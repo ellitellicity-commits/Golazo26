@@ -105,6 +105,14 @@
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
   animation: enc-panel-in 300ms var(--ease-out-quint) both;
 }
+/* The panel is a scrolling flex column; without this, an overflowing panel lets
+   flex shrink crush its sections — the CSS-grid stats block has no intrinsic
+   min-height and collapses to just its gap lines. Keep every section at natural
+   height and let the panel scroll instead. (.enc-panel__close is absolute, so
+   it's out of flow and unaffected.) */
+.enc-panel > * {
+  flex-shrink: 0;
+}
 @keyframes enc-panel-in {
   from { opacity: 0; transform: translateX(16px); }
   to { opacity: 1; transform: translateX(0); }
@@ -242,6 +250,113 @@
 .enc-panel__record-meta {
   margin: 0;
   font-size: var(--text-label);
+  color: var(--ink-secondary);
+}
+
+/* The two-line broadcast brief: editorial intro (brighter) then the factual World
+   Cup record (dimmer), each revealed by the typewriter in sequence. The typed +
+   transparent-ghost structure (see Typewriter.css) keeps each box from reflowing
+   as characters land, so nothing below jumps. */
+.enc-panel__brief {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: calc(-1 * var(--space-sm));
+}
+.enc-panel__intro {
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+/* The World Cup record — subordinate to the intro: quieter and a touch smaller,
+   so the pair reads as headline + footnote rather than two equal lines. */
+.enc-panel__history {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+/* Head coach — sourced identity data, set in the display face like the other
+   headline figures. Falls back to an honest, muted "pending" when unsourced. */
+.enc-panel__coach {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.enc-panel__coach-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.enc-panel__coach-pending {
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+/* Notable players — real, sourced squad data. */
+.enc-panel__squad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.enc-squad {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border-divider);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.enc-squad__row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  column-gap: var(--space-sm);
+  row-gap: 2px;
+  padding: 9px 12px;
+  background: var(--surface-card);
+}
+.enc-squad__pos {
+  grid-row: span 2;
+  align-self: center;
+  min-width: 34px;
+  padding: 3px 0;
+  text-align: center;
+  background: var(--surface-overlay);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-label);
+  letter-spacing: 0.04em;
+  color: var(--ink-secondary);
+}
+.enc-squad__name {
+  font-weight: 600;
+  font-size: var(--text-label);
+  color: var(--ink);
+  line-height: 1.2;
+}
+.enc-squad__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  font-size: var(--text-meta);
+  color: var(--ink-muted);
+}
+.enc-squad__club {
   color: var(--ink-secondary);
 }
 
