@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   LAYOUT,
   META,
-  PARENT_OF,
   REVEAL_ORDER,
   buildViews,
   liveResults,
@@ -135,7 +134,7 @@ function MatchCaption({ view, mode }) {
   )
 }
 
-function BracketMatch({ view, side, revealed, championName, style, hideCaption = false, outLit = false, joinSide = null }) {
+function BracketMatch({ view, side, revealed, championName, style, hideCaption = false, outLit = false, joinTop = false, joinBottom = false }) {
   const decided = !!view.winner
   const live = view.status === 'live'
   // Any tie carrying a score shows goal digits — real R32 results, real knockout
@@ -191,10 +190,11 @@ function BracketMatch({ view, side, revealed, championName, style, hideCaption =
       </div>
       {hasJoin && (
         <i
-          className={`bk-match__join bk-match__join--${side}${joinSide ? ' is-hi' : ''}`}
+          className={`bk-match__join bk-match__join--${side}${joinTop || joinBottom ? ' is-hi' : ''}`}
           aria-hidden="true"
         >
-          {joinSide && <i className={`bk-match__join-hi bk-match__join-hi--${joinSide}`} />}
+          {joinTop && <i className="bk-match__join-hi bk-match__join-hi--top" />}
+          {joinBottom && <i className="bk-match__join-hi bk-match__join-hi--bottom" />}
         </i>
       )}
     </>
@@ -359,17 +359,17 @@ function Bracket({ groups }) {
   const thirdView = views[LAYOUT.thirdId]
   const championTeam = champion ? views[LAYOUT.finalId].home.name === champion ? views[LAYOUT.finalId].home : views[LAYOUT.finalId].away : null
 
-  // Highlight scoping: a match's outgoing line lights only when its winner is the
-  // same team that goes on to win the next match (i.e. this team's advance is
-  // confirmed) — so the lit trail follows one team, never the loser's side or a
-  // dead-ended branch. The join lights only the half on the winner's own feeder.
-  const winnerSideOf = (v) =>
-    v?.winner ? (v.home.kind === 'team' && v.winner === v.home.name ? 'top' : 'bottom') : null
-  const outLitOf = (v) => {
-    if (!v?.winner) return false
-    const parent = views[PARENT_OF[v.id]]
-    return !!parent && parent.winner === v.winner
-  }
+  // Highlight = the rounds a team actually won, and they stay lit. A match's
+  // outgoing line lights the moment the match is decided (its winner won this
+  // round and advanced); it persists even after that team is later eliminated,
+  // it simply never extends past the round they lost — that next match isn't
+  // decided in their favour, so its outgoing carries the OTHER team's advance.
+  const outLitOf = (v) => !!v?.winner
+  // Each feeder that has produced a winner lights its own half of the join into
+  // this match (both halves once both feeders are decided). The team that loses
+  // THIS match still keeps the half for the round they won to reach it.
+  const joinTopOf = (v) => v?.home?.kind === 'team'
+  const joinBottomOf = (v) => v?.away?.kind === 'team'
 
   const renderRound = (side, round) => {
     const ids = LAYOUT[side][round]
@@ -390,7 +390,8 @@ function Bracket({ groups }) {
             revealed={revealedForMatch}
             championName={champion}
             outLit={outLitOf(views[id])}
-            joinSide={winnerSideOf(views[id])}
+            joinTop={joinTopOf(views[id])}
+            joinBottom={joinBottomOf(views[id])}
             style={{ gridColumn: col, gridRow: `${2 + i * span} / span ${span}` }}
           />
         ))}
@@ -485,12 +486,8 @@ function Bracket({ groups }) {
             <div className="bk-stage bk-stage--final">Final</div>
             <div className="bk-center__body">
               <div
-                className={`bk-final-wrap${
-                  finalView.winner
-                    ? finalView.home.kind === 'team' && finalView.winner === finalView.home.name
-                      ? ' is-from-left'
-                      : ' is-from-right'
-                    : ''
+                className={`bk-final-wrap${finalView.home.kind === 'team' ? ' is-from-left' : ''}${
+                  finalView.away.kind === 'team' ? ' is-from-right' : ''
                 }`}
               >
                 <div className="bk-final-head">
