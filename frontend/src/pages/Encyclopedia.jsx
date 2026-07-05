@@ -3,10 +3,17 @@ import GlobeHero from '../components/GlobeHero'
 import Typewriter from '../components/Typewriter'
 import { TEAM_COORDINATES } from '../lib/stadiumData'
 import { getCountry, COUNTRY_NAMES } from '../lib/countryData'
-import { teamMeta } from '../lib/teams'
+import { teamMeta, flagUrl } from '../lib/teams'
+import countryShapesRaw from '../data/countryShapes.json'
 import './Encyclopedia.css'
 
 const NAMES_SORTED = [...COUNTRY_NAMES].sort()
+
+// Real boundary polygons (Natural Earth, baked in scripts/generate_country_shapes.mjs)
+// joined with each nation's flag URL — drives the hover flag-fill on the globe.
+const COUNTRY_SHAPES = Object.fromEntries(
+  Object.entries(countryShapesRaw).map(([name, s]) => [name, { ...s, flag: flagUrl(teamMeta(name).iso) }]),
+)
 
 // The Atlas — an interactive globe of the 48 qualified nations. Click a marker to
 // open that nation's profile: real sourced data (FIFA rank, Elo, group,
@@ -145,7 +152,7 @@ export default function Encyclopedia() {
         </label>
       </header>
       <div className="enc__stage">
-        <GlobeHero mode="interactive" markers={MARKERS} onCountryClick={(m) => setSelected(m.name)} ariaLabel="Country atlas globe" />
+        <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} onCountryClick={(m) => setSelected(m.name)} ariaLabel="Country atlas globe" />
         {!country && <p className="enc__hint" aria-hidden="true">Tap a marker</p>}
         {country && <Panel country={country} onClose={() => setSelected(null)} />}
       </div>
