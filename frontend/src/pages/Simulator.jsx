@@ -1,9 +1,11 @@
 import { useMemo, useRef, useState } from 'react'
 import GlobeHero from '../components/GlobeHero'
-import CountryEmblem from '../components/CountryEmblem'
 import StadiumPanel from '../components/StadiumPanel'
+import Cutscene from '../components/Cutscene'
 import { TEAM_COORDINATES, STADIUMS, STADIUM_LIST } from '../lib/stadiumData'
 import { STADIUM_INFO } from '../lib/stadiumInfo'
+import { sampleMatchStats } from '../lib/matchStats'
+import { pickHype } from '../lib/hypeLines'
 import { winProb } from '../lib/bracket'
 import TEAM_META, { teamMeta, flagUrl } from '../lib/teams'
 import './Simulator.css'
@@ -87,7 +89,54 @@ function ResultCard({ result }) {
           </span>
         </div>
       </div>
+      {result.stats && <MatchStats stats={result.stats} homeCode={hm.code} awayCode={am.code} />}
     </section>
+  )
+}
+
+// Full match stats after the cutscene (B4): formations, Man of the Match, and a
+// two-sided comparison of every stat. Neutral bars (ink ramp) — never host
+// accents, which stay role-locked.
+function StatRow({ row }) {
+  const { label, home, away, unit = '' } = row
+  const total = home + away
+  const homeFrac = total > 0 ? (home / total) * 100 : 50
+  return (
+    <div className="sim-stat">
+      <span className="sim-stat__val sim-stat__val--home tnum">{home}{unit}</span>
+      <span className="sim-stat__label">{label}</span>
+      <span className="sim-stat__val sim-stat__val--away tnum">{away}{unit}</span>
+      <div className="sim-stat__bar" aria-hidden="true">
+        <span className="sim-stat__fill sim-stat__fill--home" style={{ width: `${homeFrac}%` }} />
+        <span className="sim-stat__fill sim-stat__fill--away" style={{ width: `${100 - homeFrac}%` }} />
+      </div>
+    </div>
+  )
+}
+
+function MatchStats({ stats, homeCode, awayCode }) {
+  const { formations, motm, rows } = stats
+  return (
+    <div className="sim-stats">
+      <div className="sim-stats__formations">
+        <span className="sim-stats__form tnum">{formations.home}</span>
+        <span className="sim-stats__form-label">Formations</span>
+        <span className="sim-stats__form tnum">{formations.away}</span>
+      </div>
+      {motm && (
+        <div className="sim-stats__motm">
+          <span className="sim-stats__motm-label">Man of the Match</span>
+          <span className="sim-stats__motm-name display">{motm.name}</span>
+          <span className="sim-stats__motm-meta">{motm.position} · {motm.club} · {motm.team}</span>
+        </div>
+      )}
+      <div className="sim-stats__head" aria-hidden="true">
+        <span>{homeCode}</span><span>Match stats</span><span>{awayCode}</span>
+      </div>
+      <div className="sim-stats__rows">
+        {rows.map((r) => <StatRow key={r.label} row={r} />)}
+      </div>
+    </div>
   )
 }
 
@@ -110,13 +159,10 @@ export default function Simulator() {
   const [roundId, setRoundId] = useState('final')
   const [venueName, setVenueName] = useState('MetLife Stadium') // user-selectable destination (B2)
   const [panelVenue, setPanelVenue] = useState(null) // stadium name shown in the encyclopedia panel
-  const [phase, setPhase] = useState('idle') // idle | flying | result
-  const [flight, setFlight] = useState(null)
+  const [phase, setPhase] = useState('idle') // idle | cutscene | result
+  const [cutscene, setCutscene] = useState(null) // match payload for the pregame sequence (B4)
   const [result, setResult] = useState(null)
-  const [emblem, setEmblem] = useState(null)
-  const lastHost = useRef(null)
   const pending = useRef(null)
-  const leg = useRef(0)
 
   const round = ROUNDS.find((r) => r.id === roundId)
   const canSim = home && away && home !== away
@@ -134,9 +180,9 @@ export default function Simulator() {
   }, [home, away, venueName])
 
   // Clicking a venue marker selects it as the flight destination and opens its
-  // encyclopedia panel (ignored mid-flight so a running sim isn't hijacked).
+  // encyclopedia panel (ignored mid-cutscene so a running sim isn't hijacked).
   const onMarkerClick = (m) => {
-    if (m?.kind !== 'venue' || phase === 'flying') return
+    if (m?.kind !== 'venue' || phase === 'cutscene') return
     setVenueName(m.name)
     setPanelVenue(m.name)
   }
@@ -147,39 +193,33 @@ export default function Simulator() {
     return { name: panelVenue, ...STADIUMS[panelVenue], ...STADIUM_INFO[panelVenue] }
   }, [panelVenue])
 
+  // Simulate: compute everything up front (fast, as before), then play the
+  // pregame cutscene (B4) as a flourish on top. The cutscene's onComplete reveals
+  // the full result + stats — the sim itself never waits on the animation.
   const simulate = () => {
     if (!canSim) return
     const stad = STADIUMS[venueName]
     const pHome = winProb(home, away, stad.country)
     const score = sampleResult(pHome, roundId)
-    pending.current = { home, away, score, pHome, round, venue: stad }
+    const stats = sampleMatchStats(home, away, score, pHome)
+    const { lines } = pickHype({ home, away, venue: venueName, city: stad.hostCity, pHome, roundId })
+    pending.current = { home, away, score, pHome, round, venue: stad, stats }
     setResult(null)
-    setEmblem(null)
-    lastHost.current = null
-    leg.current = 0
-    setPhase('flying')
-    setFlight({ id: Date.now(), from: TEAM_COORDINATES[home], to: [stad.lat, stad.lng] })
+    setPanelVenue(null)
+    setCutscene({
+      home, away,
+      homeFlag: flagUrl(teamMeta(home).iso), awayFlag: flagUrl(teamMeta(away).iso),
+      homeCode: teamMeta(home).code, awayCode: teamMeta(away).code,
+      venue: { name: venueName, city: stad.hostCity, country: stad.country, spec: STADIUM_INFO[venueName] },
+      hype: lines,
+    })
+    setPhase('cutscene')
   }
 
-  const onFlightComplete = () => {
-    const stad = pending.current.venue
-    if (leg.current === 0) {
-      leg.current = 1
-      lastHost.current = null
-      setFlight({ id: Date.now() + 1, from: TEAM_COORDINATES[away], to: [stad.lat, stad.lng] })
-    } else {
-      setResult(pending.current)
-      setPhase('result')
-    }
-  }
-
-  const onProgress = ({ host }) => {
-    if (host && host !== lastHost.current) {
-      lastHost.current = host
-      setEmblem({ code: host, id: Date.now() })
-    } else if (!host) {
-      lastHost.current = null
-    }
+  const revealResult = () => {
+    setCutscene(null)
+    setResult(pending.current)
+    setPhase('result')
   }
 
   return (
@@ -210,8 +250,8 @@ export default function Simulator() {
             ))}
           </select>
         </label>
-        <button className="sim__go" type="submit" disabled={!canSim || phase === 'flying'}>
-          {phase === 'flying' ? 'In flight…' : 'Simulate'}
+        <button className="sim__go" type="submit" disabled={!canSim || phase === 'cutscene'}>
+          {phase === 'cutscene' ? 'Kicking off…' : 'Simulate'}
         </button>
       </form>
 
@@ -219,11 +259,8 @@ export default function Simulator() {
         <GlobeHero
           mode="flight"
           markers={markers}
-          flight={flight}
-          onFlightProgress={onProgress}
-          onFlightComplete={onFlightComplete}
           onCountryClick={onMarkerClick}
-          ariaLabel="Match flight globe"
+          ariaLabel="Venue selection globe"
         />
         {!panelVenue && (
           <p className="sim__venue-hint" aria-hidden="true">
@@ -234,7 +271,7 @@ export default function Simulator() {
       </div>
 
       {phase === 'result' && result && <ResultCard result={result} />}
-      {emblem && <CountryEmblem key={emblem.id} country={emblem.code} onDone={() => setEmblem(null)} />}
+      {phase === 'cutscene' && cutscene && <Cutscene match={cutscene} onComplete={revealResult} />}
     </div>
   )
 }

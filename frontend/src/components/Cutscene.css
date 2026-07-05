@@ -1,0 +1,148 @@
+/* Pregame cutscene overlay (B4). Full-screen cinematic focal moment on the deep
+   studio-black ground. Neutral chrome — the accent colours stay role-locked; the
+   drama comes from motion and scale, not hue. */
+.cutscene {
+  position: fixed;
+  inset: 0;
+  z-index: 500; /* above the sticky nav (--z-sticky: 100) — full-screen takeover */
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 42%, #10151b, var(--studio-black) 70%);
+  display: grid;
+  place-items: center;
+}
+
+.cut__stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0; /* revealed at the plane-arrival beat */
+}
+.cut__stage canvas { display: block; }
+
+/* --- Beat 1: VS card --- */
+.cut__vs {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 5vw, 64px);
+}
+.cut__side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(38vw, 360px);
+}
+.cut__flag {
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+  object-fit: cover;
+}
+.cut__code {
+  font: 600 var(--text-label) / 1 var(--font-body);
+  letter-spacing: 0.14em;
+  color: var(--ink-muted);
+}
+.cut__team {
+  font-weight: 800;
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-align: center;
+}
+.cut__vs-badge {
+  font-weight: 800;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 1;
+  color: var(--ink);
+  -webkit-text-stroke: 2px var(--studio-black);
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.7));
+}
+
+/* --- Beats 2/3: captions over the 3D stage --- */
+.cut__caption {
+  position: absolute;
+  bottom: clamp(48px, 12vh, 120px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  margin: 0;
+  opacity: 0;
+  font: 600 var(--text-label) / 1 var(--font-body);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+.cut__caption--venue {
+  bottom: auto;
+  top: clamp(48px, 12vh, 120px);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
+/* --- Beat 4: hype text --- */
+.cut__hype {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: clamp(64px, 16vh, 160px);
+  transform: translateX(-50%);
+  width: min(90vw, 780px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cut__hype-line {
+  margin: 0;
+  opacity: 0; /* revealed per-line by the timeline */
+  font: 500 clamp(1.1rem, 2.6vw, 1.6rem) / 1.35 var(--font-body);
+  color: var(--ink);
+  text-align: center;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
+}
+
+/* --- Beat 5: countdown + hard cut --- */
+.cut__count {
+  position: absolute;
+  z-index: 4;
+  font-weight: 800;
+  font-size: clamp(6rem, 22vw, 16rem);
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0;
+  font-variant-numeric: tabular-nums;
+}
+.cut__flash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: var(--studio-black);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cut__skip {
+  position: absolute;
+  z-index: 6;
+  bottom: 20px;
+  right: 24px;
+  padding: 8px 16px;
+  background: color-mix(in srgb, var(--surface-card) 80%, transparent);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-md);
+  color: var(--ink-secondary);
+  font: 600 var(--text-label) / 1 var(--font-body);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.cut__skip:hover { color: var(--ink); background: var(--surface-elevated); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cut__stage { opacity: 1; }
+}

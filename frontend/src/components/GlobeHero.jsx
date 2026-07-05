@@ -153,7 +153,7 @@ function loadFlagTexture(url, onReady) {
 // aims a non-camera object's +Z at its target (verified against three@0.185), so
 // after the flight loop's lookAt(nextPoint) the nose leads the direction of
 // travel. Tail assembly sits at -Z.
-function buildPlane() {
+export function buildPlane() {
   const g = new THREE.Group()
   const mat = new THREE.MeshStandardMaterial({ color: COL.plane, roughness: 0.5, metalness: 0.1 })
   const fuselage = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.008, 0.06, 12), mat)
