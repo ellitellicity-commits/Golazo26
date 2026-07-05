@@ -536,45 +536,26 @@
   box-shadow: var(--bk-line-glow);
 }
 
+/* A match's vertical merge. One state for the whole bar (+ its stub), owned by
+   the match's winner: default faint skeleton while undecided, glowing the moment
+   the match is won, dimmed once that winner is knocked out. The bar spans 25%–75%
+   of the box; its ::after stub bridges the midpoint into the box. */
 .bk-match__join {
   position: absolute;
   top: 25%;
   bottom: 25%;
   width: var(--bk-line-w);
   background: var(--bk-line);
-  transition: background var(--dur-ui) var(--ease-out-quint);
+  transition:
+    background var(--dur-ui) var(--ease-out-quint),
+    box-shadow var(--dur-ui) var(--ease-out-quint);
 }
-/* Each feeder's half of the vertical join, laid over the faint full bar. The join
-   spans 25%–75% of the box (its own 0–100%), with the midpoint stub at 50%; a
-   feeder's winner enters from the top (0–50%) or the bottom (50–100%). Each half
-   carries its own team's state, so an alive team's arrival glows while a beaten
-   team's arrival is muted — even in the same match. */
-.bk-match__join-hi {
-  position: absolute;
-  left: 0;
-  width: var(--bk-line-w);
-}
-.bk-match__join-hi.is-elim {
+.bk-match__join.is-vert-elim,
+.bk-match__join.is-vert-elim::after {
   background: var(--bk-line-elim);
 }
-.bk-match__join-hi.is-win {
-  background: var(--bk-line-win);
-  box-shadow: var(--bk-line-glow);
-}
-.bk-match__join-hi--top {
-  top: 0;
-  height: 50%;
-}
-.bk-match__join-hi--bottom {
-  top: 50%;
-  height: 50%;
-}
-/* The stub into the box follows the continuing team: glowing if an alive team
-   passes through, muted if only beaten teams reached here. */
-.bk-match__join.is-stub-elim::after {
-  background: var(--bk-line-elim);
-}
-.bk-match__join.is-stub-win::after {
+.bk-match__join.is-vert-win,
+.bk-match__join.is-vert-win::after {
   background: var(--bk-line-win);
   box-shadow: var(--bk-line-glow);
 }
@@ -603,6 +584,26 @@
 }
 .bk-match__join--right::after {
   right: 100%;
+}
+/* R32 has no feeder matches — its two group-stage teams share one box — so its
+   merge bar hugs the box's OUTGOING edge (mirroring later rounds, whose merge
+   sits on the feeder side) and feeds straight into the winner's outgoing
+   horizontal. It brackets the two team rows, not the 25–75% feeder span, and
+   needs no stub into the box. */
+.bk-match__join--r32 {
+  top: 30%;
+  bottom: 30%;
+}
+.bk-grid--left .bk-match__join--r32 {
+  right: auto;
+  left: 100%;
+}
+.bk-grid--right .bk-match__join--r32 {
+  left: auto;
+  right: 100%;
+}
+.bk-match__join--r32::after {
+  content: none;
 }
 
 /* --- Centre column: final + trophy + third place --- */
@@ -657,17 +658,12 @@
 .bk-final-wrap .bk-match__box::after {
   left: 100%;
 }
-/* Each finalist's incoming stub (left SF = M101, right SF = M102) takes its own
-   team's state: the champion's side glows, the runner-up's side is muted. */
-.bk-final-wrap.is-left-elim .bk-match__box::before {
-  background: var(--bk-line-elim);
-}
+/* Each finalist's incoming stub (left SF = M101, right SF = M102) is a
+   winner-carries-forward horizontal earned only by winning the final, so only the
+   champion's side lights; the runner-up's stays default (it was never earned). */
 .bk-final-wrap.is-left-win .bk-match__box::before {
   background: var(--bk-line-win);
   box-shadow: var(--bk-line-glow);
-}
-.bk-final-wrap.is-right-elim .bk-match__box::after {
-  background: var(--bk-line-elim);
 }
 .bk-final-wrap.is-right-win .bk-match__box::after {
   background: var(--bk-line-win);

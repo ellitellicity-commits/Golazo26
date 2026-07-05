@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   LAYOUT,
   META,
+  PARENT_OF,
   REVEAL_ORDER,
   buildViews,
   liveResults,
@@ -134,7 +135,7 @@ function MatchCaption({ view, mode }) {
   )
 }
 
-function BracketMatch({ view, side, revealed, championName, style, hideCaption = false, outState = null, joinTopState = null, joinBottomState = null }) {
+function BracketMatch({ view, side, revealed, championName, style, hideCaption = false, outState = null, vertState = null }) {
   const decided = !!view.winner
   const live = view.status === 'live'
   // Any tie carrying a score shows goal digits — real R32 results, real knockout
@@ -151,7 +152,11 @@ function BracketMatch({ view, side, revealed, championName, style, hideCaption =
   const isFinal = view.round === 'final'
   const championGold = isFinal && !!championName
 
-  const hasJoin = view.round === 'r16' || view.round === 'qf' || view.round === 'sf'
+  // Every match owns a vertical merge, R32 included: at R32 the two group-stage
+  // teams share one box, so the join brackets that pairing; at later rounds it
+  // merges the two feeder matches. The Final/Third have no merge bar (finalists
+  // converge horizontally; third place is off the tree).
+  const hasJoin = view.round === 'r32' || view.round === 'r16' || view.round === 'qf' || view.round === 'sf'
   const justRevealed = revealed?.has?.(view.id)
 
   // Live/finished R32 ties (real tournament only) reveal a compact hover/tap
@@ -159,10 +164,6 @@ function BracketMatch({ view, side, revealed, championName, style, hideCaption =
   const previewable = revealed === null && view.round === 'r32' && (live || completed) && both
 
   const outClass = outState ? ` is-out-${outState}` : ''
-  // The stub carries into this box; it glows if either arriving team is alive,
-  // else muted if anyone has arrived. Keeps the champion's line continuous through
-  // the box while a beaten team's stub stays muted.
-  const stubState = joinTopState === 'win' || joinBottomState === 'win' ? 'win' : joinTopState || joinBottomState || null
   const className = `bk-match bk-match--${view.round}${decided ? ' is-decided' : ''}${
     live ? ' is-live' : ''
   }${outClass}${justRevealed ? ' is-pop' : ''}${previewable ? ' is-previewable' : ''}`
@@ -195,12 +196,9 @@ function BracketMatch({ view, side, revealed, championName, style, hideCaption =
       </div>
       {hasJoin && (
         <i
-          className={`bk-match__join bk-match__join--${side}${stubState ? ` is-stub-${stubState}` : ''}`}
+          className={`bk-match__join bk-match__join--${side} bk-match__join--${view.round}${vertState ? ` is-vert-${vertState}` : ''}`}
           aria-hidden="true"
-        >
-          {joinTopState && <i className={`bk-match__join-hi bk-match__join-hi--top is-${joinTopState}`} />}
-          {joinBottomState && <i className={`bk-match__join-hi bk-match__join-hi--bottom is-${joinBottomState}`} />}
-        </i>
+        />
       )}
     </>
   )
@@ -365,10 +363,11 @@ function Bracket({ groups }) {
   const championTeam = champion ? views[LAYOUT.finalId].home.name === champion ? views[LAYOUT.finalId].home : views[LAYOUT.finalId].away : null
 
   // A team stays "alive" until it loses a decided match (its name shows up as a
-  // loser somewhere). In a finished bracket the champion is the only survivor, so
-  // only their line glows; every other path is muted and stops at the round it
-  // lost. Mid-tournament, each not-yet-beaten team's path-so-far glows. Every
-  // connector is the same thickness — only brightness and length tell paths apart.
+  // loser somewhere). The champion is the only team that never loses, so their
+  // path is the only one still glowing in a finished bracket. Derived fresh from
+  // the current results every render, so re-simulating any match recomputes the
+  // whole tree — no stale state carried forward. Every connector is the same
+  // thickness; only brightness (and length) tells paths apart.
   const eliminated = useMemo(() => {
     const s = new Set()
     for (const id of ALL_IDS) {
@@ -378,14 +377,27 @@ function Bracket({ groups }) {
     return s
   }, [views])
 
-  // A decided segment glows if the team that won it is still alive; it stays but
-  // muted once that team is knocked out. Undecided rounds get no state (the faint
-  // structural skeleton). Each match's outgoing line and the matching half of the
-  // next round's join share the same team, so they carry the same state.
-  const pathStateOf = (name) => (name ? (eliminated.has(name) ? 'elim' : 'win') : null)
-  const outStateOf = (v) => (v?.winner ? pathStateOf(v.winner) : null)
-  const joinTopStateOf = (v) => (v?.home?.kind === 'team' ? pathStateOf(v.home.name) : null)
-  const joinBottomStateOf = (v) => (v?.away?.kind === 'team' ? pathStateOf(v.away.name) : null)
+  const actualChampion = views[LAYOUT.finalId]?.winner ?? null
+
+  // Two segment types, three states (default / glowing `win` / dimmed `elim`):
+  //
+  // • Vertical (a match's merge): glows the moment the match is won — while that
+  //   winner is still alive — and dims, all at once, once that winner is knocked
+  //   out. Owned by the match's winner (one colour for the whole join), so a
+  //   beaten team's earned verticals dim together while the champion's stay lit.
+  //
+  // • Outgoing horizontal (winner carries forward into PARENT_OF[id]): only
+  //   "earned" — and lit — once that winner ALSO wins the next match. A horizontal
+  //   into a match the team lost was never earned, so it stays default forever
+  //   (never dims), and nothing renders past it for that team.
+  const stateAlive = (name) => (name ? (eliminated.has(name) ? 'elim' : 'win') : null)
+  const vertStateOf = (v) => (v?.winner ? stateAlive(v.winner) : null)
+  const outStateOf = (v) => {
+    const w = v?.winner
+    if (!w) return null
+    const parent = views[PARENT_OF[v.id]]
+    return parent?.winner === w ? stateAlive(w) : null
+  }
 
   const renderRound = (side, round) => {
     const ids = LAYOUT[side][round]
@@ -406,8 +418,7 @@ function Bracket({ groups }) {
             revealed={revealedForMatch}
             championName={champion}
             outState={outStateOf(views[id])}
-            joinTopState={joinTopStateOf(views[id])}
-            joinBottomState={joinBottomStateOf(views[id])}
+            vertState={vertStateOf(views[id])}
             style={{ gridColumn: col, gridRow: `${2 + i * span} / span ${span}` }}
           />
         ))}
@@ -503,8 +514,8 @@ function Bracket({ groups }) {
             <div className="bk-center__body">
               <div
                 className={`bk-final-wrap${
-                  finalView.home.kind === 'team' ? ` is-left-${pathStateOf(finalView.home.name)}` : ''
-                }${finalView.away.kind === 'team' ? ` is-right-${pathStateOf(finalView.away.name)}` : ''}`}
+                  actualChampion && finalView.home.name === actualChampion ? ' is-left-win' : ''
+                }${actualChampion && finalView.away.name === actualChampion ? ' is-right-win' : ''}`}
               >
                 <div className="bk-final-head">
                   <span className="bk-final-head__label">Final</span>
