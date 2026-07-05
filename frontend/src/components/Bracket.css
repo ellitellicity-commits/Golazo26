@@ -819,6 +819,11 @@
   max-width: 90ch;
 }
 
+/* Horizontal-pan affordance — desktop shows the whole tree, so hide it there. */
+.bk__swipe {
+  display: none;
+}
+
 /* --- Responsive: shrink density, then drop rails on the narrowest screens --- */
 @media (max-width: 1100px) {
   .bk {
@@ -839,6 +844,28 @@
   .bk__champ-odds {
     margin-left: 0;
   }
+  /* The full two-sided tree is wider than the phone; it pans horizontally. Make
+     the gesture discoverable rather than leaving the off-screen rounds hidden. */
+  .bk__swipe {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-label);
+    color: var(--ink-muted);
+  }
+  .bk__swipe-arrow {
+    color: var(--ink-secondary);
+    animation: bk-swipe-nudge 1.8s var(--ease-out-quint) infinite;
+  }
+}
+@keyframes bk-swipe-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -848,7 +875,8 @@
     animation: none;
   }
   .bk-match__today-dot,
-  .bk-match__live-dot {
+  .bk-match__live-dot,
+  .bk__swipe-arrow {
     animation: none;
   }
 }

@@ -459,6 +459,15 @@ function Bracket({ groups }) {
         Gold dot marks a match played in the host nation’s own country (USA · Canada · Mexico) — where the venue advantage applies.
       </p>
 
+      {/* Narrow viewports pan the full tree horizontally; announce the gesture so
+          the off-screen rounds are discoverable (desktop shows the whole tree). */}
+      <p className="bk__swipe">
+        Swipe across to follow every round
+        <svg className="bk__swipe-arrow" viewBox="0 0 24 12" width="24" height="12" aria-hidden="true">
+          <path d="M2 6h18m0 0-5-4m5 4-5 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </p>
+
       <div className="bk__scroller">
         <div className="bk__canvas">
           <BracketTexture />
