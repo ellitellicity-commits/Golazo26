@@ -62,9 +62,17 @@
 /* --- Desktop tab row --- */
 .nav__tabs {
   display: none; /* shown ≥ 860px; mobile uses the bottom tab bar */
-  justify-self: center;
+  /* Fill the centre grid track and centre the tabs inside it with `safe`: while
+     the row fits, it sits centred as before; if the track is ever shorter than
+     the row (a wider-rendered wordmark under fullscreen scaling/font fallback ate
+     the slim margin), it falls back to start-alignment instead of overflowing
+     LEFT across the brand — which was the title/Home overlap. min-width:0 lets the
+     track actually shrink so the fallback engages rather than forcing an overflow. */
+  justify-self: stretch;
+  min-width: 0;
+  justify-content: safe center;
   align-items: stretch;
-  gap: clamp(var(--space-md), 2vw, var(--space-xl));
+  gap: clamp(var(--space-sm), 1.6vw, var(--space-lg));
 }
 .nav__tab {
   position: relative;
@@ -248,7 +256,7 @@
    ========================================================================== */
 @media (min-width: 860px) {
   .nav__tabs {
-    display: inline-flex;
+    display: flex;
   }
   .tabbar {
     display: none;
