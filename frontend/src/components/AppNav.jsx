@@ -102,8 +102,8 @@ function AppNav() {
 
           <div className="nav__meta">
             <DataSourceChip source={source} />
-            <p className="nav__badge" title="Predictions from a gradient-boosted model over 10,000 Monte Carlo tournament runs">
-              <span className="nav__badge-engine">XGBoost</span>
+            <p className="nav__badge" title="Predictions from a machine-learning model over 10,000 Monte Carlo tournament runs">
+              <span className="nav__badge-engine">Model</span>
               <span className="nav__badge-dot" aria-hidden="true">·</span>
               <span className="nav__badge-sims tnum">{sims}</span>
               <span className="nav__badge-unit"> simulations</span>
