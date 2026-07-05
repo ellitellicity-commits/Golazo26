@@ -148,6 +148,33 @@ function loadFlagTexture(url, onReady) {
   img.src = url
 }
 
+// A small broadcast-white airliner built from primitives (B1) — fuselage, swept
+// wings, tail fin + tailplane, nose cone. Nose points along +Z: Object3D.lookAt
+// aims a non-camera object's +Z at its target (verified against three@0.185), so
+// after the flight loop's lookAt(nextPoint) the nose leads the direction of
+// travel. Tail assembly sits at -Z.
+function buildPlane() {
+  const g = new THREE.Group()
+  const mat = new THREE.MeshStandardMaterial({ color: COL.plane, roughness: 0.5, metalness: 0.1 })
+  const fuselage = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.008, 0.06, 12), mat)
+  fuselage.rotation.x = Math.PI / 2 // cylinder Y-axis → Z (fore/aft)
+  g.add(fuselage)
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.006, 0.02, 12), mat)
+  nose.rotation.x = Math.PI / 2 // cone apex → +Z (forward)
+  nose.position.z = 0.04
+  g.add(nose)
+  const wings = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.004, 0.018), mat)
+  wings.position.z = -0.002
+  g.add(wings)
+  const tailplane = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.003, 0.011), mat)
+  tailplane.position.z = -0.027
+  g.add(tailplane)
+  const fin = new THREE.Mesh(new THREE.BoxGeometry(0.003, 0.016, 0.014), mat)
+  fin.position.set(0, 0.008, -0.027)
+  g.add(fin)
+  return g
+}
+
 function GlobeHero({
   mode = 'interactive',
   markers = [],
@@ -322,6 +349,7 @@ function GlobeHero({
     // project a lat/lng to screen px (to drive a real mouse), and read back the
     // live hover/flag state — the hover path itself runs unmodified.
     if (import.meta.env.DEV) {
+      window.__eng = () => eng.current
       window.__atlas = {
         face: (lat, lng) => {
           const E = eng.current; if (!E) return
@@ -453,8 +481,7 @@ function GlobeHero({
     // Clear any previous arc/plane.
     while (E.arcGroup.children.length) {
       const c = E.arcGroup.children.pop()
-      c.geometry?.dispose()
-      c.material?.dispose?.()
+      c.traverse?.((o) => { o.geometry?.dispose?.(); o.material?.dispose?.() })
       E.arcGroup.remove(c)
     }
     const points = greatCircleArc(flight.from, flight.to, R, 128)
@@ -463,11 +490,7 @@ function GlobeHero({
     const arcLine = new THREE.Line(arcGeo, new THREE.LineBasicMaterial({ color: COL.arc, transparent: true, opacity: 0.95 }))
     E.arcGroup.add(arcLine)
 
-    const plane = new THREE.Mesh(
-      new THREE.ConeGeometry(0.018, 0.052, 10),
-      new THREE.MeshBasicMaterial({ color: COL.plane }),
-    )
-    plane.rotation.x = Math.PI / 2
+    const plane = buildPlane()
     E.arcGroup.add(plane)
 
     E.lastHost = undefined
