@@ -263,7 +263,9 @@ function GlobeHero({
     // --- Interaction: click a marker ---
     const onClick = (e) => {
       const E = eng.current
-      if (!E || E.mode !== 'interactive') return
+      // Marker clicks fire in both modes — the Atlas opens a country, the
+      // Matchup globe selects a venue (B2). Callers gate by app state as needed.
+      if (!E) return
       const rect = renderer.domElement.getBoundingClientRect()
       pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
       pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1

@@ -1,7 +1,9 @@
 import { useMemo, useRef, useState } from 'react'
 import GlobeHero from '../components/GlobeHero'
 import CountryEmblem from '../components/CountryEmblem'
-import { TEAM_COORDINATES, STADIUMS } from '../lib/stadiumData'
+import StadiumPanel from '../components/StadiumPanel'
+import { TEAM_COORDINATES, STADIUMS, STADIUM_LIST } from '../lib/stadiumData'
+import { STADIUM_INFO } from '../lib/stadiumInfo'
 import { winProb } from '../lib/bracket'
 import TEAM_META, { teamMeta, flagUrl } from '../lib/teams'
 import './Simulator.css'
@@ -106,6 +108,8 @@ export default function Simulator() {
   const [home, setHome] = useState('Argentina')
   const [away, setAway] = useState('France')
   const [roundId, setRoundId] = useState('final')
+  const [venueName, setVenueName] = useState('MetLife Stadium') // user-selectable destination (B2)
+  const [panelVenue, setPanelVenue] = useState(null) // stadium name shown in the encyclopedia panel
   const [phase, setPhase] = useState('idle') // idle | flying | result
   const [flight, setFlight] = useState(null)
   const [result, setResult] = useState(null)
@@ -117,18 +121,35 @@ export default function Simulator() {
   const round = ROUNDS.find((r) => r.id === roundId)
   const canSim = home && away && home !== away
 
+  // Team origins + all 16 venues as clickable destinations. The selected venue
+  // is `hot`; the rest are dimmer venue markers you can click to switch to.
   const markers = useMemo(() => {
-    const stad = STADIUMS[round.stadium]
     const ms = []
     if (home) ms.push({ name: home, lat: TEAM_COORDINATES[home][0], lng: TEAM_COORDINATES[home][1], code: teamMeta(home).code, hot: true })
     if (away) ms.push({ name: away, lat: TEAM_COORDINATES[away][0], lng: TEAM_COORDINATES[away][1], code: teamMeta(away).code, hot: true })
-    ms.push({ name: stad.hostCity, lat: stad.lat, lng: stad.lng })
+    for (const s of STADIUM_LIST) {
+      ms.push({ name: s.name, lat: s.lat, lng: s.lng, kind: 'venue', hot: s.name === venueName })
+    }
     return ms
-  }, [home, away, round])
+  }, [home, away, venueName])
+
+  // Clicking a venue marker selects it as the flight destination and opens its
+  // encyclopedia panel (ignored mid-flight so a running sim isn't hijacked).
+  const onMarkerClick = (m) => {
+    if (m?.kind !== 'venue' || phase === 'flying') return
+    setVenueName(m.name)
+    setPanelVenue(m.name)
+  }
+
+  // Resolved venue for the panel: geo (stadiumData) + facts/spec (stadiumInfo).
+  const panelData = useMemo(() => {
+    if (!panelVenue) return null
+    return { name: panelVenue, ...STADIUMS[panelVenue], ...STADIUM_INFO[panelVenue] }
+  }, [panelVenue])
 
   const simulate = () => {
     if (!canSim) return
-    const stad = STADIUMS[round.stadium]
+    const stad = STADIUMS[venueName]
     const pHome = winProb(home, away, stad.country)
     const score = sampleResult(pHome, roundId)
     pending.current = { home, away, score, pHome, round, venue: stad }
@@ -201,8 +222,15 @@ export default function Simulator() {
           flight={flight}
           onFlightProgress={onProgress}
           onFlightComplete={onFlightComplete}
+          onCountryClick={onMarkerClick}
           ariaLabel="Match flight globe"
         />
+        {!panelVenue && (
+          <p className="sim__venue-hint" aria-hidden="true">
+            Destination · <strong>{venueName}</strong> — tap any venue to change
+          </p>
+        )}
+        {panelData && <StadiumPanel venue={panelData} onClose={() => setPanelVenue(null)} />}
       </div>
 
       {phase === 'result' && result && <ResultCard result={result} />}
