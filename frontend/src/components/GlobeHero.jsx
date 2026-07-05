@@ -73,7 +73,7 @@ const MAX_EDGE_DEG = 2.5
 // each ring in lng/lat space, subdivide long edges, project to the sphere, and
 // UV-map the flag across the country's bounding box so the pattern stretches to
 // fill the true silhouette (Argentina's bands run north–south across the shape).
-function buildFlagGeometry(shape) {
+function buildFlagGeometry(shape, lift = FLAG_LIFT) {
   const [minLng, minLat, maxLng, maxLat] = shape.bbox
   const w = maxLng - minLng || 1
   const h = maxLat - minLat || 1
@@ -117,7 +117,7 @@ function buildFlagGeometry(shape) {
   const uvs = new Float32Array(verts.length * 2)
   for (let i = 0; i < verts.length; i++) {
     const [lng, lat] = verts[i]
-    const [x, y, z] = llToXYZ(lat, lng, FLAG_LIFT)
+    const [x, y, z] = llToXYZ(lat, lng, lift)
     positions[i * 3] = x; positions[i * 3 + 1] = y; positions[i * 3 + 2] = z
     uvs[i * 2] = (lng - minLng) / w
     uvs[i * 2 + 1] = (lat - minLat) / h
@@ -181,6 +181,7 @@ function GlobeHero({
   flight = null,
   autoRotate = true,
   countryShapes = null,
+  hostTints = null,
   onFlightProgress,
   onFlightComplete,
   onCountryClick,
@@ -236,6 +237,10 @@ function GlobeHero({
     globe.add(markerGroup)
     const arcGroup = new THREE.Group()
     globe.add(arcGroup)
+    // Persistent host-nation tint layer (B3) — the three 2026 hosts always
+    // wear their national colour; sits just under the hover flag layer.
+    const hostGroup = new THREE.Group()
+    globe.add(hostGroup)
     // Flag-fill layer (Atlas hover). One country shows at a time; geometry and
     // textures are cached per country so re-hovering is instant.
     const flagGroup = new THREE.Group()
@@ -253,7 +258,7 @@ function GlobeHero({
     const pointer = new THREE.Vector2()
 
     eng.current = {
-      scene, camera, renderer, globe, sphere, markerGroup, arcGroup, flagGroup, controls, raycaster, pointer,
+      scene, camera, renderer, globe, sphere, markerGroup, arcGroup, hostGroup, flagGroup, controls, raycaster, pointer,
       markerMeshes: [], flight: null, raf: 0, disposed: false, lastHost: undefined, mode,
       // Atlas flag-fill state: caches + the currently shown country.
       flagGeo: new Map(), flagTex: new Map(), hoverName: null, hoverMesh: null, hoverPaused: false,
@@ -475,6 +480,26 @@ function GlobeHero({
       E.markerMeshes.push(mesh)
     }
   }, [markers])
+
+  // --- Persistent host-nation tint (B3) ---
+  useEffect(() => {
+    const E = eng.current
+    if (!E) return
+    while (E.hostGroup.children.length) {
+      const c = E.hostGroup.children.pop()
+      c.geometry?.dispose()
+      c.material?.dispose?.()
+    }
+    if (!hostTints || !countryShapes) return
+    for (const [name, color] of Object.entries(hostTints)) {
+      const shape = countryShapes[name]
+      if (!shape) continue
+      // Slightly under the hover flag layer so hovering a host still shows its flag.
+      const geo = buildFlagGeometry(shape, R * 1.0045)
+      const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false })
+      E.hostGroup.add(new THREE.Mesh(geo, mat))
+    }
+  }, [hostTints, countryShapes])
 
   // --- Start a flight when `flight.id` changes ---
   useEffect(() => {

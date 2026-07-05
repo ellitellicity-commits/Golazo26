@@ -1,0 +1,53 @@
+/* Host-nation province/state sub-map (B3). Coloured in the host's national
+   colour — the deliberate host-identity treatment (see commit), scoped to the
+   three hosts only. Strokes use non-scaling-stroke so they stay crisp under the
+   degree-scale viewBox. */
+.submap {
+  --host: var(--american-blue);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--space-md);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-md);
+}
+.submap--US { --host: var(--american-blue); }
+.submap--CA { --host: var(--canadian-red); }
+.submap--MX { --host: var(--mexican-green); }
+
+.submap svg {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  overflow: visible;
+}
+
+.submap__prov {
+  fill: color-mix(in srgb, var(--host) 24%, transparent);
+  stroke: color-mix(in srgb, var(--host) 85%, transparent);
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.submap__cap {
+  fill: var(--ink-secondary);
+  stroke: var(--studio-black);
+  stroke-width: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+.submap__cap--nat {
+  fill: var(--host);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.submap__legend {
+  color: var(--ink-muted);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

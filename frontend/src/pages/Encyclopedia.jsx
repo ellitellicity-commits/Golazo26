@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import GlobeHero from '../components/GlobeHero'
 import Typewriter from '../components/Typewriter'
+import ProvinceStateSubMap from '../components/ProvinceStateSubMap'
 import { TEAM_COORDINATES } from '../lib/stadiumData'
 import { getCountry, COUNTRY_NAMES } from '../lib/countryData'
 import { teamMeta, flagUrl } from '../lib/teams'
@@ -14,6 +15,12 @@ const NAMES_SORTED = [...COUNTRY_NAMES].sort()
 const COUNTRY_SHAPES = Object.fromEntries(
   Object.entries(countryShapesRaw).map(([name, s]) => [name, { ...s, flag: flagUrl(teamMeta(name).iso) }]),
 )
+
+// The three 2026 hosts wear their national colour on the globe (B3) — the
+// host-identity treatment (see DESIGN note in commit): US blue, Canada red,
+// Mexico green, matched to lib/teams roles.
+const HOST_TINTS = { Canada: 0xed4a49, 'United States': 0x439bf7, Mexico: 0x35c26d }
+const HOST_ISO = new Set(['us', 'ca', 'mx']) // the three 2026 hosts, by ISO alpha-2
 
 // The Atlas — an interactive globe of the 48 qualified nations. Click a marker to
 // open that nation's profile: real sourced data (FIFA rank, Elo, group,
@@ -68,6 +75,8 @@ function Panel({ country, onClose }) {
           )}
         </div>
       )}
+
+      {c.iso && HOST_ISO.has(c.iso) && <ProvinceStateSubMap code={c.iso.toUpperCase()} />}
 
       <dl className="enc-panel__stats">
         <Stat label="FIFA Rank" value={c.fifaRank != null ? `#${c.fifaRank}` : '—'} />
@@ -152,7 +161,7 @@ export default function Encyclopedia() {
         </label>
       </header>
       <div className="enc__stage">
-        <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} onCountryClick={(m) => setSelected(m.name)} ariaLabel="Country atlas globe" />
+        <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} hostTints={HOST_TINTS} onCountryClick={(m) => setSelected(m.name)} ariaLabel="Country atlas globe" />
         {!country && <p className="enc__hint" aria-hidden="true">Tap a marker</p>}
         {country && <Panel country={country} onClose={() => setSelected(null)} />}
       </div>
