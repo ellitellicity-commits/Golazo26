@@ -247,8 +247,11 @@ export function mergeLiveData(matches) {
   return {
     fixtures: { ...staticFixtures, fixtures: group.out },
     // resultsByPair stays finished-only: it drives knockout progression, and an
-    // in-play tie has no winner to advance yet.
-    knockout: { r32: ko.out, resultsByPair: finished },
+    // in-play tie has no winner to advance yet. liveByPair carries the in-play
+    // knockout scorelines so buildViews can mark a live R16+ tie (whose teams are
+    // already known from finished feeders) as live — the R32 overlay above only
+    // covers R32, so later live rounds need the pair index threaded through.
+    knockout: { r32: ko.out, resultsByPair: finished, liveByPair: live },
     applied: group.applied + ko.applied,
     liveCount: group.liveCount + ko.liveCount,
   }
@@ -256,7 +259,7 @@ export function mergeLiveData(matches) {
 
 // The knockout scaffold with no live data — corrected static bracket.json only.
 function staticKnockout() {
-  return { r32: bracketData.r32, resultsByPair: new Map() }
+  return { r32: bracketData.r32, resultsByPair: new Map(), liveByPair: new Map() }
 }
 
 /**

@@ -130,7 +130,16 @@ function MatchCaption({ view, mode }) {
   return (
     <div className="bk-match__cap">
       <span className="bk-match__no">M{view.id}</span>
-      {pens ? <span className="bk-match__ft">{pens}</span> : view.venue && <span className="bk-match__when">{view.venue.city}</span>}
+      {mode === 'live' && view.status === 'live' ? (
+        <span className="bk-match__live">
+          <span className="bk-match__live-dot" aria-hidden="true" />
+          {liveClock(view.live)}
+        </span>
+      ) : pens ? (
+        <span className="bk-match__ft">{pens}</span>
+      ) : view.venue ? (
+        <span className="bk-match__when">{view.venue.city}</span>
+      ) : null}
     </div>
   )
 }
@@ -290,7 +299,7 @@ function Bracket({ groups }) {
   useEffect(() => () => clearTimers(), [clearTimers])
 
   const views = useMemo(() => {
-    if (mode === 'live') return buildViews(liveRes, 'live', fixtures.knockout.r32)
+    if (mode === 'live') return buildViews(liveRes, 'live', fixtures.knockout.r32, fixtures.knockout.liveByPair)
     const partial = {}
     if (simResults) for (const id of revealed) partial[id] = simResults[id]
     return buildViews(partial, 'simulate', simR32 || undefined)

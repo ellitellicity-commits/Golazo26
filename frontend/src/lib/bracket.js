@@ -213,7 +213,7 @@ const pairKey = (a, b) => [a, b].sort().join('|')
 // The static knockout scaffold, used when no live data is threaded in — keeps
 // callers that don't have the tournament context (e.g. currentStageLabel's
 // default) working against corrected bracket.json.
-const STATIC_KNOCKOUT = { r32: bracketData.r32, resultsByPair: new Map() }
+const STATIC_KNOCKOUT = { r32: bracketData.r32, resultsByPair: new Map(), liveByPair: new Map() }
 
 // Real knockout results resolved onto the bracket. The R32 comes straight from
 // the (live-merged) r32 list. Later rounds are walked in order: once a match's
@@ -331,7 +331,7 @@ export function simulate() {
 // --- Build the full view the bracket renders -------------------------------
 // `mode` is 'live' or 'simulate'. In simulate mode, `results` is a full sim;
 // in live mode it is the real completed matches only.
-export function buildViews(results, mode, r32 = bracketData.r32) {
+export function buildViews(results, mode, r32 = bracketData.r32, liveByPair = new Map()) {
   const views = {}
   const today = bracketData.today
 
@@ -375,6 +375,11 @@ export function buildViews(results, mode, r32 = bracketData.r32) {
     const r = results[id] || null
     const venue = KO_VENUE[id] || null
     const vc = venue?.country
+    // In-play knockout tie (R16+): both teams known from finished feeders but not
+    // yet decided, and the live feed shows this exact pairing in play. Keyed by
+    // team pair (not bracket slot), mirroring the R32 live path, so it holds even
+    // if the real seeding differs from the static scaffold.
+    const livePair = mode === 'live' && bothKnown && !r ? liveByPair.get(pairKey(home.name, away.name)) : null
     views[id] = {
       id,
       round: ROUND_OF[id],
@@ -387,11 +392,13 @@ export function buildViews(results, mode, r32 = bracketData.r32) {
       awayHost: away.kind === 'team' && isHostAtHome(away.name, vc),
       pHome: bothKnown ? winProb(home.name, away.name, vc) : null,
       venue,
-      status: r ? 'decided' : 'pending',
+      status: r ? 'decided' : livePair ? 'live' : 'pending',
       // Real knockout ties (liveResults) and re-rolls (simulateKnockout) both
       // carry a scoreline now, so every decided round renders goal digits — the
       // same treatment R32 already got — instead of only a win-probability split.
-      score: r?.score ?? null,
+      // A live tie carries its running score + clock the same way R32 does.
+      score: r?.score ?? (livePair ? { home_score: livePair.scores[home.name], away_score: livePair.scores[away.name] } : null),
+      live: livePair ? { minute: livePair.minute, injuryTime: livePair.injuryTime, paused: livePair.paused } : null,
       winner: r?.winner ?? null,
       loser: r?.loser ?? null,
     }
