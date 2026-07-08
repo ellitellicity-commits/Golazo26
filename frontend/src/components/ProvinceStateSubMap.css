@@ -12,6 +12,8 @@
   background: var(--surface-elevated);
   border: 1px solid var(--border-divider);
   border-radius: var(--radius-md);
+  max-width: 100%;
+  overflow: hidden;
 }
 .submap--US { --host: var(--american-blue); }
 .submap--CA { --host: var(--canadian-red); }
@@ -21,7 +23,7 @@
   width: 100%;
   height: auto;
   max-height: 220px;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .submap__prov {
