@@ -1,4 +1,5 @@
 import { Mark26 } from './BrandMarks'
+import wcLogo from '../assets/WC_26_Animations.gif'
 import './LoadingScreen.css'
 
 /**
@@ -11,6 +12,13 @@ function LoadingScreen({ failed = false }) {
   return (
     <div className="loading" role="status" aria-live="polite">
       <div className="loading__inner">
+        <img
+          className="loading__logo"
+          src={wcLogo}
+          alt="FIFA World Cup 26 — USA · Canada · Mexico"
+          width="800"
+          height="495"
+        />
         <Mark26 className="loading__mark" />
         <p className="loading__label">
           {failed ? 'Loading tournament data…' : 'Loading tournament data'}
