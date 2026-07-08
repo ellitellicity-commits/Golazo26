@@ -1,5 +1,10 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import tailwindcss from '@tailwindcss/vite'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // https://vite.dev/config/
 //
@@ -63,7 +68,12 @@ export default defineConfig(({ mode }) => {
   const hasProxy = Object.keys(proxy).length > 0
 
   return {
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
     define: {
       __HAS_LIVE_DATA__: JSON.stringify(Boolean(apiKey)),
       __HAS_PHOTO_SEARCH__: JSON.stringify(hasPhotoSearch),

@@ -62,9 +62,17 @@
 /* --- Desktop tab row --- */
 .nav__tabs {
   display: none; /* shown ≥ 860px; mobile uses the bottom tab bar */
-  justify-self: center;
+  /* Fill the centre grid track and centre the tabs inside it with `safe`: while
+     the row fits, it sits centred as before; if the track is ever shorter than
+     the row (a wider-rendered wordmark under fullscreen scaling/font fallback ate
+     the slim margin), it falls back to start-alignment instead of overflowing
+     LEFT across the brand — which was the title/Home overlap. min-width:0 lets the
+     track actually shrink so the fallback engages rather than forcing an overflow. */
+  justify-self: stretch;
+  min-width: 0;
+  justify-content: safe center;
   align-items: stretch;
-  gap: clamp(var(--space-md), 2vw, var(--space-xl));
+  gap: clamp(var(--space-sm), 1.6vw, var(--space-lg));
 }
 .nav__tab {
   position: relative;
@@ -187,7 +195,9 @@
   inset: auto 0 0 0;
   z-index: var(--z-sticky);
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* Seven destinations (incl. Matchup + Atlas) share one row; tighter type below
+     keeps every label legible down to the narrowest phone. */
+  grid-template-columns: repeat(7, 1fr);
   background: color-mix(in srgb, var(--studio-black) 92%, transparent);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -202,7 +212,8 @@
   justify-content: center;
   gap: 3px;
   min-height: 56px;
-  padding: var(--space-sm) 4px;
+  min-width: 0;
+  padding: var(--space-sm) 2px;
   color: var(--ink-muted);
   text-decoration: none;
   transition: color var(--dur-ui) var(--ease-out-quint);
@@ -232,9 +243,12 @@
   display: block;
 }
 .tabbar__label {
-  font-size: var(--text-meta);
+  font-size: 0.625rem;
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  max-width: 100%;
+  white-space: nowrap;
 }
 
 /* ============================================================================
@@ -242,7 +256,7 @@
    ========================================================================== */
 @media (min-width: 860px) {
   .nav__tabs {
-    display: inline-flex;
+    display: flex;
   }
   .tabbar {
     display: none;
@@ -262,7 +276,7 @@
     gap: 0.3ch;
   }
   .nav__badge-unit {
-    display: none; /* keep "XGBoost · 10,000" — drop the trailing word only */
+    display: none; /* keep "Model · 10,000" — drop the trailing word only */
   }
 }
 
@@ -275,6 +289,16 @@
   }
   .nav__source {
     padding: 6px;
+  }
+}
+
+/* On phones the model badge can't sit beside the wordmark without colliding with
+   it, and the bottom tab bar (not the masthead) is the primary nav here — so drop
+   the badge below the phablet width. The live/source chip stays as the state cue,
+   and the model story still leads the home hero. */
+@media (max-width: 560px) {
+  .nav__badge {
+    display: none;
   }
 }
 

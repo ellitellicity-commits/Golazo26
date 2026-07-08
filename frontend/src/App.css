@@ -64,3 +64,14 @@
     transition: none;
   }
 }
+
+/* Lazy-route load fallback (globe chunks). Quiet, centered, non-jarring. */
+.route-fallback {
+  display: grid;
+  place-items: center;
+  min-height: 50vh;
+  color: var(--ink-muted);
+  font: 500 var(--text-label) / 1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

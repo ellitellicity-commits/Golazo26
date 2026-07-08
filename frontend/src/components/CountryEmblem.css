@@ -1,0 +1,107 @@
+/* Shared broadcast-graphic container for the three host emblems. One container,
+   one set of timing curves, so Canada/Mexico/USA read as a single system — only
+   the 3D emblem and label inside differ. Fixed to the right edge, vertically
+   centred, above the globe. */
+.emblem {
+  position: fixed;
+  top: 50%;
+  right: clamp(12px, 3vw, 36px);
+  z-index: var(--z-tooltip);
+  width: 216px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-sm) var(--space-md);
+  background: color-mix(in srgb, var(--surface-card) 88%, transparent);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  transform-origin: right center;
+  animation: emblem-in 460ms var(--ease-out-quint) both;
+}
+
+.emblem.is-leaving {
+  animation: emblem-out 440ms var(--ease-out-quint) both;
+}
+
+@keyframes emblem-in {
+  from {
+    opacity: 0;
+    transform: translate(28px, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%) scale(1);
+  }
+}
+
+@keyframes emblem-out {
+  from {
+    opacity: 1;
+    transform: translate(0, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(20px, -50%) scale(0.94);
+  }
+}
+
+.emblem__stage {
+  width: 200px;
+  height: 200px;
+}
+
+.emblem__label {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+.emblem__label-kicker {
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.emblem__label-country {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* The container should never sit under the fixed bottom tab bar on mobile. */
+@media (max-width: 720px) {
+  .emblem {
+    top: auto;
+    bottom: calc(var(--tabbar-h, 64px) + 12px);
+    right: 50%;
+    transform: translateX(50%);
+    transform-origin: bottom center;
+  }
+  @keyframes emblem-in {
+    from { opacity: 0; transform: translate(50%, 16px) scale(0.9); }
+    to { opacity: 1; transform: translate(50%, 0) scale(1); }
+  }
+  @keyframes emblem-out {
+    from { opacity: 1; transform: translate(50%, 0) scale(1); }
+    to { opacity: 0; transform: translate(50%, 12px) scale(0.94); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emblem,
+  .emblem.is-leaving {
+    animation: emblem-fade 200ms linear both;
+  }
+  @keyframes emblem-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}

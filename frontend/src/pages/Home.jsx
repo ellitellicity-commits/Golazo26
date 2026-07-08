@@ -151,9 +151,9 @@ function Home() {
         <BrandField className="home-hero__field" />
         <div className="home-hero__inner">
           <p className="home-hero__intro">
-            Broadcast-grade intelligence for the 2026 FIFA World Cup — an XGBoost model turns historical
-            results, Elo ratings and live tournament data into win probabilities, championship odds and
-            Monte Carlo bracket paths.
+            Broadcast-grade intelligence for the 2026 FIFA World Cup — a machine-learning model turns
+            historical results, Elo ratings and live tournament data into win probabilities, championship
+            odds and Monte Carlo bracket paths.
           </p>
           <Snapshot />
         </div>
