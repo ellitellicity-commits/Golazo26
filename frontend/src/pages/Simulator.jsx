@@ -116,7 +116,7 @@ function StatRow({ row }) {
 }
 
 function MatchStats({ stats, homeCode, awayCode }) {
-  const { formations, motm, rows } = stats
+  const { formations, rows } = stats
   return (
     <div className="sim-stats">
       <div className="sim-stats__formations">
@@ -124,13 +124,6 @@ function MatchStats({ stats, homeCode, awayCode }) {
         <span className="sim-stats__form-label">Formations</span>
         <span className="sim-stats__form tnum">{formations.away}</span>
       </div>
-      {motm && (
-        <div className="sim-stats__motm">
-          <span className="sim-stats__motm-label">Man of the Match</span>
-          <span className="sim-stats__motm-name display">{motm.name}</span>
-          <span className="sim-stats__motm-meta">{motm.position} · {motm.club} · {motm.team}</span>
-        </div>
-      )}
       <div className="sim-stats__head" aria-hidden="true">
         <span>{homeCode}</span><span>Match stats</span><span>{awayCode}</span>
       </div>

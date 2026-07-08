@@ -87,6 +87,39 @@
 }
 .stadium-model { display: block; }
 
+/* Real venue photo (Wikimedia Commons). Fixed 16:9 frame + object-fit cover so
+   every stadium reads at a consistent size regardless of the source crop. */
+.stad-panel__stage--photo {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--surface-card);
+}
+.stad-panel__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: inherit;
+}
+.stad-panel__credit {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--studio-black) 72%, transparent);
+  font-size: var(--text-meta);
+  color: var(--ink-secondary);
+}
+.stad-panel__credit a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .stad-panel__blurb {
   margin: 0;
   color: var(--ink-secondary);

@@ -4,26 +4,18 @@
 // MatchStatsPanel, which pulls ESPN data for actual fixtures). This generates a
 // plausible, internally-consistent stat line around the sampled scoreline and
 // the model's win probability — possession/shots skew toward the stronger side,
-// shots-on-target never fall below goals, Man of the Match comes from the
-// winner's real squad. Flavour, not model output — same spirit as sampleResult.
+// shots-on-target never fall below goals. Flavour, not model output — same spirit
+// as sampleResult.
+//
+// NB (Part F): no "Man of the Match" is produced. Neither ESPN nor football-data
+// exposes a player-of-match field, and this tie never happened, so any MOTM pick
+// would be invented — which the brief's data flag explicitly rules out. The
+// feature is omitted rather than fabricated.
 
-import squads from '../data/countrySquads.json'
-
-const SQUADS = squads.teams
 const FORMATIONS = ['4-3-3', '4-2-3-1', '3-5-2', '4-4-2', '3-4-3', '5-3-2', '4-1-4-1']
 
 const randInt = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1))
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]
-
-// Man of the Match from a side's real notable players — prefer an attacker,
-// since MOTM skews forward. Falls back gracefully when squad data is missing.
-function manOfTheMatch(team) {
-  const players = SQUADS[team]?.notablePlayers
-  if (!players || !players.length) return null
-  const attackers = players.filter((p) => /F|W|ST|CF/i.test(p.position) || /Forward|Wing/i.test(p.position))
-  const p = pick(attackers.length ? attackers : players)
-  return { name: p.name, team, position: p.position, club: p.club }
-}
 
 export function sampleMatchStats(home, away, score, pHome) {
   // Possession centred on the win probability, with noise, clamped and paired.
@@ -43,12 +35,8 @@ export function sampleMatchStats(home, away, score, pHome) {
   const redHome = Math.random() < 0.06 ? 1 : 0
   const redAway = Math.random() < 0.06 ? 1 : 0
 
-  // MOTM from the winning side; on a draw, the higher-possession side.
-  const motmTeam = score.outcome === 'home' ? home : score.outcome === 'away' ? away : (posHome >= posAway ? home : away)
-
   return {
     formations: { home: pick(FORMATIONS), away: pick(FORMATIONS) },
-    motm: manOfTheMatch(motmTeam) || manOfTheMatch(home) || manOfTheMatch(away),
     // Each row: [home, away]. Goals first so the box score leads with the score.
     rows: [
       { label: 'Goals', home: score.home, away: score.away },
