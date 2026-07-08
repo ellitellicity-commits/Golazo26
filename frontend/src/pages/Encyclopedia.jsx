@@ -132,6 +132,9 @@ function Panel({ country, onClose }) {
         </div>
       )}
 
+      {/* Host-nation mascot lives at the foot of the profile panel — inside the
+          panel's own bounds, so it never bleeds onto the 3D globe. */}
+      {c.iso && HOST_ISO.has(c.iso) && <HostMascot key={c.iso} iso={c.iso} />}
     </aside>
   )
 }
@@ -165,8 +168,6 @@ export default function Encyclopedia() {
       <div className="enc__stage">
         <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} hostTints={HOST_TINTS} onCountryClick={(m) => setSelected(m.name)} ariaLabel="Country atlas globe" />
         {!country && <p className="enc__hint" aria-hidden="true">Tap a marker</p>}
-        {/* Host-nation mascot greets on the left when one of the three hosts is open. */}
-        {country?.iso && HOST_ISO.has(country.iso) && <HostMascot key={country.iso} iso={country.iso} />}
         {country && <Panel country={country} onClose={() => setSelected(null)} />}
       </div>
     </div>
