@@ -13,6 +13,7 @@ import { liveClock } from '../lib/live'
 import { useTournamentData } from '../lib/tournamentData'
 import BracketMatchPreview from './BracketMatchPreview'
 import Confetti from './Confetti'
+import TabHeader from './TabHeader'
 import './Bracket.css'
 
 // All fixture dates are stored as UTC instants; format in UTC so US-local
@@ -438,18 +439,16 @@ function Bracket({ groups }) {
   return (
     <section className="bk" aria-labelledby="bk-title">
       <div className="bk__bar">
-        <div className="bk__heading">
-          <h2 id="bk-title" className="bk__title display">
-            Tournament Bracket
-          </h2>
-          <p className="bk__sub">
-            {mode === 'live'
+        <TabHeader
+          as="h2"
+          titleId="bk-title"
+          title="Tournament Bracket"
+          description={
+            mode === 'live'
               ? `The real tournament — ${META.final.stadium} final on ${fmtDay(META.final.date)}. Played matches show the result; upcoming ties show the model’s win probability.`
-              : 'A from-scratch re-roll: every match — including the group games already played — is randomised, so the whole tournament diverges from what really happened. Run it again for a new what-if.'}
-          </p>
-        </div>
-
-        <div className="bk__controls">
+              : 'A from-scratch re-roll: every match — including the group games already played — is randomised, so the whole tournament diverges from what really happened. Run it again for a new what-if.'
+          }
+        >
           <div className="bk__modes" role="tablist" aria-label="Bracket mode">
             <button
               type="button"
@@ -475,7 +474,7 @@ function Bracket({ groups }) {
               {running ? 'Simulating…' : simResults ? 'Run again' : 'Run simulation'}
             </button>
           )}
-        </div>
+        </TabHeader>
       </div>
 
       {isSim && champion && championTeam && (

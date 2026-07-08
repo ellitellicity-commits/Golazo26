@@ -8,6 +8,7 @@ import { sampleMatchStats } from '../lib/matchStats'
 import { pickHype } from '../lib/hypeLines'
 import { winProb } from '../lib/bracket'
 import TEAM_META, { teamMeta, flagUrl } from '../lib/teams'
+import TabHeader from '../components/TabHeader'
 import './Simulator.css'
 
 // Matchup Sandbox — a standalone "what if these two met?" tool. Distinct from the
@@ -224,13 +225,11 @@ export default function Simulator() {
 
   return (
     <div className="sim">
-      <header className="sim__intro">
-        <h1 className="sim__title display">Matchup Sandbox</h1>
-        <p className="sim__sub">
-          Pick any two of the 48 nations and a round, then watch them fly in and the model call the tie. A standalone
-          what-if — it never changes the real bracket.
-        </p>
-      </header>
+      <TabHeader
+        titleId="sim-title"
+        title="Matchup Sandbox"
+        description="Pick any two of the 48 nations and a round, then watch them fly in and the model call the tie. A standalone what-if — it never changes the real bracket."
+      />
 
       <form
         className="sim__panel"

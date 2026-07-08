@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import GlobeHero from '../components/GlobeHero'
 import Typewriter from '../components/Typewriter'
 import ProvinceStateSubMap from '../components/ProvinceStateSubMap'
+import TabHeader from '../components/TabHeader'
 import { TEAM_COORDINATES } from '../lib/stadiumData'
 import { getCountry, COUNTRY_NAMES } from '../lib/countryData'
 import { teamMeta, flagUrl } from '../lib/teams'
@@ -140,11 +141,11 @@ export default function Encyclopedia() {
 
   return (
     <div className="enc">
-      <header className="enc__intro">
-        <div>
-          <h1 className="enc__title display">The Atlas</h1>
-          <p className="enc__sub">All 48 nations on one globe. Spin it and tap a marker, or jump straight to a nation.</p>
-        </div>
+      <TabHeader
+        titleId="enc-title"
+        title="The Atlas"
+        description="All 48 nations on one globe. Spin it and tap a marker, or jump straight to a nation."
+      >
         <label className="enc__jump">
           <span className="enc__jump-label">Jump to a nation</span>
           <select
@@ -159,7 +160,7 @@ export default function Encyclopedia() {
             ))}
           </select>
         </label>
-      </header>
+      </TabHeader>
       <div className="enc__stage">
         <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} hostTints={HOST_TINTS} onCountryClick={(m) => setSelected(m.name)} ariaLabel="Country atlas globe" />
         {!country && <p className="enc__hint" aria-hidden="true">Tap a marker</p>}

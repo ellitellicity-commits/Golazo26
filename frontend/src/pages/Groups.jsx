@@ -7,6 +7,7 @@ import {
 } from '../lib/standings'
 import { useTournamentData } from '../lib/tournamentData'
 import { teamMeta } from '../lib/teams'
+import TabHeader from '../components/TabHeader'
 import './Groups.css'
 
 const fmtGD = (gd) => (gd > 0 ? `+${gd}` : String(gd))
@@ -193,21 +194,15 @@ function Groups() {
 
   return (
     <section className="groups" aria-labelledby="groups-title">
-      <header className="groups__head">
-        <div className="groups__heading">
-          <h1 id="groups-title" className="groups__title display">Group Tables</h1>
-          <p className="groups__sub">
-            Live standings across the twelve groups, with FIFA tiebreakers applied. The top {QUALIFY_SLOTS} of
-            each group qualify automatically; the best {THIRD_PLACE_QUALIFIERS} of the twelve third-placed teams
-            join them.
-          </p>
-        </div>
-        <div className="groups__actions">
-          <button type="button" className="btn btn--ghost" onClick={toggleAll} aria-pressed={allOpen}>
-            {allOpen ? 'Collapse all' : 'Expand all'}
-          </button>
-        </div>
-      </header>
+      <TabHeader
+        titleId="groups-title"
+        title="Group Tables"
+        description={`Live standings across the twelve groups, with FIFA tiebreakers applied. The top ${QUALIFY_SLOTS} of each group qualify automatically; the best ${THIRD_PLACE_QUALIFIERS} of the twelve third-placed teams join them.`}
+      >
+        <button type="button" className="btn btn--ghost" onClick={toggleAll} aria-pressed={allOpen}>
+          {allOpen ? 'Collapse all' : 'Expand all'}
+        </button>
+      </TabHeader>
 
       <ul className="legend" aria-label="Key">
         <li><span className="gpos gpos--key is-q" aria-hidden="true" /> Qualified — top {QUALIFY_SLOTS} in group</li>

@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import { teamMeta, flagUrl } from '../lib/teams'
+import TabHeader from './TabHeader'
 import './ChampionshipOdds.css'
 
 // Title odds round to nothing for the long tail; be honest about it rather than
@@ -148,18 +149,12 @@ function ChampionshipOdds({ odds }) {
 
   return (
     <section className="odds" aria-labelledby="odds-title">
-      <header className="odds__head">
-        <div className="odds__heading">
-          <h2 id="odds-title" className="odds__title display">
-            Championship Odds
-          </h2>
-          <p className="odds__sub">
-            Every nation’s chance of lifting the trophy, from {odds.simulations.toLocaleString('en-GB')} Monte Carlo runs
-            of the full bracket. Bar length is relative to the favourite; the figure is the absolute title chance. Open a
-            row for its path to the final.
-          </p>
-        </div>
-      </header>
+      <TabHeader
+        as="h2"
+        titleId="odds-title"
+        title="Championship Odds"
+        description={`Every nation’s chance of lifting the trophy, from ${odds.simulations.toLocaleString('en-GB')} Monte Carlo runs of the full bracket. Bar length is relative to the favourite; the figure is the absolute title chance. Open a row for its path to the final.`}
+      />
 
       <div className="odds__colhead" aria-hidden="true">
         <span className="odds__col odds__col--rank">#</span>

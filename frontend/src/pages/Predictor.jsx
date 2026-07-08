@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import FixturesRail from '../components/FixturesRail'
 import MatchCard from '../components/MatchCard'
 import KnockoutCard from '../components/KnockoutCard'
+import TabHeader from '../components/TabHeader'
 import { buildViews, liveResults } from '../lib/bracket'
 import { useTournamentData } from '../lib/tournamentData'
 import './Predictor.css'
@@ -108,13 +109,11 @@ function Predictor() {
 
   return (
     <div className="predictor">
-      <header className="predictor__head">
-        <h1 className="predictor__title display">Match Predictor</h1>
-        <p className="predictor__sub">
-          The model’s win probabilities for what’s next, up top. Completed matches — with the result against the
-          call — sit in Finished Matches below.
-        </p>
-      </header>
+      <TabHeader
+        titleId="predictor-title"
+        title="Match Predictor"
+        description="The model’s win probabilities for what’s next, up top. Completed matches — with the result against the call — sit in Finished Matches below."
+      />
 
       {liveKO.length > 0 && <KnockoutRail title="Live now" ties={liveKO} />}
 
