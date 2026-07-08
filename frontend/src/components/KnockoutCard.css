@@ -29,6 +29,32 @@
   text-transform: uppercase;
   color: var(--ink-secondary);
 }
+
+/* Green group identity on finished group cards — the filled letter badge is
+   green's primary on-screen presence (DESIGN §5), mirroring MatchCard's chip. */
+.koc__group {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mexican-green);
+}
+.koc__group-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: var(--mexican-green);
+  color: var(--studio-black);
+  font-weight: 800;
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+}
 .koc__when {
   font-size: var(--text-label);
   color: var(--ink-muted);

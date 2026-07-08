@@ -5,6 +5,7 @@ import MatchCard from '../components/MatchCard'
 import KnockoutCard from '../components/KnockoutCard'
 import TabHeader from '../components/TabHeader'
 import { buildViews, liveResults } from '../lib/bracket'
+import { teamMeta, flagUrl } from '../lib/teams'
 import { useTournamentData } from '../lib/tournamentData'
 import './Predictor.css'
 
@@ -49,6 +50,42 @@ function buildDemoItems({ completed, allFixtures, todaysMatches }) {
     { label: 'Completed — upset', fixture: upset },
     { label: 'Long team names', fixture: longName },
   ].filter((i) => i.fixture)
+}
+
+// Adapt a finished group fixture into the view shape KnockoutCard consumes, so
+// finished group games render through the same compact card as finished KO ties
+// (flags, Full time, winner/dim, venue, stats panel). KnockoutCard's `group`
+// mode keeps the green group chip and the honest three-way model bar.
+function groupFinishedView(f) {
+  return {
+    id: `g-${f.home.code}-${f.away.code}`,
+    home: { name: f.home.name, code: f.home.code, flag: flagUrl(teamMeta(f.home.name).iso) },
+    away: { name: f.away.name, code: f.away.code, flag: flagUrl(teamMeta(f.away.name).iso) },
+    prediction: f.prediction,
+    score: { home_score: f.result.home_score, away_score: f.result.away_score, penalties: null },
+    venue: f.venue,
+    status: 'completed',
+    date: f.date,
+  }
+}
+
+// Finished group games, in the KO card's compact layout (reuses the shared .rail).
+function GroupFinishedRail({ title, fixtures }) {
+  return (
+    <section className="rail" aria-label={title}>
+      <div className="rail__head">
+        <h2 className="rail__title display">{title}</h2>
+        <span className="rail__eyebrow">{fixtures.length} played</span>
+      </div>
+      <ul className="rail__track">
+        {fixtures.map((f) => (
+          <li className="rail__item" key={`${f.home.code}-${f.away.code}-${f.date}`}>
+            <KnockoutCard view={groupFinishedView(f)} group={f.group} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
 }
 
 // Rail of upcoming knockout ties (reuses the shared .rail layout from FixturesRail).
@@ -158,11 +195,9 @@ function Predictor() {
       )}
 
       {finished.length > 0 && (
-        <FixturesRail
+        <GroupFinishedRail
           title={finishedKO.length > 0 ? 'Finished — Group Stage' : 'Finished Matches'}
-          eyebrow={`${finished.length} played`}
           fixtures={finished}
-          todayDate={TODAY}
         />
       )}
 
