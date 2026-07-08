@@ -4,6 +4,7 @@
    degree-scale viewBox. */
 .submap {
   --host: var(--american-blue);
+  position: relative;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -19,17 +20,21 @@
 .submap--CA { --host: var(--canadian-red); }
 .submap--MX { --host: var(--mexican-green); }
 
-.submap svg {
+.submap__svg {
   width: 100%;
   height: auto;
   max-height: 220px;
   overflow: hidden;
+  touch-action: none; /* let the component own pinch/drag gestures */
+  cursor: default;
 }
+.submap__svg.is-zoomed { cursor: grab; }
+.submap__svg.is-zoomed:active { cursor: grabbing; }
 
 .submap__prov {
-  fill: color-mix(in srgb, var(--host) 24%, transparent);
-  stroke: color-mix(in srgb, var(--host) 85%, transparent);
-  stroke-width: 1.1;
+  fill: color-mix(in srgb, var(--host) 35%, transparent);
+  stroke: color-mix(in srgb, var(--host) 90%, transparent);
+  stroke-width: 1.4;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
@@ -45,6 +50,43 @@
   stroke-width: 1.2;
   vector-effect: non-scaling-stroke;
 }
+
+/* City labels — Barlow Condensed, drawn in SVG user units (font-size set per
+   node so the national capital reads a touch larger). They scale with the
+   viewport group on zoom, so they stay legible as you zoom in. */
+.submap__label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  fill: var(--ink-secondary);
+  paint-order: stroke;
+  stroke: color-mix(in srgb, var(--studio-black) 70%, transparent);
+  stroke-width: 0.5;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  user-select: none;
+}
+.submap__label--nat {
+  fill: var(--host);
+  font-weight: 700;
+}
+
+/* Reset control — quiet chip, top-right, only present while zoomed/panned. */
+.submap__reset {
+  position: absolute;
+  top: calc(var(--space-md) + 4px);
+  right: calc(var(--space-md) + 4px);
+  padding: 4px 10px;
+  background: color-mix(in srgb, var(--surface-card) 90%, transparent);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-sm);
+  color: var(--ink-secondary);
+  font: 600 var(--text-meta) / 1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.submap__reset:hover { color: var(--ink); background: var(--surface-elevated); }
+.submap__reset:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
 .submap__legend {
   color: var(--ink-muted);
