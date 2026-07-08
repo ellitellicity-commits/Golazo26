@@ -112,18 +112,31 @@
   color: var(--ink-secondary);
   white-space: nowrap;
 }
-/* Venue label sits over the light parchment map, so it reads in sepia ink, not
-   the app's light ink. A stacked name + city, map-cartouche style. */
+/* Venue label — a solid parchment cartouche pinned to the top of the chart, so
+   the stadium name + city sit in their own titled band rather than floating over
+   the graticule, coastlines and flight arc. Sepia ink + a double sepia frame
+   echo the chart's own ornamental border; the opaque fill guarantees the text
+   never overlaps the map content beneath it. */
 .cut__caption--venue {
   bottom: auto;
-  top: clamp(40px, 10vh, 104px);
+  top: clamp(28px, 7vh, 72px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  max-width: min(86vw, 620px);
+  padding: 10px clamp(20px, 4vw, 40px) 12px;
+  background: color-mix(in srgb, var(--cut-parchment) 96%, #fff);
+  border: 2px solid var(--cut-frame);
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--cut-parchment) 96%, #fff),
+    0 0 0 4px color-mix(in srgb, var(--cut-frame) 55%, transparent),
+    0 10px 30px rgba(58, 40, 16, 0.35);
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 4.4vw, 2.75rem);
+  line-height: 1;
   letter-spacing: 0;
   text-transform: none;
   color: var(--cut-ink);
