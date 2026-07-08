@@ -33,6 +33,13 @@
   width: 40px;
   height: 40px;
   flex-shrink: 0;
+  /* The WC26 mark GIF is black line-art on an opaque white ground. invert(1)
+     flips the white to near-black (it melts into the studio-black nav — no box,
+     no seam) and the black line-art to white, so the emblem reads as a crisp
+     white logo floating on the bar. contain keeps the whole mark in the 40px
+     slot so the wordmark never shifts. */
+  object-fit: contain;
+  filter: invert(1);
 }
 .nav__wordmark {
   display: flex;

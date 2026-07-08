@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
-import { Mark26 } from './BrandMarks'
 import { useTournamentData } from '../lib/tournamentData'
+import wcMark from '../assets/WC_26_Mark.gif'
 import './AppNav.css'
 
 /**
@@ -78,7 +78,7 @@ function AppNav() {
       <header className="nav">
         <div className="nav__inner">
           <NavLink to="/" className="nav__brand" aria-label="World Cup 26 — home">
-            <Mark26 className="nav__mark" />
+            <img className="nav__mark" src={wcMark} alt="" width="40" height="40" aria-hidden="true" />
             <span className="nav__wordmark">
               <span className="nav__title display">
                 FIFA World Cup <span className="nav__26">26</span>
