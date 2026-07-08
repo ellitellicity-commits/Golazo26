@@ -7,8 +7,16 @@
   --bk-box-h: 58px;
   --bk-rail-w: 150px;
   --bk-center-w: 158px;
+  /* Connector system (Fix 3): one uniform thickness everywhere; paths read by
+     brightness, not weight. Three tiers — faint structural skeleton (undecided),
+     muted for a knocked-out team's path, bright + soft glow for a still-alive /
+     champion path. Gold stays reserved for the champion card + trophy (DESIGN.md),
+     so the winning line is neutral ink, not gold. */
+  --bk-line-w: 3px;
   --bk-line: var(--border-divider);
-  --bk-line-on: var(--ink-secondary);
+  --bk-line-elim: color-mix(in oklab, var(--ink-muted) 80%, var(--studio-black));
+  --bk-line-win: var(--ink);
+  --bk-line-glow: 0 0 5px color-mix(in oklab, var(--ink) 42%, transparent);
   --bk-canvas-h: calc(var(--bk-head-h) + 16 * var(--bk-row-h));
 
   display: flex;
@@ -505,10 +513,12 @@
   position: absolute;
   top: 50%;
   width: calc(var(--bk-gut) - var(--bk-stub));
-  height: 2px;
+  height: var(--bk-line-w);
   background: var(--bk-line);
   transform: translateY(-50%);
-  transition: background var(--dur-ui) var(--ease-out-quint);
+  transition:
+    background var(--dur-ui) var(--ease-out-quint),
+    box-shadow var(--dur-ui) var(--ease-out-quint);
 }
 .bk-grid--left .bk-match::after {
   left: 100%;
@@ -516,17 +526,38 @@
 .bk-grid--right .bk-match::after {
   right: 100%;
 }
-.bk-grid .bk-match.is-decided::after {
-  background: var(--bk-line-on);
+/* Outgoing line: muted once the advancing team is eliminated (its trail stays but
+   fades), bright + glowing while that team is still alive / is the champion. */
+.bk-grid .bk-match.is-out-elim::after {
+  background: var(--bk-line-elim);
+}
+.bk-grid .bk-match.is-out-win::after {
+  background: var(--bk-line-win);
+  box-shadow: var(--bk-line-glow);
 }
 
+/* A match's vertical merge. One state for the whole bar (+ its stub), owned by
+   the match's winner: default faint skeleton while undecided, glowing the moment
+   the match is won, dimmed once that winner is knocked out. The bar spans 25%–75%
+   of the box; its ::after stub bridges the midpoint into the box. */
 .bk-match__join {
   position: absolute;
   top: 25%;
   bottom: 25%;
-  width: 2px;
+  width: var(--bk-line-w);
   background: var(--bk-line);
-  transition: background var(--dur-ui) var(--ease-out-quint);
+  transition:
+    background var(--dur-ui) var(--ease-out-quint),
+    box-shadow var(--dur-ui) var(--ease-out-quint);
+}
+.bk-match__join.is-vert-elim,
+.bk-match__join.is-vert-elim::after {
+  background: var(--bk-line-elim);
+}
+.bk-match__join.is-vert-win,
+.bk-match__join.is-vert-win::after {
+  background: var(--bk-line-win);
+  box-shadow: var(--bk-line-glow);
 }
 /* Vertical bar, offset from the box by the stub; the ::after is the stub that
    bridges the bar's midpoint into the box. */
@@ -541,9 +572,12 @@
   position: absolute;
   top: 50%;
   width: var(--bk-stub);
-  height: 2px;
-  background: inherit;
+  height: var(--bk-line-w);
+  background: var(--bk-line);
   transform: translateY(-50%);
+  transition:
+    background var(--dur-ui) var(--ease-out-quint),
+    box-shadow var(--dur-ui) var(--ease-out-quint);
 }
 .bk-match__join--left::after {
   left: 100%;
@@ -551,8 +585,25 @@
 .bk-match__join--right::after {
   right: 100%;
 }
-.bk-match.is-decided .bk-match__join {
-  background: var(--bk-line-on);
+/* R32 has no feeder matches — its two group-stage teams share one box — so its
+   merge bar hugs the box's OUTGOING edge (mirroring later rounds, whose merge
+   sits on the feeder side) and feeds straight into the winner's outgoing
+   horizontal. It brackets the two team rows, not the 25–75% feeder span, and
+   needs no stub into the box. */
+.bk-match__join--r32 {
+  top: 30%;
+  bottom: 30%;
+}
+.bk-grid--left .bk-match__join--r32 {
+  right: auto;
+  left: 100%;
+}
+.bk-grid--right .bk-match__join--r32 {
+  left: auto;
+  right: 100%;
+}
+.bk-match__join--r32::after {
+  content: none;
 }
 
 /* --- Centre column: final + trophy + third place --- */
@@ -594,15 +645,29 @@
   position: absolute;
   top: 50%;
   width: var(--bk-stub);
-  height: 2px;
+  height: var(--bk-line-w);
   background: var(--bk-line);
   transform: translateY(-50%);
+  transition:
+    background var(--dur-ui) var(--ease-out-quint),
+    box-shadow var(--dur-ui) var(--ease-out-quint);
 }
 .bk-final-wrap .bk-match__box::before {
   right: 100%;
 }
 .bk-final-wrap .bk-match__box::after {
   left: 100%;
+}
+/* Each finalist's incoming stub (left SF = M101, right SF = M102) is a
+   winner-carries-forward horizontal earned only by winning the final, so only the
+   champion's side lights; the runner-up's stays default (it was never earned). */
+.bk-final-wrap.is-left-win .bk-match__box::before {
+  background: var(--bk-line-win);
+  box-shadow: var(--bk-line-glow);
+}
+.bk-final-wrap.is-right-win .bk-match__box::after {
+  background: var(--bk-line-win);
+  box-shadow: var(--bk-line-glow);
 }
 /* Dedicated "Final" heading right above the M103 box (mirrors the column
    stage headers, emphasised at the box itself). Absolute so it doesn't shift
@@ -791,6 +856,11 @@
   max-width: 90ch;
 }
 
+/* Horizontal-pan affordance — desktop shows the whole tree, so hide it there. */
+.bk__swipe {
+  display: none;
+}
+
 /* --- Responsive: shrink density, then drop rails on the narrowest screens --- */
 @media (max-width: 1100px) {
   .bk {
@@ -811,6 +881,28 @@
   .bk__champ-odds {
     margin-left: 0;
   }
+  /* The full two-sided tree is wider than the phone; it pans horizontally. Make
+     the gesture discoverable rather than leaving the off-screen rounds hidden. */
+  .bk__swipe {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-label);
+    color: var(--ink-muted);
+  }
+  .bk__swipe-arrow {
+    color: var(--ink-secondary);
+    animation: bk-swipe-nudge 1.8s var(--ease-out-quint) infinite;
+  }
+}
+@keyframes bk-swipe-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -820,7 +912,8 @@
     animation: none;
   }
   .bk-match__today-dot,
-  .bk-match__live-dot {
+  .bk-match__live-dot,
+  .bk__swipe-arrow {
     animation: none;
   }
 }

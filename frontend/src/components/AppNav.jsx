@@ -40,6 +40,8 @@ const ICONS = {
   predictor: 'M3 6h14M3 10h14M3 14h9', // stacked fixture lines
   bracket: 'M3 5h4v4M3 11h4v4M7 7h3v6h3M15 8v4', // knockout tree
   groups: 'M4 4h5v5H4zM11 4h5v5h-5zM4 11h5v5H4zM11 11h5v5h-5z', // group grid
+  matchup: 'M3 12c3.5-7 10.5-7 14 0', // great-circle flight arc
+  atlas: 'M10 3a7 7 0 100 14 7 7 0 000-14M3.5 10h13M10 3c2.4 2 2.4 12 0 14M10 3c-2.4 2-2.4 12 0 14', // globe
 }
 
 function TabIcon({ name }) {
@@ -56,6 +58,8 @@ const TABS = [
   { to: '/predictor', label: 'Predictor', icon: 'predictor' },
   { to: '/bracket', label: 'Bracket', icon: 'bracket' },
   { to: '/groups', label: 'Groups', icon: 'groups' },
+  { to: '/simulator', label: 'Matchup', icon: 'matchup' },
+  { to: '/encyclopedia', label: 'Atlas', icon: 'atlas' },
 ]
 
 /**
@@ -98,8 +102,8 @@ function AppNav() {
 
           <div className="nav__meta">
             <DataSourceChip source={source} />
-            <p className="nav__badge" title="Predictions from a gradient-boosted model over 10,000 Monte Carlo tournament runs">
-              <span className="nav__badge-engine">XGBoost</span>
+            <p className="nav__badge" title="Predictions from a machine-learning model over 10,000 Monte Carlo tournament runs">
+              <span className="nav__badge-engine">Model</span>
               <span className="nav__badge-dot" aria-hidden="true">·</span>
               <span className="nav__badge-sims tnum">{sims}</span>
               <span className="nav__badge-unit"> simulations</span>

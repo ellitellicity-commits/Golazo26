@@ -1,0 +1,1925 @@
+{
+  "note": "Real WC2026 squad data from data/raw/wc2026/squads_and_players.csv, joined to country names via match_team_stats + matches_detailed. notablePlayers = top 5 by market value. No coach/history source exists; those stay pending in the Atlas.",
+  "teams": {
+    "Algeria": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Zineddine Belaid",
+          "position": "DEF",
+          "club": "JS Kabylie",
+          "caps": 18,
+          "goals": 1
+        },
+        {
+          "name": "Melvin Feycal Mastil",
+          "position": "GK",
+          "club": "FC Stade Nyonnais",
+          "caps": 2,
+          "goals": 0
+        },
+        {
+          "name": "Oussama Benbot",
+          "position": "GK",
+          "club": "USM Alger",
+          "caps": 3,
+          "goals": 0
+        },
+        {
+          "name": "Samir Sophian Chergui",
+          "position": "DEF",
+          "club": "Paris FC",
+          "caps": 5,
+          "goals": 0
+        },
+        {
+          "name": "Nabil Bentaleb",
+          "position": "MID",
+          "club": "Lille OSC",
+          "caps": 61,
+          "goals": 6
+        }
+      ]
+    },
+    "Argentina": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Lisandro Martinez",
+          "position": "DEF",
+          "club": "Manchester United FC",
+          "caps": 29,
+          "goals": 1
+        },
+        {
+          "name": "Nicolás Alejandro Tagliafico",
+          "position": "DEF",
+          "club": "Olympique Lyonnais",
+          "caps": 76,
+          "goals": 1
+        },
+        {
+          "name": "Nicolas Ivan Gonzalez",
+          "position": "MID",
+          "club": "Atlético De Madrid",
+          "caps": 52,
+          "goals": 6
+        },
+        {
+          "name": "Nicolas Hernan Gonzalo Otamendi",
+          "position": "DEF",
+          "club": "SL Benfica",
+          "caps": 133,
+          "goals": 8
+        },
+        {
+          "name": "Facundo Axel Medina",
+          "position": "DEF",
+          "club": "Olympique Marseille",
+          "caps": 10,
+          "goals": 0
+        }
+      ]
+    },
+    "Australia": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Cameron Robert Burgess",
+          "position": "DEF",
+          "club": "Swansea City AFC",
+          "caps": 28,
+          "goals": 0
+        },
+        {
+          "name": "Aziz Behich",
+          "position": "DEF",
+          "club": "Melbourne City FC",
+          "caps": 85,
+          "goals": 3
+        },
+        {
+          "name": "Jacob Michael Italiano",
+          "position": "DEF",
+          "club": "Grazer AK",
+          "caps": 6,
+          "goals": 0
+        },
+        {
+          "name": "Paul Michael Junior Okon-Engstler",
+          "position": "MID",
+          "club": "Sydney FC",
+          "caps": 7,
+          "goals": 0
+        },
+        {
+          "name": "Jordan Jacob Bos",
+          "position": "DEF",
+          "club": "Feyenoord Rotterdam",
+          "caps": 28,
+          "goals": 4
+        }
+      ]
+    },
+    "Austria": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Xaver Schlager",
+          "position": "MID",
+          "club": "RB Leipzig",
+          "caps": 52,
+          "goals": 4
+        },
+        {
+          "name": "Nicolas Seiwald",
+          "position": "MID",
+          "club": "RB Leipzig",
+          "caps": 48,
+          "goals": 1
+        },
+        {
+          "name": "David Alaba",
+          "position": "DEF",
+          "club": "Real Madrid C. F.",
+          "caps": 114,
+          "goals": 15
+        },
+        {
+          "name": "Michael Svoboda",
+          "position": "DEF",
+          "club": "Venezia FC",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Alexander Schlager",
+          "position": "GK",
+          "club": "FC Red Bull Salzburg",
+          "caps": 27,
+          "goals": 0
+        }
+      ]
+    },
+    "Belgium": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Thibaut Nicolas Courtois",
+          "position": "GK",
+          "club": "Real Madrid C. F.",
+          "caps": 110,
+          "goals": 0
+        },
+        {
+          "name": "Axel Laurent Witsel",
+          "position": "MID",
+          "club": "Girona FC",
+          "caps": 138,
+          "goals": 12
+        },
+        {
+          "name": "Arthur Nicolas Theate",
+          "position": "DEF",
+          "club": "Eintracht Frankfurt",
+          "caps": 33,
+          "goals": 1
+        },
+        {
+          "name": "Nicolas Thierry Raskin",
+          "position": "MID",
+          "club": "Rangers FC",
+          "caps": 14,
+          "goals": 2
+        },
+        {
+          "name": "Brandon Erik Mechele",
+          "position": "DEF",
+          "club": "Club Brugge",
+          "caps": 10,
+          "goals": 1
+        }
+      ]
+    },
+    "Bosnia and Herzegovina": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Haris Tabakovic",
+          "position": "FWD",
+          "club": "Borussia Mönchengladbach",
+          "caps": 10,
+          "goals": 4
+        },
+        {
+          "name": "Martin Zlomislic",
+          "position": "GK",
+          "club": "HNK Rijeka",
+          "caps": 3,
+          "goals": 0
+        },
+        {
+          "name": "Ivan Basic",
+          "position": "MID",
+          "club": "FC Astana",
+          "caps": 18,
+          "goals": 0
+        },
+        {
+          "name": "Amar Memic",
+          "position": "MID",
+          "club": "FC Viktoria Plze ň",
+          "caps": 14,
+          "goals": 1
+        },
+        {
+          "name": "Esmir Bajraktarevic",
+          "position": "FWD",
+          "club": "PSV Eindhoven",
+          "caps": 17,
+          "goals": 1
+        }
+      ]
+    },
+    "Brazil": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Matheus Matheus Cunha",
+          "position": "FWD",
+          "club": "Manchester United FC",
+          "caps": 24,
+          "goals": 1
+        },
+        {
+          "name": "Lucas Lucas Paqueta",
+          "position": "MID",
+          "club": "CR Flamengo",
+          "caps": 64,
+          "goals": 13
+        },
+        {
+          "name": "GUIMARAESBruno Bruno",
+          "position": "MID",
+          "club": "Newcastle United FC",
+          "caps": 44,
+          "goals": 3
+        },
+        {
+          "name": "Ederson Ederson",
+          "position": "GK",
+          "club": "Fenerbahçe SK",
+          "caps": 32,
+          "goals": 0
+        },
+        {
+          "name": "Bremer Bremer",
+          "position": "DEF",
+          "club": "Juventus FC",
+          "caps": 8,
+          "goals": 1
+        }
+      ]
+    },
+    "Canada": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Ali Ahmed",
+          "position": "FWD",
+          "club": "Norwich City FC",
+          "caps": 25,
+          "goals": 1
+        },
+        {
+          "name": "Promise Oluwatobi Emmanuel David",
+          "position": "FWD",
+          "club": "Royale Union Saint-Gilloise",
+          "caps": 11,
+          "goals": 3
+        },
+        {
+          "name": "Mathieu Choiniere",
+          "position": "MID",
+          "club": "LAFC",
+          "caps": 24,
+          "goals": 0
+        },
+        {
+          "name": "Moïse Bombito Bombito",
+          "position": "DEF",
+          "club": "OGC Nice",
+          "caps": 20,
+          "goals": 0
+        },
+        {
+          "name": "Jonathan Osorio",
+          "position": "MID",
+          "club": "Toronto FC",
+          "caps": 92,
+          "goals": 10
+        }
+      ]
+    },
+    "Cape Verde": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Gregory Jamiro Monteiro",
+          "position": "MID",
+          "club": "PEC Zwolle",
+          "caps": 56,
+          "goals": 5
+        },
+        {
+          "name": "Johnson Willy",
+          "position": "MID",
+          "club": "AC Omonia",
+          "caps": 39,
+          "goals": 3
+        },
+        {
+          "name": "Paulo Joao Paulo",
+          "position": "MID",
+          "club": "FC FCSB",
+          "caps": 42,
+          "goals": 1
+        },
+        {
+          "name": "José Vozinha",
+          "position": "GK",
+          "club": "GD Chaves",
+          "caps": 91,
+          "goals": 0
+        },
+        {
+          "name": "CABRALSidny Sidny Lopes",
+          "position": "DEF",
+          "club": "SL Benfica",
+          "caps": 12,
+          "goals": 3
+        }
+      ]
+    },
+    "Colombia": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Jefferson Andrés Lerma",
+          "position": "MID",
+          "club": "Crystal Palace FC",
+          "caps": 66,
+          "goals": 5
+        },
+        {
+          "name": "Yerry Fernando Mina",
+          "position": "DEF",
+          "club": "Cagliari",
+          "caps": 54,
+          "goals": 8
+        },
+        {
+          "name": "Deiver Machado",
+          "position": "DEF",
+          "club": "FC Nantes",
+          "caps": 15,
+          "goals": 0
+        },
+        {
+          "name": "Richard Rios",
+          "position": "MID",
+          "club": "SL Benfica",
+          "caps": 33,
+          "goals": 2
+        },
+        {
+          "name": "Jaminton Leandro Campaz",
+          "position": "FWD",
+          "club": "CA Rosario Central",
+          "caps": 11,
+          "goals": 2
+        }
+      ]
+    },
+    "Croatia": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Josip Sutalo",
+          "position": "DEF",
+          "club": "AFC Ajax",
+          "caps": 34,
+          "goals": 0
+        },
+        {
+          "name": "Luka Vuskovic",
+          "position": "DEF",
+          "club": "Hamburger SV",
+          "caps": 6,
+          "goals": 1
+        },
+        {
+          "name": "Petar Sucic",
+          "position": "MID",
+          "club": "FC Internazionale Milano",
+          "caps": 18,
+          "goals": 1
+        },
+        {
+          "name": "Dominik Livakovic",
+          "position": "GK",
+          "club": "GNK Dinamo Zagreb",
+          "caps": 76,
+          "goals": 0
+        },
+        {
+          "name": "Ivor Pandur",
+          "position": "GK",
+          "club": "Hull City FC",
+          "caps": 0,
+          "goals": 0
+        }
+      ]
+    },
+    "Curaçao": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Trevor Irving Doornbusch",
+          "position": "GK",
+          "club": "VVV Venlo",
+          "caps": 8,
+          "goals": 0
+        },
+        {
+          "name": "Brandley Mack-Olien Kuwas",
+          "position": "FWD",
+          "club": "FC Volendam",
+          "caps": 36,
+          "goals": 2
+        },
+        {
+          "name": "Tyrese Yurvencey Noslin",
+          "position": "FWD",
+          "club": "SC Telstar",
+          "caps": 7,
+          "goals": 1
+        },
+        {
+          "name": "Deveron Lenny Fonville",
+          "position": "DEF",
+          "club": "NEC Nijmegen",
+          "caps": 3,
+          "goals": 0
+        },
+        {
+          "name": "Róshón Felix Romar Jordan Van Eijma",
+          "position": "DEF",
+          "club": "RKC Waalwijk",
+          "caps": 28,
+          "goals": 1
+        }
+      ]
+    },
+    "Czechia": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Hugo Sochurek",
+          "position": "MID",
+          "club": "AC Sparta Praha",
+          "caps": 1,
+          "goals": 0
+        },
+        {
+          "name": "Denis Visinsky",
+          "position": "FWD",
+          "club": "FC Viktoria Plze ň",
+          "caps": 2,
+          "goals": 1
+        },
+        {
+          "name": "Pavel Sulc",
+          "position": "FWD",
+          "club": "Olympique Lyonnais",
+          "caps": 22,
+          "goals": 5
+        },
+        {
+          "name": "Vladimír Darida",
+          "position": "MID",
+          "club": "FC Hradec Králové",
+          "caps": 79,
+          "goals": 8
+        },
+        {
+          "name": "Lukáš Provod",
+          "position": "MID",
+          "club": "SK Slavia Praha",
+          "caps": 39,
+          "goals": 3
+        }
+      ]
+    },
+    "DR Congo": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Steve Nkanu Kapuadi",
+          "position": "DEF",
+          "club": "Widzew Ł ód ź",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Yoane Wissa",
+          "position": "FWD",
+          "club": "Newcastle United FC",
+          "caps": 39,
+          "goals": 9
+        },
+        {
+          "name": "Ngal’ayel Mukau",
+          "position": "MID",
+          "club": "Lille OSC",
+          "caps": 15,
+          "goals": 0
+        },
+        {
+          "name": "Samuel Alain Moutoussamy",
+          "position": "MID",
+          "club": "Atromitos FC",
+          "caps": 59,
+          "goals": 0
+        },
+        {
+          "name": "Noah Junior Sadiki",
+          "position": "MID",
+          "club": "Sunderland AFC",
+          "caps": 21,
+          "goals": 0
+        }
+      ]
+    },
+    "Ecuador": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Yaimar Abel Medina",
+          "position": "DEF",
+          "club": "KRC Genk",
+          "caps": 6,
+          "goals": 0
+        },
+        {
+          "name": "Jeremy Alberto Arevalo",
+          "position": "FWD",
+          "club": "VfB Stuttgart",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Gonzalo Roberto Valle",
+          "position": "GK",
+          "club": "LDU Quito",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Moisés Isaac Caicedo",
+          "position": "MID",
+          "club": "Chelsea FC",
+          "caps": 62,
+          "goals": 3
+        },
+        {
+          "name": "Willian Joel Pacho",
+          "position": "DEF",
+          "club": "Paris Saint-Germain",
+          "caps": 35,
+          "goals": 2
+        }
+      ]
+    },
+    "Egypt": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Mohamed Zaky Mostafa Zico",
+          "position": "MID",
+          "club": "Pyramids FC",
+          "caps": 3,
+          "goals": 2
+        },
+        {
+          "name": "Mohamed Aboelfetouh Ahmed Fatouh",
+          "position": "DEF",
+          "club": "Zamalek SC",
+          "caps": 40,
+          "goals": 1
+        },
+        {
+          "name": "Abdelaziz Moustafa Ramy Rabia",
+          "position": "DEF",
+          "club": "Al Ain FC",
+          "caps": 48,
+          "goals": 6
+        },
+        {
+          "name": "Saber Abdelmohsen Mahmoud",
+          "position": "MID",
+          "club": "ZED FC",
+          "caps": 15,
+          "goals": 1
+        },
+        {
+          "name": "Fathy Abdelhalim Hamdy Fathy",
+          "position": "MID",
+          "club": "Al Wakrah SC",
+          "caps": 65,
+          "goals": 4
+        }
+      ]
+    },
+    "England": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Declan Rice",
+          "position": "MID",
+          "club": "Arsenal FC",
+          "caps": 74,
+          "goals": 7
+        },
+        {
+          "name": "Jude Victor William Bellingham",
+          "position": "MID",
+          "club": "Real Madrid C. F.",
+          "caps": 49,
+          "goals": 7
+        },
+        {
+          "name": "Morgan Elliot Rogers",
+          "position": "MID",
+          "club": "Aston Villa FC",
+          "caps": 16,
+          "goals": 1
+        },
+        {
+          "name": "Nico Oreilly",
+          "position": "DEF",
+          "club": "Manchester City FC",
+          "caps": 6,
+          "goals": 0
+        },
+        {
+          "name": "Tehuti Djed-Hotep Spence",
+          "position": "DEF",
+          "club": "Tottenham Hotspur FC",
+          "caps": 7,
+          "goals": 0
+        }
+      ]
+    },
+    "France": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Kylian Mbappe",
+          "position": "FWD",
+          "club": "Real Madrid C. F.",
+          "caps": 99,
+          "goals": 58
+        },
+        {
+          "name": "Maghnes Akliouche",
+          "position": "MID",
+          "club": "AS Monaco",
+          "caps": 9,
+          "goals": 1
+        },
+        {
+          "name": "Jean-Philippe Mateta",
+          "position": "FWD",
+          "club": "Crystal Palace FC",
+          "caps": 4,
+          "goals": 2
+        },
+        {
+          "name": "Mike Peterson Maignan",
+          "position": "GK",
+          "club": "AC Milan",
+          "caps": 41,
+          "goals": 0
+        },
+        {
+          "name": "Warren Marie Jean-Pierre Zaire-Emery",
+          "position": "MID",
+          "club": "Paris Saint-Germain",
+          "caps": 11,
+          "goals": 1
+        }
+      ]
+    },
+    "Germany": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Leroy Aziz Sane",
+          "position": "MID",
+          "club": "Galatasaray SK",
+          "caps": 77,
+          "goals": 17
+        },
+        {
+          "name": "Nico Cédric Schlotterbeck",
+          "position": "DEF",
+          "club": "Borussia Dortmund",
+          "caps": 28,
+          "goals": 1
+        },
+        {
+          "name": "Manuel Peter Neuer",
+          "position": "GK",
+          "club": "FC Bayern München",
+          "caps": 125,
+          "goals": 0
+        },
+        {
+          "name": "Aleksandar Pavlovic",
+          "position": "MID",
+          "club": "FC Bayern München",
+          "caps": 12,
+          "goals": 1
+        },
+        {
+          "name": "Waldemar Anton",
+          "position": "DEF",
+          "club": "Borussia Dortmund",
+          "caps": 14,
+          "goals": 0
+        }
+      ]
+    },
+    "Ghana": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Jerome Opoku",
+          "position": "DEF",
+          "club": "Ba ş ak ş ehir FK",
+          "caps": 12,
+          "goals": 1
+        },
+        {
+          "name": "Kojo Peprah Oppong",
+          "position": "DEF",
+          "club": "OGC Nice",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Jonas Adjei Adjetey",
+          "position": "DEF",
+          "club": "VfL Wolfsburg",
+          "caps": 11,
+          "goals": 0
+        },
+        {
+          "name": "Caleb Marfo Yirenkyi",
+          "position": "MID",
+          "club": "FC Nordsjælland",
+          "caps": 12,
+          "goals": 2
+        },
+        {
+          "name": "Lawrence Ati Zigi",
+          "position": "GK",
+          "club": "FC St. Gallen",
+          "caps": 31,
+          "goals": 0
+        }
+      ]
+    },
+    "Haiti": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Alexandre Jr Pierre",
+          "position": "GK",
+          "club": "FC Sochaux-Montbéliard",
+          "caps": 17,
+          "goals": 0
+        },
+        {
+          "name": "Carl Fred Sainte",
+          "position": "MID",
+          "club": "El Paso Locomotive FC",
+          "caps": 26,
+          "goals": 0
+        },
+        {
+          "name": "Wilson Isidor",
+          "position": "FWD",
+          "club": "Sunderland AFC",
+          "caps": 5,
+          "goals": 2
+        },
+        {
+          "name": "Danley Jean Jacques",
+          "position": "MID",
+          "club": "Philadelphia Union",
+          "caps": 32,
+          "goals": 6
+        },
+        {
+          "name": "Jean Ricner Bellegarde",
+          "position": "MID",
+          "club": "Wolverhampton Wanderers FC",
+          "caps": 11,
+          "goals": 0
+        }
+      ]
+    },
+    "Iran": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Mehdi Ghayedi",
+          "position": "FWD",
+          "club": "Al Nasr SC",
+          "caps": 31,
+          "goals": 10
+        },
+        {
+          "name": "Ehsan Hajisafi",
+          "position": "DEF",
+          "club": "Sepahan SC",
+          "caps": 147,
+          "goals": 7
+        },
+        {
+          "name": "Mahdi Torabi",
+          "position": "MID",
+          "club": "Tractor Sazi Tabriz FC",
+          "caps": 52,
+          "goals": 7
+        },
+        {
+          "name": "Seyedhossein Hosseini",
+          "position": "GK",
+          "club": "Sepahan SC",
+          "caps": 14,
+          "goals": 0
+        },
+        {
+          "name": "Seyedpayam Niazmand",
+          "position": "GK",
+          "club": "Persepolis FC",
+          "caps": 15,
+          "goals": 0
+        }
+      ]
+    },
+    "Iraq": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Wali Faeq Youssef Amyn",
+          "position": "MID",
+          "club": "AEK Larnaca FC",
+          "caps": 27,
+          "goals": 2
+        },
+        {
+          "name": "Hussein Ghadhban Aymen",
+          "position": "FWD",
+          "club": "Al Karma SC",
+          "caps": 96,
+          "goals": 34
+        },
+        {
+          "name": "Fouad Aboud Amir Alammari",
+          "position": "MID",
+          "club": "KS Cracovia",
+          "caps": 52,
+          "goals": 3
+        },
+        {
+          "name": "Hasan Maknazi Ahmed Maknazi",
+          "position": "DEF",
+          "club": "Al Karma SC",
+          "caps": 7,
+          "goals": 0
+        },
+        {
+          "name": "Hazar Anwar Aimar",
+          "position": "MID",
+          "club": "Sarpsborg 08 FF",
+          "caps": 7,
+          "goals": 0
+        }
+      ]
+    },
+    "Ivory Coast": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "N'clomande Ghislain Konan",
+          "position": "DEF",
+          "club": "Gil Vicente FC",
+          "caps": 55,
+          "goals": 0
+        },
+        {
+          "name": "Odilon Dorgeless Kossounou",
+          "position": "DEF",
+          "club": "Atalanta Bergamo",
+          "caps": 37,
+          "goals": 0
+        },
+        {
+          "name": "Simon Adingra",
+          "position": "FWD",
+          "club": "AS Monaco",
+          "caps": 29,
+          "goals": 5
+        },
+        {
+          "name": "Obite Evan Ndicka",
+          "position": "DEF",
+          "club": "AS Roma",
+          "caps": 29,
+          "goals": 0
+        },
+        {
+          "name": "Yan Diomande",
+          "position": "FWD",
+          "club": "RB Leipzig",
+          "caps": 11,
+          "goals": 3
+        }
+      ]
+    },
+    "Japan": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Keisuke Osako",
+          "position": "GK",
+          "club": "Sanfrecce Hiroshima",
+          "caps": 11,
+          "goals": 0
+        },
+        {
+          "name": "Yukinari Sugawara",
+          "position": "DEF",
+          "club": "SV Werder Bremen",
+          "caps": 23,
+          "goals": 2
+        },
+        {
+          "name": "Kento Shiogai",
+          "position": "FWD",
+          "club": "VfL Wolfsburg",
+          "caps": 3,
+          "goals": 0
+        },
+        {
+          "name": "Koki Ogawa",
+          "position": "FWD",
+          "club": "NEC Nijmegen",
+          "caps": 16,
+          "goals": 11
+        },
+        {
+          "name": "Ayase Ueda",
+          "position": "FWD",
+          "club": "Feyenoord Rotterdam",
+          "caps": 41,
+          "goals": 16
+        }
+      ]
+    },
+    "Jordan": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Ahmad Salameh Saed",
+          "position": "DEF",
+          "club": "Al Hussein SC",
+          "caps": 22,
+          "goals": 2
+        },
+        {
+          "name": "Majed Jamil Mohammad Abualnadi",
+          "position": "DEF",
+          "club": "Selangor FC",
+          "caps": 19,
+          "goals": 0
+        },
+        {
+          "name": "Mahmoud Saleh Mohannad Abutaha",
+          "position": "MID",
+          "club": "Al-Quwa Al-Jawiya",
+          "caps": 31,
+          "goals": 1
+        },
+        {
+          "name": "Mohammad Mousa Mousa Altamari",
+          "position": "FWD",
+          "club": "Stade Rennais FC",
+          "caps": 93,
+          "goals": 24
+        },
+        {
+          "name": "Mahmoud Ahmed Nizar Alrashdan",
+          "position": "MID",
+          "club": "Qatar SC",
+          "caps": 48,
+          "goals": 4
+        }
+      ]
+    },
+    "Mexico": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Israel Reyes",
+          "position": "DEF",
+          "club": "Club América",
+          "caps": 35,
+          "goals": 2
+        },
+        {
+          "name": "Guillermo Martinez",
+          "position": "FWD",
+          "club": "Pumas UNAM",
+          "caps": 12,
+          "goals": 3
+        },
+        {
+          "name": "Jorge Eduardo Sanchez",
+          "position": "DEF",
+          "club": "PAOK Saloniki",
+          "caps": 59,
+          "goals": 3
+        },
+        {
+          "name": "Jesús Daniel Gallardo",
+          "position": "DEF",
+          "club": "Deportivo Toluca FC",
+          "caps": 123,
+          "goals": 3
+        },
+        {
+          "name": "Mateo Chavez",
+          "position": "DEF",
+          "club": "AZ Alkmaar",
+          "caps": 10,
+          "goals": 0
+        }
+      ]
+    },
+    "Morocco": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Soufiane Rahimi",
+          "position": "FWD",
+          "club": "Al Ain FC",
+          "caps": 38,
+          "goals": 12
+        },
+        {
+          "name": "Brahim Diaz",
+          "position": "FWD",
+          "club": "Real Madrid C. F.",
+          "caps": 27,
+          "goals": 15
+        },
+        {
+          "name": "Monir El Kajoui",
+          "position": "GK",
+          "club": "RS Berkane",
+          "caps": 52,
+          "goals": 0
+        },
+        {
+          "name": "Ayyoub Bouaddi",
+          "position": "MID",
+          "club": "Lille OSC",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Issa Laye Lucas Jean Diop",
+          "position": "DEF",
+          "club": "Fulham FC",
+          "caps": 5,
+          "goals": 0
+        }
+      ]
+    },
+    "Netherlands": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Paul Jan-Paul Van Hecke",
+          "position": "DEF",
+          "club": "Brighton & Hove Albion FC",
+          "caps": 13,
+          "goals": 0
+        },
+        {
+          "name": "Justin Dean Kluivert",
+          "position": "MID",
+          "club": "AFC Bournemouth",
+          "caps": 12,
+          "goals": 0
+        },
+        {
+          "name": "Marten Elco De Roon",
+          "position": "MID",
+          "club": "Atalanta Bergamo",
+          "caps": 43,
+          "goals": 1
+        },
+        {
+          "name": "Cody Mathès Gakpo",
+          "position": "FWD",
+          "club": "Liverpool FC",
+          "caps": 51,
+          "goals": 21
+        },
+        {
+          "name": "Memphis Depay",
+          "position": "FWD",
+          "club": "SC Corinthians",
+          "caps": 110,
+          "goals": 55
+        }
+      ]
+    },
+    "New Zealand": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Thomas Jefferson Smith",
+          "position": "DEF",
+          "club": "Braintree Town FC",
+          "caps": 57,
+          "goals": 2
+        },
+        {
+          "name": "Lachlan Ryan Bayliss",
+          "position": "MID",
+          "club": "Newcastle United Jets FC",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Michael Cornelis Woud",
+          "position": "GK",
+          "club": "Auckland FC",
+          "caps": 7,
+          "goals": 0
+        },
+        {
+          "name": "Timothy John Payne",
+          "position": "DEF",
+          "club": "Wellington Phoenix FC",
+          "caps": 53,
+          "goals": 3
+        },
+        {
+          "name": "Francis De Vries",
+          "position": "DEF",
+          "club": "Auckland FC",
+          "caps": 20,
+          "goals": 1
+        }
+      ]
+    },
+    "Norway": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Fredrik André Bjorkan",
+          "position": "DEF",
+          "club": "FK Bodø/Glimt",
+          "caps": 21,
+          "goals": 1
+        },
+        {
+          "name": "Jørgen Strand Strand Larsen",
+          "position": "FWD",
+          "club": "Crystal Palace FC",
+          "caps": 28,
+          "goals": 6
+        },
+        {
+          "name": "Antonio Eromonsele Nordby Nusa",
+          "position": "FWD",
+          "club": "RB Leipzig",
+          "caps": 25,
+          "goals": 8
+        },
+        {
+          "name": "Sander Gard Bolin Berge",
+          "position": "MID",
+          "club": "Fulham FC",
+          "caps": 67,
+          "goals": 1
+        },
+        {
+          "name": "Alexander Sorloth",
+          "position": "FWD",
+          "club": "Atlético De Madrid",
+          "caps": 73,
+          "goals": 26
+        }
+      ]
+    },
+    "Panama": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Cesar Jair Samudio",
+          "position": "GK",
+          "club": "CD Marathón",
+          "caps": 5,
+          "goals": 0
+        },
+        {
+          "name": "Luis Ricardo Mejia",
+          "position": "GK",
+          "club": "Club Nacional",
+          "caps": 56,
+          "goals": 0
+        },
+        {
+          "name": "Jiovany Javier Ramos",
+          "position": "DEF",
+          "club": "Puerto Cabello CF",
+          "caps": 24,
+          "goals": 2
+        },
+        {
+          "name": "Roderick Alonso Miller",
+          "position": "DEF",
+          "club": "Turan Tovuz",
+          "caps": 49,
+          "goals": 2
+        },
+        {
+          "name": "Cesar Augusto Yanis",
+          "position": "MID",
+          "club": "CD Cobresal",
+          "caps": 55,
+          "goals": 5
+        }
+      ]
+    },
+    "Paraguay": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Gastón Hernán Olveira",
+          "position": "GK",
+          "club": "Club Olimpia",
+          "caps": 1,
+          "goals": 0
+        },
+        {
+          "name": "Matias Galarza",
+          "position": "MID",
+          "club": "Atlanta United FC",
+          "caps": 15,
+          "goals": 3
+        },
+        {
+          "name": "Orlando Daniel Gill",
+          "position": "GK",
+          "club": "CA San Lorenzo",
+          "caps": 7,
+          "goals": 0
+        },
+        {
+          "name": "Adrián Andrés Cubas",
+          "position": "MID",
+          "club": "Vancouver Whitecaps FC",
+          "caps": 34,
+          "goals": 0
+        },
+        {
+          "name": "Miguel Angel Almiron",
+          "position": "MID",
+          "club": "Atlanta United FC",
+          "caps": 77,
+          "goals": 10
+        }
+      ]
+    },
+    "Portugal": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "RAMOSGonçalo Goncalo",
+          "position": "FWD",
+          "club": "Paris Saint-Germain",
+          "caps": 26,
+          "goals": 10
+        },
+        {
+          "name": "Rúben Ruben Dias",
+          "position": "DEF",
+          "club": "Manchester City FC",
+          "caps": 76,
+          "goals": 3
+        },
+        {
+          "name": "Pedro Jose Sa",
+          "position": "GK",
+          "club": "Wolverhampton Wanderers FC",
+          "caps": 5,
+          "goals": 0
+        },
+        {
+          "name": "Diogo Diogo Dalot",
+          "position": "DEF",
+          "club": "Manchester United FC",
+          "caps": 35,
+          "goals": 3
+        },
+        {
+          "name": "Alexandre Nuno",
+          "position": "DEF",
+          "club": "Paris Saint-Germain",
+          "caps": 45,
+          "goals": 1
+        }
+      ]
+    },
+    "Qatar": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Zakaria Salah Zakaria",
+          "position": "GK",
+          "club": "Al Duhail SC",
+          "caps": 10,
+          "goals": 0
+        },
+        {
+          "name": "Aissa Meshaal Barsham",
+          "position": "GK",
+          "club": "Al Sadd SC",
+          "caps": 60,
+          "goals": 0
+        },
+        {
+          "name": "Omer Assim Madibo",
+          "position": "MID",
+          "club": "Al Wakrah SC",
+          "caps": 65,
+          "goals": 0
+        },
+        {
+          "name": "Hussain Sultan",
+          "position": "DEF",
+          "club": "Al Duhail SC",
+          "caps": 20,
+          "goals": 0
+        },
+        {
+          "name": "Elamin Homam",
+          "position": "DEF",
+          "club": "Cultural Leonesa",
+          "caps": 77,
+          "goals": 3
+        }
+      ]
+    },
+    "Saudi Arabia": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Waheeb Mohammed Abu Alshamat",
+          "position": "DEF",
+          "club": "Al Qadsiah FC",
+          "caps": 9,
+          "goals": 0
+        },
+        {
+          "name": "Essa Khalid Alghannam",
+          "position": "FWD",
+          "club": "Al Ettifaq FC",
+          "caps": 7,
+          "goals": 0
+        },
+        {
+          "name": "Abdulrahman Abdullah Alhamddan",
+          "position": "FWD",
+          "club": "Al Nassr FC",
+          "caps": 53,
+          "goals": 13
+        },
+        {
+          "name": "Essa Nasser Aldawsari",
+          "position": "MID",
+          "club": "Al Hilal SC",
+          "caps": 48,
+          "goals": 1
+        },
+        {
+          "name": "Meshari Nawaf Bu Washl",
+          "position": "DEF",
+          "club": "Al Nassr FC",
+          "caps": 28,
+          "goals": 0
+        }
+      ]
+    },
+    "Scotland": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Dominic John Hyam",
+          "position": "DEF",
+          "club": "Wrexham AFC",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Aaron Buchanan Hickey",
+          "position": "DEF",
+          "club": "Brentford FC",
+          "caps": 22,
+          "goals": 0
+        },
+        {
+          "name": "Lyndon John Dykes",
+          "position": "FWD",
+          "club": "Charlton Athletic FC",
+          "caps": 52,
+          "goals": 10
+        },
+        {
+          "name": "Andrew Henry Robertson",
+          "position": "DEF",
+          "club": "Liverpool FC",
+          "caps": 95,
+          "goals": 4
+        },
+        {
+          "name": "Findlay Kenneth Curtis",
+          "position": "FWD",
+          "club": "Kilmarnock FC",
+          "caps": 4,
+          "goals": 1
+        }
+      ]
+    },
+    "Senegal": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Bara Sapoko Ndiaye",
+          "position": "MID",
+          "club": "FC Bayern München",
+          "caps": 1,
+          "goals": 0
+        },
+        {
+          "name": "Antoine Alpha Mendy",
+          "position": "DEF",
+          "club": "OGC Nice",
+          "caps": 7,
+          "goals": 0
+        },
+        {
+          "name": "Lamine Camara",
+          "position": "MID",
+          "club": "AS Monaco",
+          "caps": 46,
+          "goals": 7
+        },
+        {
+          "name": "Kalidou Koulibaly",
+          "position": "DEF",
+          "club": "Al Hilal SC",
+          "caps": 105,
+          "goals": 2
+        },
+        {
+          "name": "Pape Alassane Gueye",
+          "position": "MID",
+          "club": "Villarreal CF",
+          "caps": 43,
+          "goals": 6
+        }
+      ]
+    },
+    "South Africa": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Bradley Paul Cross",
+          "position": "DEF",
+          "club": "Kaizer Chiefs FC",
+          "caps": 1,
+          "goals": 0
+        },
+        {
+          "name": "Khuliso Johnson Mudau",
+          "position": "DEF",
+          "club": "Mamelodi Sundowns FC",
+          "caps": 35,
+          "goals": 1
+        },
+        {
+          "name": "Themba Zwane",
+          "position": "MID",
+          "club": "Mamelodi Sundowns FC",
+          "caps": 56,
+          "goals": 12
+        },
+        {
+          "name": "Ronwen Hayden Williams",
+          "position": "GK",
+          "club": "Mamelodi Sundowns FC",
+          "caps": 65,
+          "goals": 0
+        },
+        {
+          "name": "Thapelo Maseko",
+          "position": "FWD",
+          "club": "AEL Limassol",
+          "caps": 8,
+          "goals": 1
+        }
+      ]
+    },
+    "South Korea": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Minjae Kim",
+          "position": "DEF",
+          "club": "FC Bayern München",
+          "caps": 80,
+          "goals": 4
+        },
+        {
+          "name": "Jae Sung Lee",
+          "position": "MID",
+          "club": "1. FSV Mainz 05",
+          "caps": 106,
+          "goals": 15
+        },
+        {
+          "name": "Hanbeom Lee",
+          "position": "DEF",
+          "club": "FC Midtjylland",
+          "caps": 9,
+          "goals": 0
+        },
+        {
+          "name": "Hyeongyu Oh",
+          "position": "FWD",
+          "club": "Be ş ikta ş  JK",
+          "caps": 28,
+          "goals": 7
+        },
+        {
+          "name": "Youngwoo Seol",
+          "position": "DEF",
+          "club": "FK Crvena Zvezda",
+          "caps": 35,
+          "goals": 0
+        }
+      ]
+    },
+    "Spain": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Daniel Olmo",
+          "position": "FWD",
+          "club": "FC Barcelona",
+          "caps": 51,
+          "goals": 12
+        },
+        {
+          "name": "Victor Munoz",
+          "position": "FWD",
+          "club": "CA Osasuna",
+          "caps": 2,
+          "goals": 1
+        },
+        {
+          "name": "Mikel Oyarzabal",
+          "position": "FWD",
+          "club": "Real Sociedad",
+          "caps": 54,
+          "goals": 25
+        },
+        {
+          "name": "Unai Simon",
+          "position": "GK",
+          "club": "Athletic Club",
+          "caps": 59,
+          "goals": 0
+        },
+        {
+          "name": "Alejandro Grimaldo",
+          "position": "DEF",
+          "club": "Bayer 04 Leverkusen",
+          "caps": 14,
+          "goals": 0
+        }
+      ]
+    },
+    "Sweden": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Bo Kristoffer Nordfeldt",
+          "position": "GK",
+          "club": "AIK Stockholm",
+          "caps": 22,
+          "goals": 0
+        },
+        {
+          "name": "Alexander Olof Bernhardsson",
+          "position": "DEF",
+          "club": "Holstein Kiel",
+          "caps": 12,
+          "goals": 0
+        },
+        {
+          "name": "Carl Anders Theodor Starfelt",
+          "position": "DEF",
+          "club": "RC Celta Vigo",
+          "caps": 18,
+          "goals": 0
+        },
+        {
+          "name": "Taha Abdi Ali",
+          "position": "FWD",
+          "club": "Malmö FF",
+          "caps": 2,
+          "goals": 0
+        },
+        {
+          "name": "Isak Malcolm Kwaku Hien",
+          "position": "DEF",
+          "club": "Atalanta Bergamo",
+          "caps": 30,
+          "goals": 0
+        }
+      ]
+    },
+    "Switzerland": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Silvan Dominic Widmer",
+          "position": "DEF",
+          "club": "1. FSV Mainz 05",
+          "caps": 60,
+          "goals": 5
+        },
+        {
+          "name": "Yvon Landry Mvogo",
+          "position": "GK",
+          "club": "FC Lorient",
+          "caps": 13,
+          "goals": 0
+        },
+        {
+          "name": "Denis Lemi Zakaria",
+          "position": "MID",
+          "club": "AS Monaco",
+          "caps": 66,
+          "goals": 3
+        },
+        {
+          "name": "Michel Aebischer",
+          "position": "MID",
+          "club": "Pisa SC",
+          "caps": 41,
+          "goals": 2
+        },
+        {
+          "name": "Johan Kula Manzambi",
+          "position": "MID",
+          "club": "SC Freiburg",
+          "caps": 13,
+          "goals": 3
+        }
+      ]
+    },
+    "Tunisia": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Ali Abdi",
+          "position": "DEF",
+          "club": "OGC Nice",
+          "caps": 47,
+          "goals": 7
+        },
+        {
+          "name": "Khalil Ayari",
+          "position": "MID",
+          "club": "Paris Saint-Germain",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Elias Saad",
+          "position": "FWD",
+          "club": "Hannover 96",
+          "caps": 16,
+          "goals": 3
+        },
+        {
+          "name": "Abdelmouhib Chamakh",
+          "position": "GK",
+          "club": "Club Africain",
+          "caps": 4,
+          "goals": 0
+        },
+        {
+          "name": "Hazem Mastouri",
+          "position": "FWD",
+          "club": "FC Dynamo Makhachkala",
+          "caps": 19,
+          "goals": 4
+        }
+      ]
+    },
+    "Turkey": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Ça ğ lar Soyuncu",
+          "position": "DEF",
+          "club": "Fenerbahçe SK",
+          "caps": 60,
+          "goals": 2
+        },
+        {
+          "name": "Arda Guler",
+          "position": "FWD",
+          "club": "Real Madrid C. F.",
+          "caps": 31,
+          "goals": 6
+        },
+        {
+          "name": "Yunus Akgun",
+          "position": "FWD",
+          "club": "Galatasaray SK",
+          "caps": 20,
+          "goals": 4
+        },
+        {
+          "name": "Altay Bayindir",
+          "position": "GK",
+          "club": "Manchester United FC",
+          "caps": 12,
+          "goals": 0
+        },
+        {
+          "name": "Ugurcan Cakir",
+          "position": "GK",
+          "club": "Galatasaray SK",
+          "caps": 40,
+          "goals": 0
+        }
+      ]
+    },
+    "United States": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Maximilian Michael Arfsten",
+          "position": "DEF",
+          "club": "Columbus Crew",
+          "caps": 20,
+          "goals": 1
+        },
+        {
+          "name": "Mc",
+          "position": "DEF",
+          "club": "Toulouse FC",
+          "caps": 29,
+          "goals": 0
+        },
+        {
+          "name": "Antonee Robinson",
+          "position": "DEF",
+          "club": "Fulham FC",
+          "caps": 55,
+          "goals": 5
+        },
+        {
+          "name": "Christian Mate Pulisic",
+          "position": "FWD",
+          "club": "AC Milan",
+          "caps": 87,
+          "goals": 33
+        },
+        {
+          "name": "Cristian Roldan",
+          "position": "MID",
+          "club": "Seattle Sounders FC",
+          "caps": 47,
+          "goals": 0
+        }
+      ]
+    },
+    "Uruguay": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Emiliano Martinez",
+          "position": "MID",
+          "club": "SE Palmeiras",
+          "caps": 10,
+          "goals": 0
+        },
+        {
+          "name": "Mathías Olivera",
+          "position": "DEF",
+          "club": "SSC Napoli",
+          "caps": 36,
+          "goals": 2
+        },
+        {
+          "name": "Darwin Gabriel Nunez",
+          "position": "FWD",
+          "club": "Al Hilal SC",
+          "caps": 39,
+          "goals": 13
+        },
+        {
+          "name": "Diego Nicolás De La Cruz",
+          "position": "MID",
+          "club": "CR Flamengo",
+          "caps": 35,
+          "goals": 5
+        },
+        {
+          "name": "Radrigo Zalazar",
+          "position": "MID",
+          "club": "SC Braga",
+          "caps": 7,
+          "goals": 2
+        }
+      ]
+    },
+    "Uzbekistan": {
+      "squadSize": 26,
+      "notablePlayers": [
+        {
+          "name": "Jamshid Iskanderov",
+          "position": "MID",
+          "club": "FK Neftchi Farg'ona",
+          "caps": 46,
+          "goals": 4
+        },
+        {
+          "name": "Behruzjon Karimov",
+          "position": "DEF",
+          "club": "Surkhon FK",
+          "caps": 3,
+          "goals": 0
+        },
+        {
+          "name": "Sherzod Nasrullaev",
+          "position": "DEF",
+          "club": "Pakhtakor Tashkent FK",
+          "caps": 41,
+          "goals": 2
+        },
+        {
+          "name": "Ruslanbek Jiyanov",
+          "position": "MID",
+          "club": "PFC Navbahor Namangan",
+          "caps": 8,
+          "goals": 1
+        },
+        {
+          "name": "Umarbek Eshmurodov",
+          "position": "DEF",
+          "club": "Nasaf Qarshi FC",
+          "caps": 40,
+          "goals": 0
+        }
+      ]
+    }
+  }
+}

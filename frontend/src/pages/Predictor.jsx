@@ -91,7 +91,7 @@ function Predictor() {
     // Upcoming knockout ties: both teams known, not yet decided (the real
     // "upcoming matches" once the group stage is over). Predictions come from the
     // same win-probability model the bracket uses.
-    const koViews = buildViews(liveResults(data.knockout), 'live', data.knockout.r32)
+    const koViews = buildViews(liveResults(data.knockout), 'live', data.knockout.r32, data.knockout.liveByPair)
     const openKO = Object.values(koViews)
       .filter((v) => v.home?.kind === 'team' && v.away?.kind === 'team' && !v.winner && v.status !== 'completed')
       .sort((a, b) => ROUND_RANK[a.round] - ROUND_RANK[b.round] || a.id - b.id)

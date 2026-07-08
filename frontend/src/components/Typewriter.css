@@ -1,0 +1,64 @@
+/* Broadcast typewriter reveal. The typed + ghost spans together always contain
+   the full text, so the box never reflows as characters land. The caret is a
+   zero-width element with an absolutely-positioned bar, so it adds no layout
+   width — the reveal is pure recolouring, not layout animation.
+
+   Caret colour is neutral ink on purpose: red is role-locked to live state and
+   green/blue/gold to their data roles, so a decorative caret uses none of them. */
+
+.typewriter {
+  margin: 0;
+}
+
+.typewriter__visual {
+  /* the visible, animated layer — hidden from assistive tech; the full sentence
+     is exposed once via the adjacent .visually-hidden copy */
+  color: var(--ink-secondary);
+}
+
+.typewriter__typed {
+  color: var(--ink-secondary);
+}
+
+/* Not-yet-typed tail: transparent but present, holding the final box open. */
+.typewriter__ghost {
+  color: transparent;
+}
+
+.typewriter__caret {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  vertical-align: baseline;
+}
+.typewriter__caret::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0.02em;
+  width: 0.46ch;
+  height: 1.02em;
+  background: var(--ink);
+  transform: translateX(0.5px);
+  animation: typewriter-blink 900ms steps(1, end) infinite;
+}
+
+/* When the line finishes, retire the caret with a soft fade so it doesn't sit
+   there blinking like a terminal prompt. */
+.typewriter.is-done .typewriter__caret::before {
+  animation: none;
+  opacity: 0;
+  transition: opacity 360ms var(--ease-out-quint);
+}
+
+@keyframes typewriter-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter__caret::before {
+    animation: none;
+    opacity: 0;
+  }
+}

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   LAYOUT,
   META,
+  PARENT_OF,
   REVEAL_ORDER,
   buildViews,
   liveResults,
@@ -129,17 +130,27 @@ function MatchCaption({ view, mode }) {
   return (
     <div className="bk-match__cap">
       <span className="bk-match__no">M{view.id}</span>
-      {pens ? <span className="bk-match__ft">{pens}</span> : view.venue && <span className="bk-match__when">{view.venue.city}</span>}
+      {mode === 'live' && view.status === 'live' ? (
+        <span className="bk-match__live">
+          <span className="bk-match__live-dot" aria-hidden="true" />
+          {liveClock(view.live)}
+        </span>
+      ) : pens ? (
+        <span className="bk-match__ft">{pens}</span>
+      ) : view.venue ? (
+        <span className="bk-match__when">{view.venue.city}</span>
+      ) : null}
     </div>
   )
 }
 
-function BracketMatch({ view, side, revealed, championName, style, hideCaption = false }) {
+function BracketMatch({ view, side, revealed, championName, style, hideCaption = false, outState = null, vertState = null }) {
   const decided = !!view.winner
   const live = view.status === 'live'
-  // Both completed and in-play R32 ties carry a score to show; only completed
-  // ties get the finished treatment (dimmed loser, "Full time").
-  const showScore = view.round === 'r32' && view.score != null
+  // Any tie carrying a score shows goal digits — real R32 results, real knockout
+  // results, and re-rolled ties alike. In-play ties keep the running score; a
+  // finished tie (completed) gets the dimmed-loser / "Full time" treatment.
+  const showScore = view.score != null
   const completed = showScore && !live
   const both = view.home.kind === 'team' && view.away.kind === 'team'
   const showProb = !decided && !completed && view.pHome != null
@@ -150,16 +161,21 @@ function BracketMatch({ view, side, revealed, championName, style, hideCaption =
   const isFinal = view.round === 'final'
   const championGold = isFinal && !!championName
 
-  const hasJoin = view.round === 'r16' || view.round === 'qf' || view.round === 'sf'
+  // Every match owns a vertical merge, R32 included: at R32 the two group-stage
+  // teams share one box, so the join brackets that pairing; at later rounds it
+  // merges the two feeder matches. The Final/Third have no merge bar (finalists
+  // converge horizontally; third place is off the tree).
+  const hasJoin = view.round === 'r32' || view.round === 'r16' || view.round === 'qf' || view.round === 'sf'
   const justRevealed = revealed?.has?.(view.id)
 
   // Live/finished R32 ties (real tournament only) reveal a compact hover/tap
   // preview — state, score and a short line-up — without expanding the tree.
   const previewable = revealed === null && view.round === 'r32' && (live || completed) && both
 
+  const outClass = outState ? ` is-out-${outState}` : ''
   const className = `bk-match bk-match--${view.round}${decided ? ' is-decided' : ''}${
     live ? ' is-live' : ''
-  }${justRevealed ? ' is-pop' : ''}${previewable ? ' is-previewable' : ''}`
+  }${outClass}${justRevealed ? ' is-pop' : ''}${previewable ? ' is-previewable' : ''}`
 
   const inner = (
     <>
@@ -187,7 +203,12 @@ function BracketMatch({ view, side, revealed, championName, style, hideCaption =
           host={view.awayHost}
         />
       </div>
-      {hasJoin && <i className={`bk-match__join bk-match__join--${side}`} aria-hidden="true" />}
+      {hasJoin && (
+        <i
+          className={`bk-match__join bk-match__join--${side} bk-match__join--${view.round}${vertState ? ` is-vert-${vertState}` : ''}`}
+          aria-hidden="true"
+        />
+      )}
     </>
   )
 
@@ -278,7 +299,7 @@ function Bracket({ groups }) {
   useEffect(() => () => clearTimers(), [clearTimers])
 
   const views = useMemo(() => {
-    if (mode === 'live') return buildViews(liveRes, 'live', fixtures.knockout.r32)
+    if (mode === 'live') return buildViews(liveRes, 'live', fixtures.knockout.r32, fixtures.knockout.liveByPair)
     const partial = {}
     if (simResults) for (const id of revealed) partial[id] = simResults[id]
     return buildViews(partial, 'simulate', simR32 || undefined)
@@ -350,6 +371,43 @@ function Bracket({ groups }) {
   const thirdView = views[LAYOUT.thirdId]
   const championTeam = champion ? views[LAYOUT.finalId].home.name === champion ? views[LAYOUT.finalId].home : views[LAYOUT.finalId].away : null
 
+  // A team stays "alive" until it loses a decided match (its name shows up as a
+  // loser somewhere). The champion is the only team that never loses, so their
+  // path is the only one still glowing in a finished bracket. Derived fresh from
+  // the current results every render, so re-simulating any match recomputes the
+  // whole tree — no stale state carried forward. Every connector is the same
+  // thickness; only brightness (and length) tells paths apart.
+  const eliminated = useMemo(() => {
+    const s = new Set()
+    for (const id of ALL_IDS) {
+      const l = views[id]?.loser
+      if (l) s.add(l)
+    }
+    return s
+  }, [views])
+
+  const actualChampion = views[LAYOUT.finalId]?.winner ?? null
+
+  // Two segment types, three states (default / glowing `win` / dimmed `elim`):
+  //
+  // • Vertical (a match's merge): glows the moment the match is won — while that
+  //   winner is still alive — and dims, all at once, once that winner is knocked
+  //   out. Owned by the match's winner (one colour for the whole join), so a
+  //   beaten team's earned verticals dim together while the champion's stay lit.
+  //
+  // • Outgoing horizontal (winner carries forward into PARENT_OF[id]): only
+  //   "earned" — and lit — once that winner ALSO wins the next match. A horizontal
+  //   into a match the team lost was never earned, so it stays default forever
+  //   (never dims), and nothing renders past it for that team.
+  const stateAlive = (name) => (name ? (eliminated.has(name) ? 'elim' : 'win') : null)
+  const vertStateOf = (v) => (v?.winner ? stateAlive(v.winner) : null)
+  const outStateOf = (v) => {
+    const w = v?.winner
+    if (!w) return null
+    const parent = views[PARENT_OF[v.id]]
+    return parent?.winner === w ? stateAlive(w) : null
+  }
+
   const renderRound = (side, round) => {
     const ids = LAYOUT[side][round]
     const col = side === 'left'
@@ -368,6 +426,8 @@ function Bracket({ groups }) {
             side={side}
             revealed={revealedForMatch}
             championName={champion}
+            outState={outStateOf(views[id])}
+            vertState={vertStateOf(views[id])}
             style={{ gridColumn: col, gridRow: `${2 + i * span} / span ${span}` }}
           />
         ))}
@@ -436,6 +496,15 @@ function Bracket({ groups }) {
         Gold dot marks a match played in the host nation’s own country (USA · Canada · Mexico) — where the venue advantage applies.
       </p>
 
+      {/* Narrow viewports pan the full tree horizontally; announce the gesture so
+          the off-screen rounds are discoverable (desktop shows the whole tree). */}
+      <p className="bk__swipe">
+        Swipe across to follow every round
+        <svg className="bk__swipe-arrow" viewBox="0 0 24 12" width="24" height="12" aria-hidden="true">
+          <path d="M2 6h18m0 0-5-4m5 4-5 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </p>
+
       <div className="bk__scroller">
         <div className="bk__canvas">
           <BracketTexture />
@@ -452,7 +521,11 @@ function Bracket({ groups }) {
           <div className="bk-center">
             <div className="bk-stage bk-stage--final">Final</div>
             <div className="bk-center__body">
-              <div className="bk-final-wrap">
+              <div
+                className={`bk-final-wrap${
+                  actualChampion && finalView.home.name === actualChampion ? ' is-left-win' : ''
+                }${actualChampion && finalView.away.name === actualChampion ? ' is-right-win' : ''}`}
+              >
                 <div className="bk-final-head">
                   <span className="bk-final-head__label">Final</span>
                   <span className="bk-final-head__meta">

@@ -1,0 +1,392 @@
+.enc {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--space-md), 3vw, var(--space-lg));
+}
+
+.enc__intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.enc__intro > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 60ch;
+}
+.enc__jump {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 0 1 260px;
+}
+.enc__jump-label {
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.enc__jump-select {
+  appearance: none;
+  width: 100%;
+  background: var(--surface-elevated);
+  color: var(--ink);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-md);
+  padding: 11px 34px 11px 12px;
+  font: 500 var(--text-title) / 1.2 var(--font-body);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23a8a8a8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+.enc__jump-select:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.enc__title {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.enc__sub {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-body);
+  line-height: 1.5;
+}
+
+/* --- Globe stage + overlays --- */
+.enc__stage {
+  position: relative;
+  width: 100%;
+  height: min(74vh, 700px);
+}
+.enc__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 8px 14px;
+  background: color-mix(in srgb, var(--surface-card) 82%, transparent);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-full);
+  color: var(--ink-muted);
+  font: 600 var(--text-meta) / 1 var(--font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* --- Profile panel --- */
+.enc-panel {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: min(340px, calc(100% - 2 * var(--space-md)));
+  max-height: calc(100% - 2 * var(--space-md));
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: color-mix(in srgb, var(--surface-card) 94%, transparent);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+  animation: enc-panel-in 300ms var(--ease-out-quint) both;
+}
+/* The panel is a scrolling flex column; without this, an overflowing panel lets
+   flex shrink crush its sections — the CSS-grid stats block has no intrinsic
+   min-height and collapses to just its gap lines. Keep every section at natural
+   height and let the panel scroll instead. (.enc-panel__close is absolute, so
+   it's out of flow and unaffected.) */
+.enc-panel > * {
+  flex-shrink: 0;
+}
+@keyframes enc-panel-in {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.enc-panel__close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.enc-panel__close:hover {
+  color: var(--ink);
+  background: var(--surface-elevated);
+}
+
+.enc-panel__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.enc-panel__flag {
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.enc-panel__code {
+  margin: 0 0 2px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+}
+.enc-panel__host {
+  padding: 2px 7px;
+  background: var(--surface-overlay);
+  border-radius: var(--radius-sm);
+  color: var(--ink-secondary);
+  font-size: var(--text-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.enc-panel__name {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.enc-panel__stats {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border-divider);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.enc-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 14px;
+  background: var(--surface-card);
+}
+.enc-stat--accent {
+  grid-column: 1 / -1;
+}
+.enc-stat__label {
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.enc-stat__value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* All-time record — a neutral lightness ramp (W brightest → L dimmest), never
+   green/red, which stay role-locked to group data / live state. */
+.enc-panel__record {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.enc-panel__record-title {
+  margin: 0;
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.enc-panel__wdl {
+  display: flex;
+  height: 34px;
+  gap: 2px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.enc-wdl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  font: 600 var(--text-meta) / 1 var(--font-body);
+  letter-spacing: 0.04em;
+}
+.enc-wdl span {
+  font-size: var(--text-label);
+}
+.enc-wdl--w { background: var(--ink-secondary); color: var(--studio-black); }
+.enc-wdl--d { background: var(--surface-overlay); color: var(--ink-secondary); }
+.enc-wdl--l { background: var(--surface-elevated); color: var(--ink-muted); }
+.enc-panel__record-meta {
+  margin: 0;
+  font-size: var(--text-label);
+  color: var(--ink-secondary);
+}
+
+/* The two-line broadcast brief: editorial intro (brighter) then the factual World
+   Cup record (dimmer), each revealed by the typewriter in sequence. The typed +
+   transparent-ghost structure (see Typewriter.css) keeps each box from reflowing
+   as characters land, so nothing below jumps. */
+.enc-panel__brief {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: calc(-1 * var(--space-sm));
+}
+.enc-panel__intro {
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+/* The World Cup record — subordinate to the intro: quieter and a touch smaller,
+   so the pair reads as headline + footnote rather than two equal lines. */
+.enc-panel__history {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+/* Head coach — sourced identity data, set in the display face like the other
+   headline figures. Falls back to an honest, muted "pending" when unsourced. */
+.enc-panel__coach {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.enc-panel__coach-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.enc-panel__coach-pending {
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+/* Notable players — real, sourced squad data. */
+.enc-panel__squad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.enc-squad {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border-divider);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.enc-squad__row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  column-gap: var(--space-sm);
+  row-gap: 2px;
+  padding: 9px 12px;
+  background: var(--surface-card);
+}
+.enc-squad__pos {
+  grid-row: span 2;
+  align-self: center;
+  min-width: 34px;
+  padding: 3px 0;
+  text-align: center;
+  background: var(--surface-overlay);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-label);
+  letter-spacing: 0.04em;
+  color: var(--ink-secondary);
+}
+.enc-squad__name {
+  font-weight: 600;
+  font-size: var(--text-label);
+  color: var(--ink);
+  line-height: 1.2;
+}
+.enc-squad__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  font-size: var(--text-meta);
+  color: var(--ink-muted);
+}
+.enc-squad__club {
+  color: var(--ink-secondary);
+}
+
+.enc-panel__pending {
+  margin: 0;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-divider);
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+/* Mobile: panel becomes a bottom sheet so it never buries the globe. */
+@media (max-width: 640px) {
+  .enc-panel {
+    top: auto;
+    left: var(--space-sm);
+    right: var(--space-sm);
+    bottom: var(--space-sm);
+    width: auto;
+    max-height: 62%;
+  }
+  @keyframes enc-panel-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enc-panel {
+    animation: none;
+  }
+}
