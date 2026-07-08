@@ -204,7 +204,7 @@ export default function Simulator() {
       home, away,
       homeFlag: flagUrl(teamMeta(home).iso), awayFlag: flagUrl(teamMeta(away).iso),
       homeCode: teamMeta(home).code, awayCode: teamMeta(away).code,
-      venue: { name: venueName, city: stad.hostCity, country: stad.country, spec: STADIUM_INFO[venueName] },
+      venue: { name: venueName, city: stad.hostCity, country: stad.country, lat: stad.lat, lng: stad.lng, spec: STADIUM_INFO[venueName] },
       hype: lines,
     })
     setPhase('cutscene')
