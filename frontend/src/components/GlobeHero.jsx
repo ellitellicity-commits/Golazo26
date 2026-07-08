@@ -357,12 +357,19 @@ function GlobeHero({
       }
     }
 
-    const onPointerMove = (e) => {
+    // Perf (P8): pointermove can fire ~120×/s, but the sphere raycast + point-in-
+    // polygon hit test only needs to resolve once per rendered frame. Coalesce to
+    // one rAF — latest cursor position wins — so fast hovers don't queue redundant
+    // hit tests. No perceptible latency (still resolves every frame).
+    let pendingPointer = null
+    let pointerScheduled = false
+    const processPointer = () => {
+      pointerScheduled = false
       const E = eng.current
-      if (!E || E.mode !== 'interactive' || !shapesRef.current) return
+      if (!E || E.disposed || E.mode !== 'interactive' || !shapesRef.current || !pendingPointer) return
       const rect = renderer.domElement.getBoundingClientRect()
-      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
-      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      pointer.x = ((pendingPointer.x - rect.left) / rect.width) * 2 - 1
+      pointer.y = -((pendingPointer.y - rect.top) / rect.height) * 2 + 1
       raycaster.setFromCamera(pointer, camera)
       const hit = raycaster.intersectObject(E.sphere, false)[0]
       if (!hit) { E.hoverPaused = false; showFlag(null); if (cbs.current.onCountryHover) cbs.current.onCountryHover(null); return }
@@ -377,6 +384,10 @@ function GlobeHero({
         showFlag(name)
         if (cbs.current.onCountryHover) cbs.current.onCountryHover(name)
       }
+    }
+    const onPointerMove = (e) => {
+      pendingPointer = { x: e.clientX, y: e.clientY }
+      if (!pointerScheduled) { pointerScheduled = true; requestAnimationFrame(processPointer) }
     }
     const onPointerLeave = () => {
       const E = eng.current
