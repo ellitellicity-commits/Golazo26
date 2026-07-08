@@ -64,6 +64,10 @@ function buildGraticule() {
 // mesh just above the coastline lines (R*1.002) so it never z-fights them, and
 // stays below the marker dots (R*1.01) so the point stays visible on top.
 const FLAG_LIFT = R * 1.006
+// Hovered country pops radially off the surface (G2) — the globe's answer to a
+// card hover-lift. Scaling the flag mesh about the globe centre lifts it outward
+// and grows the silhouette ~4%; subtle, not dramatic.
+const HOVER_LIFT_SCALE = 1.04
 // Chords of a flat triangle sink toward the sphere centre; subdividing every
 // edge below this angular length keeps the filled mesh hugging the sphere, so
 // wide countries (Argentina, Australia) don't sink through the surface.
@@ -322,10 +326,13 @@ function GlobeHero({
         const prev = E.hoverMesh
         E.hoverMesh = null
         gsap.killTweensOf(prev.material)
+        gsap.killTweensOf(prev.scale)
         gsap.to(prev.material, {
           opacity: 0, duration: reduceMotion ? 0 : 0.22, ease: 'power2.out',
           onComplete: () => { E.flagGroup.remove(prev); prev.material.dispose() },
         })
+        // Settle the extrusion back to the surface as it fades.
+        if (!reduceMotion) gsap.to(prev.scale, { x: 1, y: 1, z: 1, duration: 0.22, ease: 'power2.out' })
       }
       if (!name || !shapes || !shapes[name]) return
       // Geometry cache (built once per country).
@@ -342,6 +349,12 @@ function GlobeHero({
       if (cached) apply(cached)
       else if (shapes[name].flag) loadFlagTexture(shapes[name].flag, (tex) => { if (tex) { E.flagTex.set(name, tex); apply(tex) } })
       gsap.to(mat, { opacity: 1, duration: reduceMotion ? 0 : 0.3, ease: 'power2.out' })
+      // G2: pop the silhouette radially off the surface as it appears.
+      if (reduceMotion) {
+        mesh.scale.setScalar(HOVER_LIFT_SCALE)
+      } else {
+        gsap.to(mesh.scale, { x: HOVER_LIFT_SCALE, y: HOVER_LIFT_SCALE, z: HOVER_LIFT_SCALE, duration: 0.2, ease: 'back.out(1.7)' })
+      }
     }
 
     const onPointerMove = (e) => {
