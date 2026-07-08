@@ -21,14 +21,23 @@ This is not a retrospective study written after the fact. It was built and shipp
 
 Honest framing: this is a portfolio project. The model is useful, not oracular (see [Model Transparency](#model-transparency)), and the interface is desktop-first.
 
+## Demo
+
+[Open the live app](https://world-cup-2026-analytics-xi.vercel.app)
+
+<!-- Ellison: add demo video / walkthrough links here.
+     - Full walkthrough:
+     - Matchup Sandbox cutscene + paper-map flight:
+     - The Atlas globe + host mascots: -->
+
 ## Key Features
 
 | Feature | Description |
 |---|---|
 | Match predictor | XGBoost classifier estimates win, draw, and loss probabilities for any fixture, shown match by match. |
 | Monte Carlo bracket simulator | Plays the full 48-team tournament 10,000 times to produce advancement and title odds. |
-| The Atlas (3D globe) | An interactive Three.js globe of all 48 qualified nations. Spin it, hover a country to fill its real landmass with its flag, or open a nation's profile (rank, Elo, group, squad, all-time record). |
-| Matchup Sandbox | Pit any two nations at any round and watch the model call the tie, opening with a vintage paper-map flight animation to the host venue. |
+| The Atlas (3D globe) | An interactive Three.js globe of all 48 qualified nations. Spin it, hover a country to fill its real landmass with its flag, or open a nation's profile (rank, Elo, group, squad, all-time record). Opening one of the three host nations greets you with an original animated mascot: Maple the moose (Canada), Clutch the bison (USA), and Zayu the armadillo (Mexico), each with its own fun facts. |
+| Matchup Sandbox | Pit any two nations at any round and watch the model call the tie. It opens with a broadcast pregame cutscene (a VS clash, a vintage paper-map flight to the real host venue, and a whistle countdown) before the result and full match stats reveal. |
 | Knockout bracket view | An interactive R32-to-final bracket that redraws as results and simulations change, with the champion's path traced through. |
 | Live group standings | Real group tables rebuilt from results, with the full FIFA 2026 tiebreaker sequence applied. |
 | Live match data | Real results, lineups, in-game stats, and current minute from football-data.org and ESPN, polled during live matches. |
