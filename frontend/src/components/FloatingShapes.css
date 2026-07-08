@@ -1,0 +1,17 @@
+/* Full-bleed canvas layer behind the home hero content. Non-interactive, sits
+   under the copy (z-index handled by the hero). The canvas fades itself in. */
+.floating-shapes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Behind the hero content, and behind it in the blend sense too: the logo
+     screen-blends against this layer, so it must sit below the (non-isolating)
+     content wrapper. */
+  z-index: -1;
+}
+
+.floating-shapes canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}

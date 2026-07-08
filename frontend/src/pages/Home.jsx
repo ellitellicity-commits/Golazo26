@@ -1,10 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { BrandField } from '../components/BrandMarks'
 import { getCurrentRound, finalCountdown, META } from '../lib/bracket'
 import { teamMeta, flagUrl } from '../lib/teams'
 import { useTournamentData } from '../lib/tournamentData'
+import wcLogo from '../assets/WC_26_Animations.gif'
 import './Home.css'
+
+// The 3D shape field pulls in three.js — lazy-load it so it never weighs down the
+// home tab's first paint; the canvas fades in once the chunk arrives.
+const FloatingShapes = lazy(() => import('../components/FloatingShapes'))
 
 // Dates are stored as UTC instants; format in UTC (matches the rest of the app).
 const DATE_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
@@ -53,6 +58,20 @@ function buildDestinations({ todaysCount, upcomingCount }) {
       blurb: 'Standings and qualification probability for all twelve groups.',
       meta: '12',
       metaLabel: 'groups',
+    },
+    {
+      to: '/simulator',
+      title: 'Matchup Sandbox',
+      blurb: 'Pit any two nations at any round and watch the model call the tie — a standalone what-if.',
+      meta: '16',
+      metaLabel: 'venues',
+    },
+    {
+      to: '/encyclopedia',
+      title: 'The Atlas',
+      blurb: 'Every qualified nation on one globe — rank, Elo, squad and all-time record on tap.',
+      meta: '48',
+      metaLabel: 'profiles',
     },
   ]
 }
@@ -149,7 +168,19 @@ function Home() {
     <div className="home">
       <section className="home-hero">
         <BrandField className="home-hero__field" />
+        <Suspense fallback={null}>
+          <FloatingShapes className="home-hero__shapes" />
+        </Suspense>
         <div className="home-hero__inner">
+          <span className="home-hero__logo-wrap">
+            <img
+              className="home-hero__logo"
+              src={wcLogo}
+              alt="FIFA World Cup 26 — USA · Canada · Mexico"
+              width="800"
+              height="495"
+            />
+          </span>
           <p className="home-hero__intro">
             Broadcast-grade intelligence for the 2026 FIFA World Cup — a machine-learning model turns
             historical results, Elo ratings and live tournament data into win probabilities, championship
@@ -184,6 +215,19 @@ function Home() {
           <span className="tnum">{playedCount}</span> matches played · model updated {updated}
         </p>
       </nav>
+
+      <p className="home-credits">
+        World Cup 26 logo animation by{' '}
+        <a
+          className="home-credits__link"
+          href="https://iconscout.com/contributors/happy-monster/lottie-animations"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Happy Monster
+        </a>{' '}
+        on IconScout.
+      </p>
     </div>
   )
 }

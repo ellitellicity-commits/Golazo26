@@ -10,27 +10,78 @@
 .home-hero {
   position: relative;
   overflow: hidden;
+  /* Contain the logo's screen blend to the hero, and anchor the negative-z
+     decorative layers (pattern + shapes) inside it. */
+  isolation: isolate;
   border-bottom: 1px solid var(--border-divider);
   padding-block: clamp(var(--space-xl), 6vw, var(--space-2xl));
 }
 .home-hero__field {
+  z-index: -1;
   -webkit-mask-image: radial-gradient(120% 130% at 100% 0%, #000 30%, transparent 72%);
   mask-image: radial-gradient(120% 130% at 100% 0%, #000 30%, transparent 72%);
 }
 .home-hero__inner {
+  /* Positioned but deliberately NOT a stacking context (no z-index): it must
+     paint above the negative-z decorative layers while still letting the logo
+     blend against them. */
   position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: clamp(var(--space-lg), 4vw, var(--space-2xl));
 }
+
+/* Animated World Cup 26 logo — the hero's brand centrepiece (credit near the
+   foot of the page). The wrap lays a soft studio-black disc under the mark so
+   the drifting shapes clear the logo and it reads as the focal element. */
+.home-hero__logo-wrap {
+  display: grid;
+  place-items: center;
+  padding: 3% 7%;
+  background: radial-gradient(ellipse at center, var(--studio-black) 42%, transparent 76%);
+}
+
+/* Sized as a mark, not a banner; height follows the GIF's natural 800×495 ratio
+   so there's no reserved-box layout shift on load. The source GIF is dark
+   line-art on a near-white plate (built for light themes); invert() flips it to a
+   light mark, then screen blending drops the now-black plate out against the
+   dark disc behind it, leaving only the trophy. */
+.home-hero__logo {
+  width: clamp(200px, 32vw, 380px);
+  height: auto;
+  display: block;
+  filter: invert(1);
+  mix-blend-mode: screen;
+}
+
 .home-hero__intro {
   max-width: 60ch;
+  margin-inline: auto;
   font-size: clamp(1.125rem, 2.4vw, 1.5rem);
   line-height: 1.45;
   color: var(--ink);
   font-weight: 400;
   text-wrap: pretty;
+}
+
+/* The hero snapshot strip inherits the centred layout — a balanced broadcast
+   row rather than a left-anchored data table. */
+.home-hero .snapshot-block {
+  align-items: center;
+}
+.home-hero .data-status {
+  align-self: center;
+}
+.home-hero .snapshot {
+  justify-content: center;
+}
+.home-hero .snapshot__item {
+  align-items: center;
+}
+.home-hero .snapshot__item dd {
+  justify-content: center;
 }
 
 /* --- Snapshot block: the data-state marker, then the strip it labels --- */
@@ -280,6 +331,21 @@
 .home-menu__note {
   font-size: var(--text-label);
   color: var(--ink-muted);
+}
+
+/* Asset attribution for the animated logo — quiet, near the foot of the page. */
+.home-credits {
+  font-size: var(--text-meta);
+  color: var(--ink-muted);
+}
+.home-credits__link {
+  color: var(--ink-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--dur-ui) var(--ease-out-quint);
+}
+.home-credits__link:hover {
+  color: var(--ink);
 }
 
 @media (max-width: 520px) {
