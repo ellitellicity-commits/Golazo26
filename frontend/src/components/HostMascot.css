@@ -1,0 +1,96 @@
+/* Host mascot — pops in on the LEFT of the Atlas stage when a 2026 host nation
+   is opened (the profile panel is top-right, so the two never overlap and the
+   country data never shifts). Sits above the globe as a broadcast graphic. */
+.mascot {
+  position: absolute;
+  left: var(--space-md);
+  bottom: var(--space-md);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  max-width: 300px;
+  pointer-events: none; /* the figure re-enables it; the globe stays draggable around it */
+  animation: mascot-in 360ms var(--ease-out-quint) both;
+}
+@keyframes mascot-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Speech bubble carrying the fun fact. */
+.mascot__bubble {
+  position: relative;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--surface-card) 94%, transparent);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  max-width: 280px;
+}
+/* Little tail pointing down toward the mascot. */
+.mascot__bubble::after {
+  content: '';
+  position: absolute;
+  left: 34px;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  background: var(--surface-card);
+  border-right: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  transform: rotate(45deg);
+}
+.mascot__hi {
+  margin: 0 0 2px;
+  font: 600 var(--text-meta) / 1.2 var(--font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.mascot__name {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.mascot__fact {
+  margin: 0;
+  color: var(--ink-secondary);
+  font: 400 0.9rem / 1.4 var(--font-body);
+}
+
+/* The figure is the only interactive part. */
+.mascot__figure {
+  pointer-events: auto;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  line-height: 0;
+  border-radius: var(--radius-md);
+  transition: transform 150ms var(--ease-out-quint);
+}
+.mascot__figure:hover { transform: translateY(-2px); }
+.mascot__figure:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* Jersey number / wordmark inside the SVG. */
+.m-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  fill: #ffffffcc;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 640px) {
+  .mascot { max-width: 220px; }
+  .mascot__figure svg { width: 108px; height: 135px; }
+  .mascot__bubble { max-width: 200px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mascot { animation: none; }
+}

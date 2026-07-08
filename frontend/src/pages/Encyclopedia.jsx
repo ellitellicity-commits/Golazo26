@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import GlobeHero from '../components/GlobeHero'
 import Typewriter from '../components/Typewriter'
+import HostMascot from '../components/HostMascot'
 import ProvinceStateSubMap from '../components/ProvinceStateSubMap'
 import TabHeader from '../components/TabHeader'
 import { TEAM_COORDINATES } from '../lib/stadiumData'
@@ -164,6 +165,8 @@ export default function Encyclopedia() {
       <div className="enc__stage">
         <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} hostTints={HOST_TINTS} onCountryClick={(m) => setSelected(m.name)} ariaLabel="Country atlas globe" />
         {!country && <p className="enc__hint" aria-hidden="true">Tap a marker</p>}
+        {/* Host-nation mascot greets on the left when one of the three hosts is open. */}
+        {country?.iso && HOST_ISO.has(country.iso) && <HostMascot key={country.iso} iso={country.iso} />}
         {country && <Panel country={country} onClose={() => setSelected(null)} />}
       </div>
     </div>
