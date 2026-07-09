@@ -1,6 +1,7 @@
-/* Atmospheric cloud layer behind the globes. See CloudBackground.jsx for the
-   design rationale. All colour is neutral surface tone + opacity; all motion is
-   compositor-only transform. */
+/* Deep-space nebula layer behind the globes. See CloudBackground.jsx for the
+   design rationale. All colour is neutral cool-tinted surface tone + opacity;
+   every mass is a radial-gradient that falls tone -> transparent (opacity-only
+   density falloff, not a glow); all motion is compositor-only transform. */
 
 .clouds {
   position: absolute;
@@ -13,57 +14,114 @@
   contain: strict;
 }
 
+/* --- Star-field base ---------------------------------------------------------
+   A sparse scatter of faint ink pin-pricks, painted once as a stack of tiny
+   radial-gradients. Seats the "space" read instantly behind the clouds at near-
+   zero cost (one rasterised layer, no animation). */
+.clouds__stars {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(1.2px 1.2px at 12% 18%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1px 1px at 27% 72%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1.4px 1.4px at 41% 34%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1px 1px at 58% 61%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1.3px 1.3px at 69% 22%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1px 1px at 78% 84%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1.5px 1.5px at 88% 47%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1px 1px at 6% 54%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1.2px 1.2px at 34% 91%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1px 1px at 52% 12%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1.3px 1.3px at 63% 78%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1px 1px at 83% 8%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1.1px 1.1px at 95% 68%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1px 1px at 17% 43%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1.4px 1.4px at 46% 57%, var(--ink, #f3f5f8) 0, transparent 60%),
+    radial-gradient(1px 1px at 72% 51%, var(--ink, #f3f5f8) 0, transparent 60%);
+  /* very slow breathing twinkle - opacity only, compositor-friendly */
+  animation: clouds-twinkle 14s ease-in-out infinite alternate;
+}
+
+/* --- Nebula masses -----------------------------------------------------------
+   Each mass is a multi-lobe radial-gradient: two or three offset elliptical
+   cores of a raised surface tone that dissolve to transparent well before the
+   box edge, so the shape reads as an irregular wispy cloud - never a hard circle
+   and never a clipped square. A modest static blur melts the lobes together;
+   only transform animates, so the compositor moves an already-rasterised layer.
+   Opacity floors are low - a lift off the black, not a second surface. */
 .clouds__c {
   position: absolute;
-  border-radius: 50%;
-  /* A soft tonal mass: a raised surface tone on the near-black ground. The blur
-     is static (computed once); only transform animates, so the compositor moves
-     an already-rasterised layer. */
-  background: var(--surface-elevated);
-  filter: blur(48px);
+  /* organic, asymmetric silhouette (mostly hidden by the gradient falloff, but
+     keeps the soft-clipped edge from ever reading as a rectangle) */
+  border-radius: 60% 40% 55% 45% / 55% 60% 40% 45%;
+  filter: blur(30px);
   will-change: transform;
 }
 
-/* Each mass: a size, a resting spot, an opacity, and its own slow eased drift.
-   Sizes stay large and heavily blurred so they read as atmosphere, never as
-   discrete circles. Opacity floors are deliberately low - this is a lift off
-   the black, not a second surface. Drift ranges are small (a breathing sway),
-   so no mass ever sweeps the full stage or resets with a pop. */
 .clouds__c1 {
-  width: 46%; height: 42%; top: 6%; left: -14%;
-  opacity: 0.24;
-  background: var(--surface-overlay);
+  width: 52%; height: 46%; top: 4%; left: -16%;
+  opacity: 0.42;
+  background:
+    radial-gradient(58% 46% at 38% 42%, var(--surface-overlay, #21272d) 0%, transparent 68%),
+    radial-gradient(42% 54% at 66% 60%, var(--surface-elevated, #181e23) 0%, transparent 72%);
   animation: clouds-drift-1 86s ease-in-out infinite alternate;
 }
 .clouds__c2 {
-  width: 40%; height: 36%; top: 44%; left: -18%;
-  opacity: 0.18;
+  width: 44%; height: 40%; top: 46%; left: -20%;
+  opacity: 0.32;
+  background:
+    radial-gradient(54% 48% at 44% 38%, var(--surface-elevated, #181e23) 0%, transparent 70%),
+    radial-gradient(40% 50% at 62% 66%, var(--surface-overlay, #21272d) 0%, transparent 74%);
   animation: clouds-drift-2 112s ease-in-out infinite alternate;
 }
 .clouds__c3 {
-  width: 32%; height: 30%; top: 16%; left: 62%;
-  opacity: 0.16;
+  width: 38%; height: 34%; top: 12%; left: 60%;
+  opacity: 0.30;
+  background:
+    radial-gradient(56% 44% at 40% 46%, var(--surface-overlay, #21272d) 0%, transparent 70%),
+    radial-gradient(38% 52% at 68% 58%, var(--surface-elevated, #181e23) 0%, transparent 73%);
   animation: clouds-drift-3 98s ease-in-out infinite alternate;
 }
 .clouds__c4 {
-  width: 54%; height: 46%; top: 52%; left: 56%;
-  opacity: 0.13;
+  width: 60%; height: 50%; top: 50%; left: 52%;
+  opacity: 0.24;
+  background:
+    radial-gradient(50% 50% at 42% 40%, var(--surface-elevated, #181e23) 0%, transparent 70%),
+    radial-gradient(44% 46% at 64% 64%, var(--surface-overlay, #21272d) 0%, transparent 72%);
   animation: clouds-drift-4 128s ease-in-out infinite alternate;
 }
 .clouds__c5 {
-  width: 26%; height: 24%; top: -2%; left: 34%;
-  opacity: 0.12;
+  width: 30%; height: 28%; top: -4%; left: 32%;
+  opacity: 0.22;
+  background:
+    radial-gradient(58% 46% at 46% 44%, var(--surface-overlay, #21272d) 0%, transparent 68%),
+    radial-gradient(40% 50% at 60% 62%, var(--surface-elevated, #181e23) 0%, transparent 72%);
   animation: clouds-drift-5 76s ease-in-out infinite alternate;
 }
+.clouds__c6 {
+  width: 34%; height: 30%; top: 66%; left: 18%;
+  opacity: 0.20;
+  background:
+    radial-gradient(54% 48% at 44% 42%, var(--surface-elevated, #181e23) 0%, transparent 70%),
+    radial-gradient(42% 48% at 62% 60%, var(--surface-overlay, #21272d) 0%, transparent 73%);
+  animation: clouds-drift-6 104s ease-in-out infinite alternate;
+}
 
-@keyframes clouds-drift-1 { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(14%, 6%, 0); } }
-@keyframes clouds-drift-2 { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(18%, -8%, 0); } }
-@keyframes clouds-drift-3 { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-16%, 7%, 0); } }
-@keyframes clouds-drift-4 { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-12%, -6%, 0); } }
-@keyframes clouds-drift-5 { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(10%, 9%, 0); } }
+/* Drift is a small breathing sway plus a hair of scale for parallax depth; no
+   mass ever sweeps the full stage or resets with a pop. transform-only. */
+@keyframes clouds-drift-1 { from { transform: translate3d(0, 0, 0) scale(1); }    to { transform: translate3d(13%, 6%, 0) scale(1.06); } }
+@keyframes clouds-drift-2 { from { transform: translate3d(0, 0, 0) scale(1.04); } to { transform: translate3d(17%, -7%, 0) scale(1); } }
+@keyframes clouds-drift-3 { from { transform: translate3d(0, 0, 0) scale(1); }    to { transform: translate3d(-15%, 7%, 0) scale(1.05); } }
+@keyframes clouds-drift-4 { from { transform: translate3d(0, 0, 0) scale(1.05); } to { transform: translate3d(-11%, -6%, 0) scale(1); } }
+@keyframes clouds-drift-5 { from { transform: translate3d(0, 0, 0) scale(1); }    to { transform: translate3d(9%, 9%, 0) scale(1.07); } }
+@keyframes clouds-drift-6 { from { transform: translate3d(0, 0, 0) scale(1.03); } to { transform: translate3d(-8%, -9%, 0) scale(1); } }
 
-/* Reduced motion: hold every mass still. The atmosphere stays as a static tonal
+@keyframes clouds-twinkle { from { opacity: 0.42; } to { opacity: 0.6; } }
+
+/* Reduced motion: hold every layer still. The nebula stays as a static tonal
    depth cue rather than disappearing. */
 @media (prefers-reduced-motion: reduce) {
-  .clouds__c { animation: none; }
+  .clouds__c,
+  .clouds__stars { animation: none; }
 }

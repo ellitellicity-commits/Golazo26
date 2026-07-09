@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // Playwright scenario: the atmospheric CloudBackground renders behind both globes.
 //
-// Runs against `npm run dev`. Fix 3 adds a decorative cloud layer behind the
+// Runs against `npm run dev`. A decorative deep-space nebula layer sits behind the
 // Atlas and Matchup Sandbox globes. Asserts, on BOTH tabs and at desktop + mobile
 // widths:
-//   1. clouds-present     — the .clouds layer + its 5 masses are in the DOM.
+//   1. clouds-present     — the .clouds layer + its 6 nebula masses are in the DOM.
 //   2. behind-globe       — the clouds layer paints strictly behind the globe
 //                           (clouds z-index 0 < globe-hero z-index 1).
 //   3. no-globe-overlap   — the clouds layer never sits on top of the globe:
@@ -35,7 +35,7 @@ const record = (name, ok, detail) => results.push({ name, ok, detail })
 function checkTab(tab, stageSel) {
   // 1. Clouds present.
   const count = evalJSON(`document.querySelectorAll('${stageSel} .clouds .clouds__c').length`)
-  record(`${tab}-clouds-present`, count === 5, `${count} cloud masses under ${stageSel}`)
+  record(`${tab}-clouds-present`, count === 6, `${count} nebula masses under ${stageSel}`)
 
   // 2. Behind the globe by z-index.
   const z = evalJSON(`(() => {
