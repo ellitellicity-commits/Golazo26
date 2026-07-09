@@ -75,6 +75,11 @@
   align-items: center;
   gap: 8px;
   width: min(38vw, 360px);
+  /* The flag + code stack sits ABOVE the team name. Matching that stack's height
+     as bottom padding vertically centres the NAME within each side, so the row's
+     align-items:center lands the VS badge exactly on the team-name line rather
+     than up at the flags. */
+  padding-bottom: 122px;
 }
 .cut__flag {
   border-radius: var(--radius-sm);
