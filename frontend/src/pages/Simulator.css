@@ -73,8 +73,14 @@
 }
 .sim__vs {
   flex: 0 0 auto;
-  align-self: center;
-  padding-bottom: 11px;
+  /* Bottom-align with the two selects (the panel is align-items: end) rather than
+     centre on the taller label+select stack, which floated "vs" well above the
+     control row. The bottom padding then lifts it to the selects' own vertical
+     centre: their border (1px) + padding (11px) + half the line box, matched by
+     line-height: 1 here so the glyph's centre lands on the boxes' centre. */
+  align-self: end;
+  line-height: 1;
+  padding-bottom: 13px;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.25rem;
