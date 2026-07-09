@@ -200,7 +200,7 @@ const ORIGINS = {
 const TOURS = {
   CA: [
     { line: "Welcome to Canada! Co-hosting our very first men's World Cup!", anim: 'wave' },
-    { line: 'Three cities in the mix - Toronto, Vancouver, and Edmonton!', anim: 'jump' },
+    { line: 'Two host cities carry us - Toronto in the east, Vancouver on the west coast!', anim: 'jump' },
     { line: "BC Place in Vancouver has one of the world's largest retractable roofs!", anim: 'point' },
     { line: "Alphonso Davies scored our first ever men's World Cup goal in 2022. History made!", anim: 'celebrate' },
   ],
