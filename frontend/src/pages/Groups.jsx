@@ -197,7 +197,7 @@ function Groups() {
       <TabHeader
         titleId="groups-title"
         title="Group Tables"
-        description={`Live standings across the twelve groups, with FIFA tiebreakers applied. The top ${QUALIFY_SLOTS} of each group qualify automatically; the best ${THIRD_PLACE_QUALIFIERS} of the twelve third-placed teams join them.`}
+        description={`Live standings across all twelve groups, FIFA tiebreakers applied. The top ${QUALIFY_SLOTS} of every group go through automatically, and the ${THIRD_PLACE_QUALIFIERS} best third-placed teams grab the last spots in the Round of 32. Every point counts.`}
       >
         <button type="button" className="btn btn--ghost" onClick={toggleAll} aria-pressed={allOpen}>
           {allOpen ? 'Collapse all' : 'Expand all'}

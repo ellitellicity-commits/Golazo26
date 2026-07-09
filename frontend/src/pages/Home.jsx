@@ -192,9 +192,9 @@ function Home() {
         </Suspense>
         <div className="home-hero__inner" ref={heroRef}>
           <p className="home-hero__intro">
-            Broadcast-grade intelligence for the 2026 FIFA World Cup - a machine-learning model turns
-            historical results, Elo ratings and live tournament data into win probabilities, championship
-            odds and Monte Carlo bracket paths.
+            Broadcast-grade intelligence for the 2026 FIFA World Cup. The model turns historical results,
+            Elo ratings and live data into win probabilities, bracket paths and championship odds.
+            All in one place. All in real time.
           </p>
           <Snapshot />
         </div>

@@ -159,6 +159,7 @@ function LoadingScreen({ failed = false }) {
       <CitySkylines />
       <div className="loading__inner">
         <SoccerBall />
+        <p className="loading__ball-label">Loading the beautiful game…</p>
         <FunFacts />
         <p className="loading__label">
           {failed ? 'Loading tournament data…' : 'Loading tournament data'}

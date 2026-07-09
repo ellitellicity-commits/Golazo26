@@ -153,7 +153,7 @@ function ChampionshipOdds({ odds }) {
         as="h2"
         titleId="odds-title"
         title="Championship Odds"
-        description={`Every nation’s chance of lifting the trophy, from ${odds.simulations.toLocaleString('en-GB')} Monte Carlo runs of the full bracket. Bar length is relative to the favourite; the figure is the absolute title chance. Open a row for its path to the final.`}
+        description={`The model’s title odds after ${odds.simulations.toLocaleString('en-GB')} simulated tournaments, refreshed as results come in. Bar length is relative to the favourite; the figure is each nation’s outright chance of lifting the trophy. Open a row to trace its path to the final.`}
       />
 
       <div className="odds__colhead" aria-hidden="true">

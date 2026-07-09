@@ -150,6 +150,12 @@ function Predictor() {
   const { TODAY, upcomingGroup, liveGroup, liveKO, upcomingKO, finished, finishedKO } = view
   const hasLive = liveKO.length > 0 || liveGroup.length > 0
   const nothingUpcoming = upcomingGroup.length === 0 && upcomingKO.length === 0 && !hasLive
+  // Live model accuracy over the finished group results shown below (each carries
+  // a CALLED IT / upset badge). Honest running tally, straight from the same
+  // model-called check the badges use.
+  const finishedCalls = finished.map(modelCalledIt).filter((v) => v !== null)
+  const calledCount = finishedCalls.filter(Boolean).length
+  const totalFinished = finishedCalls.length
 
   return (
     <div className="predictor">
@@ -199,6 +205,13 @@ function Predictor() {
           title={finishedKO.length > 0 ? 'Finished - Group Stage' : 'Finished Matches'}
           fixtures={finished}
         />
+      )}
+
+      {totalFinished > 0 && (
+        <p className="predictor__accuracy">
+          Every result above was predicted before kick-off. The model has called{' '}
+          <span className="tnum">{calledCount}</span> of <span className="tnum">{totalFinished}</span> right so far.
+        </p>
       )}
 
       {showDemo && (

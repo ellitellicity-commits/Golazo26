@@ -204,7 +204,7 @@ export default function Encyclopedia() {
       <TabHeader
         titleId="enc-title"
         title="The Atlas"
-        description="All 48 nations on one globe. Spin it and tap a marker, or jump straight to a nation."
+        description="48 nations. One tournament. Spin the globe and tap any country to explore their story, squad, and odds of going all the way."
       >
         <label className="enc__jump">
           <span className="enc__jump-label">Jump to a nation</span>

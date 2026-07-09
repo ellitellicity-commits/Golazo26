@@ -57,6 +57,18 @@
   }
 }
 
+/* Caption beneath the rolling ball. Warm, quiet body register: the flavour line,
+   not the functional status (that sits at the foot of the gate). */
+.loading__ball-label {
+  margin: 0;
+  font-family: var(--font-body, Inter, system-ui, sans-serif);
+  font-size: var(--text-meta, 0.75rem);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+
 /* Rotating reel of real tournament facts, typed in. Each fact rides its own
    block that slides up + fades in on arrival and fades up + out on the way out. */
 .loading__facts {

@@ -73,6 +73,16 @@ function ResultCard({ result }) {
   // win for the favoured side, so it reads as an upset of the prediction.
   const predictedSide = pHome >= 0.5 ? 'home' : 'away'
   const called = score.outcome === predictedSide
+  // Verdict copy tuned to the story of the match: a coin-flip edged, a call the
+  // model nailed, a rout, or a genuine upset. The gap is the probability spread
+  // between the two sides; an upset needs a real gap (a near-even game is just
+  // "edged", not an upset regardless of who wins).
+  const gap = Math.abs(homePct - awayPct)
+  let verdictTail
+  if (gap < 10) verdictTail = 'edge it. What a match!'
+  else if (!called) verdictTail = 'cause the upset! Nobody saw that coming!'
+  else if (gap <= 30) verdictTail = 'advance. The model saw this coming.'
+  else verdictTail = 'cruise through. Dominant.'
   return (
     <section className="sim-result" aria-live="polite">
       <p className="sim-result__round">{round.label} · {venue.city}</p>
@@ -83,7 +93,7 @@ function ResultCard({ result }) {
         <Side name={away} meta={am} goals={score.away} win={score.outcome === 'away'} dim={score.outcome === 'home'} align="right" />
       </div>
       <p className="sim-result__verdict">
-        {winName ? <><span className="display">{winName}</span> advance</> : 'Level - honours even'}
+        {winName ? <><span className="display">{winName}</span> {verdictTail}</> : 'Level, honours even.'}
       </p>
       <div className="sim-result__prob" role="img" aria-label={`Win probability - ${hm.code} ${homePct}%, ${am.code} ${awayPct}%.`}>
         <span className="sim-result__prob-label">Model win probability</span>
@@ -227,7 +237,7 @@ export default function Simulator() {
       <TabHeader
         titleId="sim-title"
         title="Matchup Sandbox"
-        description="Pick any two of the 48 nations and a round, then watch them fly in and the model call the tie. A standalone what-if - it never changes the real bracket."
+        description="Pick any two nations. Run the sim. See who the model fancies. No pressure, just the beautiful game, powered by data. A standalone what-if that never touches the real bracket."
       />
 
       <form

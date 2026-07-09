@@ -43,6 +43,20 @@
   color: var(--american-blue);
 }
 
+/* Running model-accuracy line beneath the finished matches. Quiet body register:
+   the tally is a credibility footnote, not a headline. */
+.predictor__accuracy {
+  margin: var(--space-md) 0 0;
+  max-width: 60ch;
+  font-size: var(--text-body);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+.predictor__accuracy .tnum {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 /* --- ?demo states gallery (moved verbatim from the old single-page App) --- */
 .gallery {
   display: flex;
