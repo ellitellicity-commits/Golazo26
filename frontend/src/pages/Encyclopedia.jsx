@@ -96,7 +96,7 @@ function Panel({ country, onClose }) {
 
       {c.funFacts && c.funFacts.length > 0 && (
         <div className="enc-panel__facts">
-          <p className="enc-panel__facts-label">⚡ Did you know</p>
+          <p className="enc-panel__facts-label">Did you know</p>
           <ul className="enc-facts">
             {c.funFacts.map((f, i) => (
               <li className="enc-facts__item" key={i}>

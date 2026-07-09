@@ -199,19 +199,19 @@ const ORIGINS = {
 // names the mascot animation it plays. The mascot speaks directly to the user.
 const TOURS = {
   CA: [
-    { line: "Welcome to Canada! 🍁 Co-hosting our very first men's World Cup!", anim: 'wave' },
+    { line: "Welcome to Canada! Co-hosting our very first men's World Cup!", anim: 'wave' },
     { line: 'Three cities in the mix - Toronto, Vancouver, and Edmonton!', anim: 'jump' },
     { line: "BC Place in Vancouver has one of the world's largest retractable roofs!", anim: 'point' },
     { line: "Alphonso Davies scored our first ever men's World Cup goal in 2022. History made!", anim: 'celebrate' },
   ],
   US: [
-    { line: "Welcome to the USA! 🦅 We're hosting 11 of the 16 venues - biggest share!", anim: 'wave' },
+    { line: "Welcome to the USA! We're hosting 11 of the 16 venues - biggest share!", anim: 'wave' },
     { line: 'MetLife Stadium in New Jersey hosts the Final on 19 July 2026!', anim: 'point' },
     { line: "Our first men's World Cup since 1994 - and this time we're IN it!", anim: 'jump' },
     { line: 'From Seattle to Miami, the whole country is a football pitch right now!', anim: 'celebrate' },
   ],
   MX: [
-    { line: '¡Bienvenidos a México! 🌵 First nation to host or co-host THREE World Cups!', anim: 'wave' },
+    { line: '¡Bienvenidos a México! First nation to host or co-host THREE World Cups!', anim: 'wave' },
     { line: 'Estadio Azteca has seen two World Cup finals - 1970 AND 1986!', anim: 'point' },
     { line: 'Guadalajara and Monterrey join Mexico City - three iconic football cities!', anim: 'jump' },
     { line: 'The atmosphere here? Unmatched. The whole country bleeds football!', anim: 'celebrate' },

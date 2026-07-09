@@ -205,7 +205,7 @@ export function RefereeVerdict({ called }) {
       </svg>
       <p className="referee__verdict">
         {called ? (
-          <><span className="referee__verdict-head">Called it ✓</span> The model had this one right.</>
+          <><span className="referee__verdict-head">Called it</span> The model had this one right.</>
         ) : (
           <><span className="referee__verdict-head">Upset!</span> The model didn’t see this coming.</>
         )}
