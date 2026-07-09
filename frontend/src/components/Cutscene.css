@@ -165,7 +165,11 @@
    BEHIND the referee (z-index 2 < referee's 6): a big, faint backdrop the
    referee stands in front of, arm raised, rather than a number stamped over him.
    The bubble is suppressed on this beat (he's blowing the whistle, not talking),
-   so the only foreground is the referee himself. --- */
+   so the only foreground is the referee himself.
+   NB the ~15% background weight is carried by the colour's alpha, not the opacity
+   property: GSAP pulses this element's opacity 0 -> 1 -> 0 per digit, so a CSS
+   opacity would be overwritten at the peak; baking it into the ink alpha keeps
+   the number a faint ghost even at the tween's full opacity. --- */
 .cut__count {
   position: absolute;
   left: 0;
@@ -174,9 +178,9 @@
   z-index: 2;
   text-align: center;
   font-weight: 800;
-  font-size: clamp(8rem, 26vw, 20rem);
+  font-size: clamp(20vw, 28vw, 340px);
   line-height: 1;
-  color: color-mix(in srgb, var(--ink) 28%, transparent);
+  color: color-mix(in srgb, var(--ink) 15%, transparent);
   opacity: 0;
   pointer-events: none;
   font-variant-numeric: tabular-nums;
