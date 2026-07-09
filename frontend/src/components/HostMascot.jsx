@@ -68,13 +68,13 @@ function Maple() {
         <path d="M103 96 Q74 100 72 124 Q80 140 103 140 Q126 140 134 124 Q132 100 103 96Z" fill={snout} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
         {/* huge warm eyes, left larger (asymmetry) */}
         <g className="m-eyes">
-          <ellipse cx="86" cy="80" rx="11" ry="12" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="88" cy="82" r="5.4" fill="#20242a" /><circle cx="90.4" cy="79.6" r="1.7" fill="#fff" />
+          <g className="m-eye-l"><ellipse cx="86" cy="80" rx="11" ry="12" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="88" cy="82" r="5.4" fill="#20242a" /><circle cx="90.4" cy="79.6" r="1.7" fill="#fff" /></g>
           <ellipse cx="118" cy="81" rx="9" ry="10" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="119" cy="83" r="4.4" fill="#20242a" /><circle cx="121" cy="80.6" r="1.4" fill="#fff" />
         </g>
         <path className="m-brow m-brow-l" d="M76 62 Q86 56 97 62" stroke={furDark} strokeWidth="3.4" fill="none" strokeLinecap="round" />
         <path className="m-brow m-brow-r" d="M109 63 Q118 58 127 64" stroke={furDark} strokeWidth="3.4" fill="none" strokeLinecap="round" />
         <ellipse cx="92" cy="120" rx="4" ry="3" fill={furDark} /><ellipse cx="114" cy="120" rx="4" ry="3" fill={furDark} />
-        <path className="m-mouth" d="M88 128 Q103 140 118 128" stroke={furDark} strokeWidth="3.2" fill="none" strokeLinecap="round" />
+        <path className="m-mouth" d="M85 127 Q103 144 121 127" stroke={furDark} strokeWidth="3.6" fill="none" strokeLinecap="round" />
       </g>
     </g>
   )
@@ -120,13 +120,13 @@ function Clutch() {
         <path d="M92 62 Q103 50 114 62 Q108 74 103 74 Q98 74 92 62Z" fill={mane} stroke={OL} strokeWidth="2" strokeLinejoin="round" />
         {/* small, narrowed, determined eyes */}
         <g className="m-eyes">
-          <ellipse cx="88" cy="90" rx="7" ry="6" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="89" cy="91" r="3.4" fill="#20242a" />
+          <g className="m-eye-l"><ellipse cx="88" cy="90" rx="7" ry="6" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="89" cy="91" r="3.4" fill="#20242a" /></g>
           <ellipse cx="118" cy="90" rx="7" ry="6" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="117" cy="91" r="3.4" fill="#20242a" />
         </g>
         <path className="m-brow m-brow-l" d="M78 80 Q88 74 99 81" stroke={furDark} strokeWidth="4" fill="none" strokeLinecap="round" />
         <path className="m-brow m-brow-r" d="M107 81 Q118 74 128 80" stroke={furDark} strokeWidth="4" fill="none" strokeLinecap="round" />
         <ellipse cx="94" cy="115" rx="4.5" ry="3.2" fill="#20242a" /><ellipse cx="112" cy="115" rx="4.5" ry="3.2" fill="#20242a" />
-        <path className="m-mouth" d="M90 126 Q103 136 116 126" stroke={furDark} strokeWidth="3.4" fill="none" strokeLinecap="round" />
+        <path className="m-mouth" d="M87 125 Q103 141 119 125" stroke={furDark} strokeWidth="3.6" fill="none" strokeLinecap="round" />
       </g>
     </g>
   )
@@ -168,13 +168,13 @@ function Zayu() {
         <path d="M96 98 Q72 102 68 122 Q78 136 96 136 Q114 136 122 122 Q120 102 96 98Z" fill={bodyLt} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
         {/* big round curious eyes */}
         <g className="m-eyes">
-          <ellipse cx="83" cy="86" rx="10" ry="11" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="85" cy="88" r="5" fill="#20242a" /><circle cx="87" cy="85.6" r="1.6" fill="#fff" />
+          <g className="m-eye-l"><ellipse cx="83" cy="86" rx="10" ry="11" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="85" cy="88" r="5" fill="#20242a" /><circle cx="87" cy="85.6" r="1.6" fill="#fff" /></g>
           <ellipse cx="110" cy="87" rx="9" ry="10" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="111" cy="89" r="4.6" fill="#20242a" /><circle cx="113" cy="86.6" r="1.4" fill="#fff" />
         </g>
         <path className="m-brow m-brow-l" d="M73 70 Q83 64 93 70" stroke={shellDark} strokeWidth="3.2" fill="none" strokeLinecap="round" />
         <path className="m-brow m-brow-r" d="M101 71 Q110 65 120 71" stroke={shellDark} strokeWidth="3.2" fill="none" strokeLinecap="round" />
         <ellipse cx="96" cy="118" rx="6" ry="4.5" fill="#20242a" />
-        <path className="m-mouth" d="M84 126 Q96 135 108 126" stroke={shellDark} strokeWidth="3" fill="none" strokeLinecap="round" />
+        <path className="m-mouth" d="M81 125 Q96 140 111 125" stroke={shellDark} strokeWidth="3.5" fill="none" strokeLinecap="round" />
         {/* oversized sombrero, tilted rakishly */}
         <g className="m-hat" transform="rotate(-9 100 52)">
           <ellipse cx="100" cy="56" rx="64" ry="15" fill={straw} stroke={OL} strokeWidth={OLW} />
@@ -202,7 +202,7 @@ const TOURS = {
     { line: "Welcome to Canada! 🍁 Co-hosting our very first men's World Cup!", anim: 'wave' },
     { line: 'Three cities in the mix - Toronto, Vancouver, and Edmonton!', anim: 'jump' },
     { line: "BC Place in Vancouver has one of the world's largest retractable roofs!", anim: 'point' },
-    { line: 'We thrashed Qatar 6-0 for our first ever World Cup win. History made!', anim: 'celebrate' },
+    { line: "Alphonso Davies scored our first ever men's World Cup goal in 2022. History made!", anim: 'celebrate' },
   ],
   US: [
     { line: "Welcome to the USA! 🦅 We're hosting 11 of the 16 venues - biggest share!", anim: 'wave' },
@@ -222,21 +222,37 @@ const TOURS = {
 // mascot's pivots; they drive the existing named SVG groups only (no path edits),
 // so they survive the Part 6 redraw untouched.
 const BEAT_ANIM = {
+  // Full arm wave, body tilts toward the user, head nods along.
   wave: (q, o) => {
-    gsap.fromTo(q('.m-arm-l'), { rotation: 0 }, { rotation: -34, duration: 0.32, yoyo: true, repeat: 3, svgOrigin: o.armL, ease: 'sine.inOut' })
-    gsap.fromTo(q('.m-head'), { rotation: 0 }, { rotation: 7, duration: 0.42, yoyo: true, repeat: 1, svgOrigin: o.center, ease: 'sine.inOut' })
+    gsap.fromTo(q('.m-arm-l'), { rotation: 0 }, { rotation: -46, duration: 0.24, yoyo: true, repeat: 5, svgOrigin: o.armL, ease: 'sine.inOut' })
+    gsap.fromTo(q('.m-mascot'), { rotation: 0 }, { rotation: -4, duration: 0.42, yoyo: true, repeat: 1, svgOrigin: o.center, ease: 'sine.inOut' })
+    gsap.fromTo(q('.m-head'), { rotation: 0 }, { rotation: 9, duration: 0.3, yoyo: true, repeat: 3, svgOrigin: o.center, ease: 'sine.inOut' })
   },
+  // Full squash-and-stretch jump with a landing impact, grounded at the feet.
   jump: (q) => {
-    gsap.fromTo(q('.m-mascot'), { y: 0 }, { y: -28, duration: 0.28, yoyo: true, repeat: 1, ease: 'power2.out' })
-    gsap.fromTo(q('.m-mascot'), { scaleY: 1 }, { scaleY: 0.9, duration: 0.12, delay: 0.56, yoyo: true, repeat: 1, transformOrigin: '50% 100%', ease: 'power2.out' })
+    gsap.timeline({ defaults: { transformOrigin: '50% 100%' } })
+      .to(q('.m-mascot'), { scaleY: 0.84, scaleX: 1.12, duration: 0.14, ease: 'power2.in' })
+      .to(q('.m-mascot'), { y: -44, scaleY: 1.14, scaleX: 0.9, duration: 0.26, ease: 'power2.out' })
+      .to(q('.m-mascot'), { y: 0, scaleY: 0.8, scaleX: 1.16, duration: 0.16, ease: 'power2.in' })
+      .to(q('.m-mascot'), { scaleY: 1, scaleX: 1, duration: 0.4, ease: 'elastic.out(1, 0.4)' })
   },
+  // Arm shoots out dramatically, the body leans into the point.
   point: (q, o) => {
-    gsap.fromTo(q('.m-arm-r'), { rotation: 0 }, { rotation: 42, duration: 0.34, yoyo: true, repeat: 1, repeatDelay: 0.7, svgOrigin: o.armR, ease: 'power2.out' })
+    gsap.timeline({ svgOrigin: o.armR })
+      .fromTo(q('.m-arm-r'), { rotation: 0 }, { rotation: 52, duration: 0.22, ease: 'back.out(3)' })
+      .to(q('.m-arm-r'), { rotation: 44, duration: 0.7 })
+      .to(q('.m-arm-r'), { rotation: 0, duration: 0.3, ease: 'power2.inOut' })
+    gsap.fromTo(q('.m-mascot'), { rotation: 0 }, { rotation: 5, duration: 0.24, yoyo: true, repeat: 1, repeatDelay: 0.7, svgOrigin: o.center, ease: 'power2.out' })
   },
+  // Both arms up, a spinning jump, landing with a settle.
   celebrate: (q, o) => {
-    gsap.fromTo(q('.m-arm-l'), { rotation: 0 }, { rotation: -48, duration: 0.3, yoyo: true, repeat: 1, repeatDelay: 0.6, svgOrigin: o.armL, ease: 'back.out(2)' })
-    gsap.fromTo(q('.m-arm-r'), { rotation: 0 }, { rotation: 48, duration: 0.3, yoyo: true, repeat: 1, repeatDelay: 0.6, svgOrigin: o.armR, ease: 'back.out(2)' })
-    gsap.fromTo(q('.m-mascot'), { rotation: 0 }, { rotation: 360, duration: 0.72, ease: 'power2.inOut', svgOrigin: o.center })
+    gsap.fromTo(q('.m-arm-l'), { rotation: 0 }, { rotation: -58, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 0.7, svgOrigin: o.armL, ease: 'back.out(2.5)' })
+    gsap.fromTo(q('.m-arm-r'), { rotation: 0 }, { rotation: 58, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 0.7, svgOrigin: o.armR, ease: 'back.out(2.5)' })
+    gsap.timeline({ defaults: { svgOrigin: o.center } })
+      .to(q('.m-mascot'), { y: -36, duration: 0.34, ease: 'power2.out' })
+      .to(q('.m-mascot'), { rotation: 360, duration: 0.66, ease: 'power1.inOut' }, '<')
+      .to(q('.m-mascot'), { y: 0, duration: 0.22, ease: 'power2.in' }, '>-0.2')
+      .fromTo(q('.m-mascot'), { scaleY: 1 }, { scaleY: 0.86, scaleX: 1.12, duration: 0.12, transformOrigin: '50% 100%', yoyo: true, repeat: 1, ease: 'power2.out' })
   },
 }
 
@@ -351,22 +367,59 @@ export default function HostMascot({ iso, variant = 'panel', onExplore }) {
     setBeat(0)
     const root = rootRef.current
     if (!def || !root || reduced()) return undefined
+    const oc = origins?.center || '103 118'
+    const oal = origins?.armL || '64 152'
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector(root)
       gsap.from(q('.m-torso'), { x: -240, opacity: 0, duration: 0.5, ease: 'back.out(1.7)' })
       gsap.from(q('.m-head'), { x: -240, opacity: 0, duration: 0.5, delay: 0.08, ease: 'back.out(1.7)' })
       gsap.from([q('.m-legs'), q('.m-ball'), q('.m-tail')], { y: 46, opacity: 0, duration: 0.42, delay: 0.22, stagger: 0.05, ease: 'power2.out' })
-      // Idle: body bob + head sway, starting once the entrance has landed.
-      gsap.to(q('.m-torso'), { y: -6, duration: 0.95, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 0.75 })
-      gsap.to(q('.m-head'), { rotation: 3, duration: 1.4, repeat: -1, yoyo: true, ease: 'sine.inOut', svgOrigin: origins?.center || '101 124', delay: 0.75 })
-      // Blink.
-      gsap.timeline({ repeat: -1, repeatDelay: 2.6, delay: 1.4 })
-        .to(q('.m-eyes'), { scaleY: 0.12, duration: 0.08, transformOrigin: '50% 50%' })
-        .to(q('.m-eyes'), { scaleY: 1, duration: 0.09 })
+
+      // Idle personality loop: the mascot is never still. One repeating timeline
+      // cycles three beats so it reads as a living character, not a bobbing prop:
+      //   1) a happy bounce with a squash-and-stretch landing,
+      //   2) a curious look-around, then
+      //   3) a friendly wave at the user.
+      gsap.timeline({ repeat: -1, delay: 0.8 })
+        // 1) happy bounce
+        .to(q('.m-torso'), { y: -12, duration: 0.34, ease: 'power2.out' })
+        .to(q('.m-torso'), { y: 0, scaleY: 0.9, scaleX: 1.1, duration: 0.24, transformOrigin: '50% 100%', ease: 'bounce.out' })
+        .to(q('.m-torso'), { scaleY: 1, scaleX: 1, duration: 0.16, ease: 'power1.out' })
+        .to(q('.m-torso'), { y: -7, duration: 0.3, ease: 'sine.inOut' })
+        .to(q('.m-torso'), { y: 0, duration: 0.3, ease: 'sine.inOut' })
+        // 2) look around
+        .to(q('.m-head'), { rotation: -13, duration: 0.4, svgOrigin: oc, ease: 'power1.inOut' })
+        .to(q('.m-head'), { rotation: 11, duration: 0.55, svgOrigin: oc, ease: 'power1.inOut' })
+        .to(q('.m-head'), { rotation: 0, duration: 0.3, svgOrigin: oc, ease: 'power2.out' })
+        // 3) wave at the user
+        .to(q('.m-arm-l'), { rotation: -44, duration: 0.2, svgOrigin: oal, ease: 'back.out(2)' })
+        .to(q('.m-arm-l'), { rotation: -22, duration: 0.14, svgOrigin: oal })
+        .to(q('.m-arm-l'), { rotation: -44, duration: 0.14, svgOrigin: oal })
+        .to(q('.m-arm-l'), { rotation: -22, duration: 0.14, svgOrigin: oal })
+        .to(q('.m-arm-l'), { rotation: 0, duration: 0.22, svgOrigin: oal, ease: 'power2.out' })
+        .to({}, { duration: 0.5 }) // breath before the loop repeats
+
+      // Blink loop with a wink on every third blink. A single repeating timeline
+      // (blink, blink, wink) keeps it deterministic and fully inside the context,
+      // so revert() tears it down with no stray delayedCalls left running.
+      const blink = (tl, sel) => tl
+        .to(q(sel), { scaleY: 0.1, duration: 0.08, transformOrigin: '50% 50%' })
+        .to(q(sel), { scaleY: 1, duration: 0.09 })
+        .to({}, { duration: 2.4 })
+      const bt = gsap.timeline({ repeat: -1, delay: 1.4 })
+      blink(bt, '.m-eyes')
+      blink(bt, '.m-eyes')
+      blink(bt, '.m-eye-l') // the wink
+
       // Tour: play the first beat's animation once the character has landed.
       if (isTour) gsap.delayedCall(0.85, () => playBeat(0))
     }, root)
-    return () => ctx.revert()
+    return () => {
+      ctx.revert()
+      // Kill any transient tour-beat / poke tweens that may still be mid-flight,
+      // so nothing keeps animating a detached node after unmount.
+      gsap.killTweensOf(root.querySelectorAll('*'))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [def, isTour])
 
