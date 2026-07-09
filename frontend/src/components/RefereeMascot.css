@@ -1,11 +1,11 @@
-/* Referee narrator - centre-bottom of the pregame cutscene, speech bubble above.
-   He sits below the VS card / team names and the giant countdown, so he never
-   collides with them. */
+/* Referee narrator - true dead-centre of the pregame cutscene (both axes), speech
+   bubble above. The giant countdown is centred behind him (z-index 2 < 6), so he
+   stands in front of it; the team names sit up at the top, clear of the bubble. */
 .referee--cutscene {
   position: absolute;
+  top: 50%;
   left: 50%;
-  bottom: 3%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   z-index: 6;
   display: flex;
   flex-direction: column;

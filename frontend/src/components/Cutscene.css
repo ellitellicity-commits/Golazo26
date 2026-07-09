@@ -160,10 +160,12 @@
   color: color-mix(in srgb, var(--cut-ink) 78%, transparent);
 }
 
-/* --- Beat 4: countdown + hard cut. The giant number sits in the lower third,
-   centred full-width (no transform, so the GSAP scale tween stays clean) and
-   BEHIND the referee (z-index 2 < referee's 6): a big, faint backdrop the
-   referee stands in front of, arm raised, rather than a number stamped over him.
+/* --- Beat 4: countdown + hard cut. The giant number is centred on BOTH axes,
+   directly behind the dead-centre referee (z-index 2 < referee's 6): a big, faint
+   backdrop he stands in front of, arm raised, rather than a number stamped over
+   him. Centring is done with a full-frame flex box (inset:0), NOT a CSS transform,
+   so GSAP's per-digit scale tween owns the transform matrix unopposed and pulses
+   the number about the frame centre cleanly.
    The bubble is suppressed on this beat (he's blowing the whistle, not talking),
    so the only foreground is the referee himself.
    NB the ~15% background weight is carried by the colour's alpha, not the opacity
@@ -172,10 +174,11 @@
    the number a faint ghost even at the tween's full opacity. --- */
 .cut__count {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: clamp(24px, 7vh, 96px);
+  inset: 0;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-weight: 800;
   font-size: clamp(20vw, 28vw, 340px);
