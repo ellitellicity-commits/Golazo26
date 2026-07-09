@@ -325,7 +325,7 @@ function GlobeHero({
 
     eng.current = {
       scene, camera, renderer, globe, sphere, markerGroup, arcGroup, hostGroup, flagGroup, controls, raycaster, pointer,
-      markerMeshes: [], flight: null, raf: 0, disposed: false, running: false, lastHost: undefined, mode,
+      markerMeshes: [], flight: null, raf: 0, disposed: false, running: false, inView: true, lastHost: undefined, mode,
       // Atlas flag-fill state: caches + the currently shown country.
       flagGeo: new Map(), flagTex: new Map(), hoverName: null, hoverMesh: null, hoverPaused: false,
       testFreeze: false,
@@ -541,6 +541,9 @@ function GlobeHero({
         if (fl.t >= 1 && !fl.done) {
           fl.done = true
           if (cbs.current.onFlightComplete) cbs.current.onFlightComplete()
+          // Flight finished: if the globe is off-screen, drop back to the idle
+          // pause the viewport observer would otherwise have applied already.
+          if (!E.inView) stop()
         }
       }
       renderer.render(scene, camera)
@@ -559,6 +562,9 @@ function GlobeHero({
       E.running = false
       cancelAnimationFrame(E.raf)
     }
+    // Exposed so the flight effect can resume the loop if a flight starts while
+    // the globe is paused off-screen (a flight advances inside tick()).
+    eng.current.start = start
     start()
 
     // Pause the render loop while the globe is scrolled out of view. A raw rAF
@@ -568,7 +574,15 @@ function GlobeHero({
     // is the biggest mobile win: the Atlas/Simulator globes stop burning GPU the
     // moment they leave the viewport.
     const io = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) start(); else stop() },
+      ([entry]) => {
+        const E = eng.current
+        if (!E) return
+        E.inView = entry.isIntersecting
+        // Keep rendering through an active flight even off-screen, so its arc,
+        // pin drop, and onFlightComplete still land; otherwise pause when idle.
+        if (entry.isIntersecting) start()
+        else if (!E.flight) stop()
+      },
       { threshold: 0 },
     )
     io.observe(mount)
@@ -699,6 +713,8 @@ function GlobeHero({
 
     E.lastHost = undefined
     E.flight = { points, arcLine, plane, t: 0, speed: 1 / (flight.durationFrames || 150), done: false }
+    // If the globe was paused off-screen, resume so the flight actually advances.
+    E.start?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flight?.id])
 
