@@ -121,6 +121,25 @@
 .nav__tab.is-active::after {
   transform: scaleX(1);
 }
+/* Active-route pin: a small dot centred under the label, a second read on top of
+   the underline. Wayfinding blue (not gold) to match the rule above; trophy gold
+   stays reserved for the championship moment (DESIGN.md). Scales in on activation
+   and is stilled under reduced motion below. */
+.nav__tab::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--american-blue);
+  transform: translateX(-50%) scale(0);
+  transition: transform var(--dur-ui) var(--ease-out-quint);
+}
+.nav__tab.is-active::before {
+  transform: translateX(-50%) scale(1);
+}
 
 /* --- Model badge (persistent on every route) --- */
 .nav__meta {
@@ -277,6 +296,7 @@
 @media (prefers-reduced-motion: reduce) {
   .nav__tab,
   .nav__tab::after,
+  .nav__tab::before,
   .tabbar__tab,
   .tabbar__tab::before {
     transition: none;

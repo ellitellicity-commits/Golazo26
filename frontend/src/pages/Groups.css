@@ -238,6 +238,18 @@
 .gtable tbody tr.is-q3in td {
   color: var(--ink);
 }
+
+/* A single brief green flash across a directly-qualified row when the table
+   mounts, a quiet nod that this team is through (green = group data). Plays once;
+   stilled under reduced motion below. */
+@keyframes g-qualify-flash {
+  0% { background-color: transparent; }
+  45% { background-color: color-mix(in srgb, var(--mexican-green) 15%, transparent); }
+  100% { background-color: transparent; }
+}
+.gtable tbody tr.is-q {
+  animation: g-qualify-flash 0.8s var(--ease-out-quint, ease-out) 1;
+}
 .gtable__pts {
   color: var(--ink);
   font-weight: 700;
@@ -403,5 +415,8 @@
   .grow__btn,
   .btn {
     transition: none;
+  }
+  .gtable tbody tr.is-q {
+    animation: none;
   }
 }

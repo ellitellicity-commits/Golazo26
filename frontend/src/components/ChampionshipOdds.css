@@ -113,6 +113,20 @@
 .odds-row__crown {
   color: var(--trophy-gold);
 }
+/* Rank-move marker: appears when a nation shifts places on refresh, then fades
+   out so the table settles. Muted ink; the triangle direction is the signal. */
+.odds-row__move {
+  font-size: 0.6rem;
+  line-height: 1;
+  color: var(--ink-muted);
+  opacity: 0.75;
+  animation: odds-move-out 2s var(--ease-out-quint) forwards;
+}
+@keyframes odds-move-out {
+  0% { opacity: 0.75; }
+  70% { opacity: 0.75; }
+  100% { opacity: 0; }
+}
 
 /* --- Team identity (flag · code · name · group) --- */
 .odds-row__team {
@@ -389,5 +403,10 @@
   }
   .odds-row__chev {
     transition: none;
+  }
+  /* The marker still shows its direction, just without the fade choreography. */
+  .odds-row__move {
+    animation: none;
+    opacity: 0.75;
   }
 }

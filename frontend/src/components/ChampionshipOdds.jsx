@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { teamMeta, flagUrl } from '../lib/teams'
 import TabHeader from './TabHeader'
 import './ChampionshipOdds.css'
@@ -56,7 +56,7 @@ function SurvivalCurve({ team }) {
   )
 }
 
-function OddsRow({ team, meta, rank, barPct, isLeader, open, onToggle, index }) {
+function OddsRow({ team, meta, rank, dir = 0, barPct, isLeader, open, onToggle, index }) {
   const panelId = useId()
   const pct = fmtPct(team.championship_odds)
   const flag = flagUrl(meta.iso)
@@ -85,6 +85,19 @@ function OddsRow({ team, meta, rank, barPct, isLeader, open, onToggle, index }) 
             </svg>
           )}
           {rank}
+          {dir !== 0 && (
+            // Shape carries the signal (▲ rose / ▼ fell), never colour alone, so
+            // it stays colour-blind safe; muted ink keeps the role-locked hues
+            // (blue = prediction, red = live) reserved. Keyed on rank+dir so the
+            // one-shot fade replays whenever a nation actually moves.
+            <span
+              key={`${rank}-${dir}`}
+              className={`odds-row__move odds-row__move--${dir > 0 ? 'up' : 'down'}`}
+              aria-hidden="true"
+            >
+              {dir > 0 ? '▲' : '▼'}
+            </span>
+          )}
         </span>
 
         <span className="odds-row__team">
@@ -139,6 +152,22 @@ function ChampionshipOdds({ odds }) {
   const teams = odds.teams // already sorted by championship_odds, descending
   const leaderOdds = teams[0]?.championship_odds || 1
 
+  // Rank-change indicator: compare each nation's current rank against the last
+  // render's, so a refresh that reshuffles the table shows a small up/down arrow
+  // on the movers (which fades after 2s in CSS). First render has no baseline, so
+  // nothing flashes on load.
+  const prevRankRef = useRef(null)
+  const rankDir = new Map()
+  teams.forEach((t, i) => {
+    const prev = prevRankRef.current?.get(t.team)
+    rankDir.set(t.team, prev == null ? 0 : Math.sign(prev - (i + 1)))
+  })
+  useEffect(() => {
+    const m = new Map()
+    teams.forEach((t, i) => m.set(t.team, i + 1))
+    prevRankRef.current = m
+  })
+
   const toggle = (name) =>
     setOpenSet((prev) => {
       const next = new Set(prev)
@@ -171,6 +200,7 @@ function ChampionshipOdds({ odds }) {
             team={team}
             meta={teamMeta(team.team)}
             rank={i + 1}
+            dir={rankDir.get(team.team)}
             index={i}
             isLeader={i === 0}
             barPct={Math.max((team.championship_odds / leaderOdds) * 100, 0.6)}

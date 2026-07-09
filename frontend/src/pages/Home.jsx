@@ -88,6 +88,27 @@ function useFinalCountdown() {
   return cd
 }
 
+// A precise, per-second clock down to the final's kickoff. The headline figure
+// above stays days/hours (scannable); this is the live ticking detail that makes
+// the snapshot feel like a real countdown to the biggest night. Returns null once
+// the final is under way, so the days-figure display takes over.
+function useFinalClock(targetIso) {
+  const target = useMemo(() => new Date(targetIso).getTime(), [targetIso])
+  const compute = () => {
+    const ms = target - Date.now()
+    if (ms <= 0) return null
+    const s = Math.floor(ms / 1000)
+    return { d: Math.floor(s / 86400), h: Math.floor((s % 86400) / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 }
+  }
+  const [t, setT] = useState(compute)
+  useEffect(() => {
+    const id = setInterval(() => setT(compute()), 1000)
+    return () => clearInterval(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target])
+  return t
+}
+
 // A single status marker labelling the snapshot below it: red pulsing "LIVE"
 // when the football-data.org feed is current, or a neutral "Snapshot · <date>"
 // when the app has fallen back to the bundled data (missing key, rate limit,
@@ -114,6 +135,7 @@ function Snapshot() {
   const favMeta = teamMeta(favourite.team)
   const stage = getCurrentRound(fixtures.fixtures, fixtures.knockout)
   const countdown = useFinalCountdown()
+  const clock = useFinalClock(KICKOFF_ISO)
   const favPct = (favourite.championship_odds * 100).toFixed(1)
   const flag = flagUrl(favMeta.iso)
   return (
@@ -139,6 +161,11 @@ function Snapshot() {
           <span className="snapshot__big tnum">{countdown.big}</span>
           {countdown.unit && <span className="snapshot__unit">{countdown.unit}</span>}
         </dd>
+        {countdown.phase === 'countdown' && clock && (
+          <p className="snapshot__clock tnum" role="timer" aria-live="off">
+            {clock.d}d {String(clock.h).padStart(2, '0')}h {String(clock.m).padStart(2, '0')}m {String(clock.s).padStart(2, '0')}s
+          </p>
+        )}
         {countdown.phase === 'countdown' && (
           <p className="snapshot__kickoff">
             Kick-off <time dateTime={KICKOFF_ISO} className="tnum">{KICKOFF_TEXT}</time>

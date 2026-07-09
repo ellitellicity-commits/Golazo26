@@ -36,13 +36,35 @@
 }
 
 /* Rolling match ball - the loader's motion. Rolls across a short track and back
-   (alternate), the spin matched to the travel so it reads as a real roll. */
+   (alternate), the spin matched to the travel so it reads as a real roll. Three
+   faint ghosts share the roll on a slight lag for a trailing streak. */
+.loading__ball-track {
+  position: relative;
+  display: block;
+  width: 64px;
+  height: 64px;
+}
 .loading__ball {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 64px;
   height: 64px;
   animation: loading-roll 2.4s ease-in-out infinite alternate;
 }
+.loading__ball-ghost {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--ink);
+  animation: loading-roll 2.4s ease-in-out infinite alternate;
+}
+.loading__ball-ghost--1 { opacity: 0.16; animation-delay: -0.09s; }
+.loading__ball-ghost--2 { opacity: 0.1; animation-delay: -0.18s; }
+.loading__ball-ghost--3 { opacity: 0.06; animation-delay: -0.27s; }
 .loading__ball-svg {
   display: block;
   width: 100%;
@@ -129,9 +151,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* No roll: the ball rests centred (the typing facts still signal progress). */
+  /* No roll: the ball rests centred (the typing facts still signal progress),
+     and the motion-streak ghosts are dropped entirely. */
   .loading__ball {
     animation: none;
+  }
+  .loading__ball-ghost {
+    display: none;
   }
   /* Facts swap without the slide/fade choreography. */
   .loading__fact-block,

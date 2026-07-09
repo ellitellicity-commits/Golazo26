@@ -154,6 +154,16 @@
    countdown always shows the time it's counting to. Colour stays neutral through
    the days/hours phase (a countdown is neither group, prediction nor champion);
    red is held back for the live phase alone. */
+/* Live per-second clock to kickoff. Tabular so the digits never jitter as they
+   tick. Quiet, sits between the days headline and the kickoff time. */
+.snapshot__clock {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+}
 .snapshot__kickoff {
   margin: var(--space-xs) 0 0;
   font-size: var(--text-meta);

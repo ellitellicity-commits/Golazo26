@@ -55,7 +55,13 @@ function CitySkylines() {
 // pentagon so it reads against the studio-black gate.
 function SoccerBall() {
   return (
-    <span className="loading__ball" aria-hidden="true">
+    <span className="loading__ball-track" aria-hidden="true">
+      {/* Three fading ghosts trail the ball for a motion streak (hidden under
+          reduced motion, where the ball rests). */}
+      <span className="loading__ball-ghost loading__ball-ghost--1" />
+      <span className="loading__ball-ghost loading__ball-ghost--2" />
+      <span className="loading__ball-ghost loading__ball-ghost--3" />
+      <span className="loading__ball">
       <svg viewBox="0 0 16 16" width="64" height="64" className="loading__ball-svg">
         <circle cx="8" cy="8" r="6.4" fill="var(--ink)" stroke="var(--studio-black)" strokeWidth="0.9" />
         <path d="M8 5.7 10.19 7.29 9.35 9.86 6.65 9.86 5.81 7.29Z" fill="var(--studio-black)" />
@@ -68,6 +74,7 @@ function SoccerBall() {
           strokeLinejoin="round"
         />
       </svg>
+      </span>
     </span>
   )
 }
@@ -121,7 +128,9 @@ function FunFacts() {
   const [facts] = useState(() => shuffle(FACTS))
   const [i, setI] = useState(0)
   const [leaving, setLeaving] = useState(false)
-  // A fresh random eyebrow label each time the fact changes.
+  // A fresh random eyebrow label each time the fact changes. `i` is the cache key
+  // (recompute per fact), not read inside - so the exhaustive-deps rule is silenced.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const label = useMemo(() => LABELS[Math.floor(Math.random() * LABELS.length)], [i])
 
   useEffect(() => {

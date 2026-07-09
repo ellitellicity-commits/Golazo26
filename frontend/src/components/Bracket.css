@@ -537,8 +537,14 @@
   background: var(--bk-line-elim);
 }
 .bk-grid .bk-match.is-out-win::after {
-  background: var(--bk-line-win);
+  background-color: var(--bk-line-win);
+  /* A brighter band travels along the champion's wire, like a charge running
+     through it. Pure lightness lift of the role-locked green (no new hue). */
+  background-image: linear-gradient(90deg, transparent 0%, color-mix(in oklab, #fff 60%, var(--bk-line-win)) 50%, transparent 100%);
+  background-size: 45% 100%;
+  background-repeat: no-repeat;
   box-shadow: var(--bk-line-glow);
+  animation: bk-champ-flow-x 3s linear infinite;
 }
 
 /* A match's vertical merge. One state for the whole bar (+ its stub), owned by
@@ -561,8 +567,22 @@
 }
 .bk-match__join.is-vert-win,
 .bk-match__join.is-vert-win::after {
-  background: var(--bk-line-win);
+  background-color: var(--bk-line-win);
   box-shadow: var(--bk-line-glow);
+}
+.bk-match__join.is-vert-win {
+  background-image: linear-gradient(180deg, transparent 0%, color-mix(in oklab, #fff 60%, var(--bk-line-win)) 50%, transparent 100%);
+  background-size: 100% 45%;
+  background-repeat: no-repeat;
+  animation: bk-champ-flow-y 3s linear infinite;
+}
+@keyframes bk-champ-flow-x {
+  from { background-position: -45% 50%; }
+  to { background-position: 145% 50%; }
+}
+@keyframes bk-champ-flow-y {
+  from { background-position: 50% -45%; }
+  to { background-position: 50% 145%; }
 }
 
 /* Depth cue on the red "progressed" trail: the further a team got, the thicker
@@ -940,5 +960,11 @@
   .bk-match__live-dot,
   .bk__swipe-arrow {
     animation: none;
+  }
+  /* Champion wire holds its solid green, no travelling charge. */
+  .bk-grid .bk-match.is-out-win::after,
+  .bk-match__join.is-vert-win {
+    animation: none;
+    background-image: none;
   }
 }
