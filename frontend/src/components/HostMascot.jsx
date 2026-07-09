@@ -160,6 +160,59 @@ function Zayu() {
   )
 }
 
+// Per-mascot SVG pivots (svgOrigin) for the shared tour-beat animations, plus the
+// full nation name for the "Explore …" hand-off button.
+const ORIGINS = {
+  CA: { country: 'Canada', armL: '64 150', armR: '138 152', center: '101 124' },
+  US: { country: 'United States', armL: '63 152', armR: '143 154', center: '103 122' },
+  MX: { country: 'Mexico', armL: '64 152', armR: '140 156', center: '100 124' },
+}
+
+// Guided-tour scripts (Part 2a) — real, confirmed WC2026 facts only. Each beat
+// names the mascot animation it plays. The mascot speaks directly to the user.
+const TOURS = {
+  CA: [
+    { line: "Welcome to Canada! 🍁 Co-hosting our very first men's World Cup!", anim: 'wave' },
+    { line: 'Three cities in the mix — Toronto, Vancouver, and Edmonton!', anim: 'jump' },
+    { line: "BC Place in Vancouver has one of the world's largest retractable roofs!", anim: 'point' },
+    { line: 'We thrashed Qatar 6-0 for our first ever World Cup win. History made!', anim: 'celebrate' },
+  ],
+  US: [
+    { line: "Welcome to the USA! 🦅 We're hosting 11 of the 16 venues — biggest share!", anim: 'wave' },
+    { line: 'MetLife Stadium in New Jersey hosts the Final on 19 July 2026!', anim: 'point' },
+    { line: "Our first men's World Cup since 1994 — and this time we're IN it!", anim: 'jump' },
+    { line: 'From Seattle to Miami, the whole country is a football pitch right now!', anim: 'celebrate' },
+  ],
+  MX: [
+    { line: '¡Bienvenidos a México! 🌵 First nation to host or co-host THREE World Cups!', anim: 'wave' },
+    { line: 'Estadio Azteca has seen two World Cup finals — 1970 AND 1986!', anim: 'point' },
+    { line: 'Guadalajara and Monterrey join Mexico City — three iconic football cities!', anim: 'jump' },
+    { line: 'The atmosphere here? Unmatched. The whole country bleeds football!', anim: 'celebrate' },
+  ],
+}
+
+// The four tour-beat animations (Part 2b). Each takes the scoped selector + the
+// mascot's pivots; they drive the existing named SVG groups only (no path edits),
+// so they survive the Part 6 redraw untouched.
+const BEAT_ANIM = {
+  wave: (q, o) => {
+    gsap.fromTo(q('.m-arm-l'), { rotation: 0 }, { rotation: -34, duration: 0.32, yoyo: true, repeat: 3, svgOrigin: o.armL, ease: 'sine.inOut' })
+    gsap.fromTo(q('.m-head'), { rotation: 0 }, { rotation: 7, duration: 0.42, yoyo: true, repeat: 1, svgOrigin: o.center, ease: 'sine.inOut' })
+  },
+  jump: (q) => {
+    gsap.fromTo(q('.m-mascot'), { y: 0 }, { y: -28, duration: 0.28, yoyo: true, repeat: 1, ease: 'power2.out' })
+    gsap.fromTo(q('.m-mascot'), { scaleY: 1 }, { scaleY: 0.9, duration: 0.12, delay: 0.56, yoyo: true, repeat: 1, transformOrigin: '50% 100%', ease: 'power2.out' })
+  },
+  point: (q, o) => {
+    gsap.fromTo(q('.m-arm-r'), { rotation: 0 }, { rotation: 42, duration: 0.34, yoyo: true, repeat: 1, repeatDelay: 0.7, svgOrigin: o.armR, ease: 'power2.out' })
+  },
+  celebrate: (q, o) => {
+    gsap.fromTo(q('.m-arm-l'), { rotation: 0 }, { rotation: -48, duration: 0.3, yoyo: true, repeat: 1, repeatDelay: 0.6, svgOrigin: o.armL, ease: 'back.out(2)' })
+    gsap.fromTo(q('.m-arm-r'), { rotation: 0 }, { rotation: 48, duration: 0.3, yoyo: true, repeat: 1, repeatDelay: 0.6, svgOrigin: o.armR, ease: 'back.out(2)' })
+    gsap.fromTo(q('.m-mascot'), { rotation: 0 }, { rotation: 360, duration: 0.72, ease: 'power2.inOut', svgOrigin: o.center })
+  },
+}
+
 // iso → mascot definition. Facts are real, checkable World Cup 2026 / host notes.
 const MASCOTS = {
   CA: {
@@ -206,11 +259,55 @@ const MASCOTS = {
 const reduced = () =>
   typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
-export default function HostMascot({ iso }) {
+// A short CSS-only confetti burst for the tour's 'celebrate' beat (Part 2b) —
+// small coloured dots that fling out from the mascot and fade. Keyed on `fire`
+// so each celebrate remounts and replays. Host identity + gold, restrained count.
+const BURST_COLORS = ['var(--host-colour, var(--ink))', '#f6f6f6', 'var(--trophy-gold)']
+function ConfettiBurst({ fire }) {
+  if (!fire || reduced()) return null
+  const dots = Array.from({ length: 14 }, (_, i) => {
+    const ang = (i / 14) * Math.PI * 2 + (i % 2) * 0.4
+    const dist = 46 + (i % 4) * 12
+    return {
+      key: `${fire}-${i}`,
+      '--tx': `${Math.cos(ang) * dist}px`,
+      '--ty': `${Math.sin(ang) * dist - 14}px`,
+      background: BURST_COLORS[i % BURST_COLORS.length],
+      animationDelay: `${(i % 5) * 18}ms`,
+    }
+  })
+  return (
+    <span className="mascot__confetti" aria-hidden="true">
+      {dots.map(({ key, ...style }) => (
+        <span key={key} className="mascot__confetti-dot" style={style} />
+      ))}
+    </span>
+  )
+}
+
+export default function HostMascot({ iso, variant = 'panel', onExplore }) {
   const code = (iso || '').toUpperCase()
   const def = MASCOTS[code]
+  const origins = ORIGINS[code]
+  const tour = TOURS[code]
+  const isTour = variant === 'tour' && !!tour
   const rootRef = useRef(null)
   const [factIdx, setFactIdx] = useState(0)
+  // Tour progression: 'tour' walks the beats; 'idle' is the post-tour resting
+  // state where poking cycles fun facts. Non-tour (panel) variant starts idle.
+  const [phase, setPhase] = useState(isTour ? 'tour' : 'idle')
+  const [beat, setBeat] = useState(0)
+  const [burst, setBurst] = useState(0)
+
+  // Play one tour beat's animation against the live SVG.
+  const playBeat = (i) => {
+    const root = rootRef.current
+    if (!root || !origins || reduced()) return
+    const q = gsap.utils.selector(root)
+    const anim = tour[i]?.anim
+    if (anim && BEAT_ANIM[anim]) BEAT_ANIM[anim](q, origins)
+    if (anim === 'celebrate') setBurst((b) => b + 1)
+  }
 
   // Entrance + looping idle + blink. Rebuilds when the host nation changes.
   //
@@ -223,6 +320,8 @@ export default function HostMascot({ iso }) {
   // so every (re)mount animates in from a clean, visible baseline.
   useEffect(() => {
     setFactIdx(0)
+    setPhase(isTour ? 'tour' : 'idle')
+    setBeat(0)
     const root = rootRef.current
     if (!def || !root || reduced()) return undefined
     const ctx = gsap.context(() => {
@@ -232,19 +331,35 @@ export default function HostMascot({ iso }) {
       gsap.from([q('.m-legs'), q('.m-ball'), q('.m-tail')], { y: 46, opacity: 0, duration: 0.42, delay: 0.22, stagger: 0.05, ease: 'power2.out' })
       // Idle: body bob + head sway, starting once the entrance has landed.
       gsap.to(q('.m-torso'), { y: -6, duration: 0.95, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 0.75 })
-      gsap.to(q('.m-head'), { rotation: 3, duration: 1.4, repeat: -1, yoyo: true, ease: 'sine.inOut', svgOrigin: '101 124', delay: 0.75 })
+      gsap.to(q('.m-head'), { rotation: 3, duration: 1.4, repeat: -1, yoyo: true, ease: 'sine.inOut', svgOrigin: origins?.center || '101 124', delay: 0.75 })
       // Blink.
       gsap.timeline({ repeat: -1, repeatDelay: 2.6, delay: 1.4 })
         .to(q('.m-eyes'), { scaleY: 0.12, duration: 0.08, transformOrigin: '50% 50%' })
         .to(q('.m-eyes'), { scaleY: 1, duration: 0.09 })
+      // Tour: play the first beat's animation once the character has landed.
+      if (isTour) gsap.delayedCall(0.85, () => playBeat(0))
     }, root)
     return () => ctx.revert()
-  }, [def])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [def, isTour])
 
   if (!def) return null
 
-  // Poke: an excited expression (mouth grins, brows lift) plus the species burst,
-  // then advance to the next fun fact.
+  // Advance the guided tour one beat; the last beat's button hands off to the
+  // panel (onExplore) and drops the mascot into its idle resting state.
+  const nextBeat = () => {
+    if (beat >= tour.length - 1) {
+      setPhase('idle')
+      onExplore?.()
+      return
+    }
+    const i = beat + 1
+    setBeat(i)
+    playBeat(i)
+  }
+
+  // Poke (idle): an excited expression (mouth grins, brows lift) plus the species
+  // burst, then advance to the next fun fact.
   const poke = () => {
     const root = rootRef.current
     if (!root || reduced()) {
@@ -259,23 +374,44 @@ export default function HostMascot({ iso }) {
   }
 
   const { Art, name, kind, facts } = def
+  const inTour = isTour && phase === 'tour'
+  const bubbleText = inTour ? tour[beat].line : facts[factIdx]
+  const bubbleKey = inTour ? `${code}-beat-${beat}` : `${code}-fact-${factIdx}`
+  const lastBeat = beat >= tour?.length - 1
+  const figureLabel = inTour
+    ? `${name} ${kind}. Tap to continue the tour.`
+    : `${name} ${kind}, the ${origins?.country || ''} mascot. Activate for a fun fact.`
+
   return (
-    <div className="mascot" ref={rootRef} data-mascot={code}>
+    <div className={`mascot${isTour ? ' mascot--tour' : ''}`} ref={rootRef} data-mascot={code} data-phase={phase}>
       <div className="mascot__bubble" aria-live="polite">
         <p className="mascot__hi">
           <span className="mascot__name">{name}</span> {kind}
         </p>
-        <Typewriter key={`${code}-${factIdx}`} text={facts[factIdx]} className="mascot__fact" />
+        <Typewriter key={bubbleKey} text={bubbleText} className="mascot__fact" />
+        {inTour && (
+          <div className="mascot__tour-controls">
+            <span className="mascot__tour-dots" aria-hidden="true">
+              {tour.map((_, i) => (
+                <span key={i} className={`mascot__tour-dot${i === beat ? ' is-active' : ''}`} />
+              ))}
+            </span>
+            <button type="button" className="mascot__next" onClick={nextBeat}>
+              {lastBeat ? `Explore ${origins.country} →` : 'Next →'}
+            </button>
+          </div>
+        )}
       </div>
       <button
         type="button"
         className="mascot__figure"
-        onClick={poke}
-        aria-label={`${name} ${kind}, the ${code === 'CA' ? 'Canada' : code === 'US' ? 'United States' : 'Mexico'} mascot. Activate for a fun fact.`}
+        onClick={inTour ? nextBeat : poke}
+        aria-label={figureLabel}
       >
         <svg viewBox="0 0 200 250" width="150" height="188" role="img" aria-hidden="true">
           <Art />
         </svg>
+        <ConfettiBurst fire={burst} />
       </button>
     </div>
   )

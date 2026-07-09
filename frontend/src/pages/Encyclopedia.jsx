@@ -140,16 +140,30 @@ function Panel({ country, onClose }) {
         </div>
       )}
 
-      {/* Host-nation mascot lives at the foot of the profile panel — inside the
-          panel's own bounds, so it never bleeds onto the 3D globe. */}
-      {c.iso && HOST_ISO.has(c.iso) && <HostMascot key={c.iso} iso={c.iso} />}
     </aside>
   )
 }
 
+const HOST_COLOURS = { ca: '#ed4a49', us: '#439bf7', mx: '#35c26d' }
+
 export default function Encyclopedia() {
   const [selected, setSelected] = useState(null)
+  // A host runs the guided tour before its panel opens; `tourDone` gates the panel
+  // and resets whenever a different nation is chosen.
+  const [tourDone, setTourDone] = useState(false)
   const country = useMemo(() => (selected ? getCountry(selected) : null), [selected])
+
+  const isHost = !!(country?.iso && HOST_ISO.has(country.iso))
+  const hostColour = country?.iso ? HOST_COLOURS[country.iso] : null
+
+  const choose = (name) => {
+    setTourDone(false)
+    setSelected(name)
+  }
+  const close = () => {
+    setSelected(null)
+    setTourDone(false)
+  }
 
   // A host nation flies the camera in (Part 1c); the 45 others just open the
   // panel over the still-rotating globe. `focus` identity changes per host so the
@@ -158,6 +172,10 @@ export default function Encyclopedia() {
     const iso = country?.iso
     return iso && HOST_COORDS[iso] ? { id: iso, ...HOST_COORDS[iso] } : null
   }, [country])
+
+  // Panel opens immediately for the 45 non-hosts; a host holds it back until the
+  // mascot's guided tour hands off (onExplore → tourDone).
+  const showPanel = !!country && (!isHost || tourDone)
 
   return (
     <div className="enc">
@@ -171,7 +189,7 @@ export default function Encyclopedia() {
           <select
             className="enc__jump-select"
             value={selected || ''}
-            onChange={(e) => setSelected(e.target.value || null)}
+            onChange={(e) => choose(e.target.value || null)}
             aria-label="Jump to a nation"
           >
             <option value="">Choose…</option>
@@ -181,10 +199,18 @@ export default function Encyclopedia() {
           </select>
         </label>
       </TabHeader>
-      <div className="enc__stage">
-        <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} hostTints={HOST_TINTS} focus={focus} onCountryClick={(m) => setSelected(m.name)} ariaLabel="Country atlas globe" />
+      <div
+        className={`enc__stage${showPanel ? ' enc__stage--panel' : ''}`}
+        style={hostColour ? { '--host-colour': hostColour } : undefined}
+      >
+        <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} hostTints={HOST_TINTS} focus={focus} onCountryClick={(m) => choose(m.name)} ariaLabel="Country atlas globe" />
         {!country && <p className="enc__hint" aria-hidden="true">Tap a marker</p>}
-        {country && <Panel country={country} onClose={() => setSelected(null)} />}
+        {/* Host mascot stays mounted for the whole selection: it runs the guided
+            tour, then drops into idle (onExplore) beside the open panel. */}
+        {isHost && (
+          <HostMascot key={country.iso} iso={country.iso} variant="tour" onExplore={() => setTourDone(true)} />
+        )}
+        {showPanel && <Panel country={country} onClose={close} />}
       </div>
     </div>
   )
