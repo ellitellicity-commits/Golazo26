@@ -225,3 +225,5 @@ __marimo__/
 # Playwright CLI (local browser state + captures)
 **/.playwright/
 **/.playwright-cli/
+MEMORY.md
+project_design_context.md
