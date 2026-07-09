@@ -122,6 +122,9 @@
   width: 100%;
   height: min(60vh, 560px);
 }
+/* The globe (and every foreground stage element) sits above the atmospheric
+   CloudBackground, which renders behind at z-index 0. */
+.sim__stage > .globe-hero { position: relative; z-index: 1; }
 .sim__venue-hint {
   position: absolute;
   left: 50%;

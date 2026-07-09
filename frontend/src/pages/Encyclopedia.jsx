@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import GlobeHero from '../components/GlobeHero'
+import CloudBackground from '../components/CloudBackground'
 import Typewriter from '../components/Typewriter'
 import HostMascot from '../components/HostMascot'
 import ProvinceStateSubMap from '../components/ProvinceStateSubMap'
@@ -225,6 +226,7 @@ export default function Encyclopedia() {
         className={`enc__stage${showPanel ? ' enc__stage--panel' : ''}`}
         style={hostColour ? { '--host-colour': hostColour } : undefined}
       >
+        <CloudBackground />
         <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} hostTints={HOST_TINTS} focus={focus} onCountryClick={(m) => choose(m.name)} ariaLabel="Country atlas globe" />
         {!country && <p className="enc__hint" aria-hidden="true">Tap a marker</p>}
         {/* Host mascot stays mounted for the whole selection: it runs the guided

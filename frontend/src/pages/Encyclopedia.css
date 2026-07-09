@@ -70,6 +70,9 @@
   width: 100%;
   height: min(74vh, 700px);
 }
+/* The globe (and every foreground stage element) sits above the atmospheric
+   CloudBackground, which renders behind at z-index 0. */
+.enc__stage > .globe-hero { position: relative; z-index: 1; }
 .enc__hint {
   position: absolute;
   left: 50%;

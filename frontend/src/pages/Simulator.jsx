@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import GlobeHero from '../components/GlobeHero'
+import CloudBackground from '../components/CloudBackground'
 import StadiumPanel from '../components/StadiumPanel'
 import Cutscene from '../components/Cutscene'
 import { RefereeVerdict } from '../components/RefereeMascot'
@@ -264,6 +265,7 @@ export default function Simulator() {
       </form>
 
       <div className="sim__stage">
+        <CloudBackground />
         <GlobeHero
           mode="flight"
           markers={markers}
