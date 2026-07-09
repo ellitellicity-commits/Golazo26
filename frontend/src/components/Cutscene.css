@@ -161,21 +161,24 @@
 }
 
 /* --- Beat 4: countdown + hard cut. The giant number sits in the lower third,
-   centred full-width (no transform, so the scale tween stays clean) and BEHIND
-   the referee (z-index 3 < referee's 6), so he is framed by the number, never
-   buried by it. --- */
+   centred full-width (no transform, so the GSAP scale tween stays clean) and
+   BEHIND the referee (z-index 2 < referee's 6): a big, faint backdrop the
+   referee stands in front of, arm raised, rather than a number stamped over him.
+   The bubble is suppressed on this beat (he's blowing the whistle, not talking),
+   so the only foreground is the referee himself. --- */
 .cut__count {
   position: absolute;
   left: 0;
   right: 0;
   bottom: clamp(24px, 7vh, 96px);
-  z-index: 3;
+  z-index: 2;
   text-align: center;
   font-weight: 800;
-  font-size: clamp(6rem, 22vw, 16rem);
+  font-size: clamp(8rem, 26vw, 20rem);
   line-height: 1;
-  color: color-mix(in srgb, var(--ink) 34%, transparent);
+  color: color-mix(in srgb, var(--ink) 28%, transparent);
   opacity: 0;
+  pointer-events: none;
   font-variant-numeric: tabular-nums;
 }
 .cut__flash {

@@ -184,11 +184,13 @@ export default function Cutscene({ match, onComplete }) {
   // The referee narrates every beat from centre-bottom. During the hype beat his
   // bubble carries the hype lines themselves, so all pregame copy lives in one
   // place above his head rather than floating loose across the screen.
+  // No line on the count beat: the referee raises the whistle in silence, so the
+  // bubble is hidden and only he (over the giant background number) reads on the
+  // 3-2-1. His arm-raise is the focus; the whistle blow lands on the next beat.
   const refLine =
     beat === 'vs' ? `${homeCode} versus ${awayCode}. Let's have a clean game.`
       : beat === 'flight' ? `Next stop: ${venue.city}.`
-        : beat === 'count' ? 'Kick-off!'
-          : null
+        : null
   const refLines = beat === 'hype' ? hype : null
 
   return (
