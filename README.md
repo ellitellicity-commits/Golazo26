@@ -11,7 +11,7 @@
 
 **A match predictor, Monte Carlo bracket simulator, and player dashboard for the 2026 FIFA World Cup, built and deployed live during the real tournament.**
 
-[**LIVE APP**](https://world-cup-2026-analytics-xi.vercel.app/)
+[**LIVE APP**](world-cup-2026-analytics-xi.vercel.app)
 
 </div>
 
