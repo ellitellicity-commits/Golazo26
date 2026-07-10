@@ -34,47 +34,63 @@ function Ball({ x, y }) {
 // warm eyes (left larger), a long droopy snout, and one hoof raising the ball
 // aloft like a trophy. Thick hand-drawn outlines throughout.
 function Maple() {
-  const fur = '#8a6440', furDark = '#5a3f2b', snout = '#a6825d', antler = '#d9bd8f', kit = 'var(--canadian-red)'
-  const OL = '#20242a', OLW = 2.5
+  const fur = '#7c5836', furDark = '#4d3722', snout = '#9c7850', antler = '#d9c39a', antlerDark = '#a98f63', kit = 'var(--canadian-red)'
+  const OL = '#171a1e', OLW = 3
   return (
     <g className="m-mascot">
-      <g className="m-legs">
-        <rect className="m-leg-l" x="80" y="198" width="19" height="40" rx="9" fill={fur} stroke={OL} strokeWidth={OLW} />
-        <rect className="m-leg-r" x="105" y="198" width="19" height="40" rx="9" fill={fur} stroke={OL} strokeWidth={OLW} />
-        <ellipse cx="89" cy="238" rx="13" ry="6" fill={furDark} stroke={OL} strokeWidth="2" />
-        <ellipse cx="115" cy="238" rx="13" ry="6" fill={furDark} stroke={OL} strokeWidth="2" />
-      </g>
-      {/* torso leans forward - its top edge sits right of the base */}
-      <g className="m-torso">
-        <path d="M64 150 Q66 116 108 116 Q150 118 144 152 L138 198 Q100 210 62 196Z" fill={kit} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
-        <text x="103" y="178" className="m-num" textAnchor="middle">26</text>
-        {/* left arm swings free (drives the wave) */}
-        <g className="m-arm-l"><path d="M66 152 Q40 148 32 118" stroke={fur} strokeWidth="15" strokeLinecap="round" fill="none" /><circle cx="32" cy="115" r="10" fill={fur} stroke={OL} strokeWidth={OLW} /></g>
-        {/* right arm raised, holding the ball aloft like a trophy */}
-        <g className="m-arm-r"><path d="M142 152 Q168 142 170 108" stroke={fur} strokeWidth="15" strokeLinecap="round" fill="none" /><circle cx="170" cy="106" r="10" fill={fur} stroke={OL} strokeWidth={OLW} /></g>
-      </g>
-      <Ball x={170} y={88} />
-      <g className="m-head">
-        {/* big, branching, slightly asymmetric antlers */}
+      <ellipse className="m-shadow" cx="100" cy="241" rx="48" ry="8" fill="var(--studio-black)" opacity="0.34" />
+      <g className="m-breath">
+        {/* Legs - hip-cocked, weight planted on the left; hooves tuck under the hem */}
+        <g className="m-legs">
+          <rect className="m-leg-l" x="80" y="190" width="22" height="48" rx="10" fill={fur} stroke={OL} strokeWidth={OLW} />
+          <rect className="m-leg-r" x="105" y="196" width="21" height="42" rx="10" fill={fur} stroke={OL} strokeWidth={OLW} />
+          <ellipse cx="91" cy="237" rx="14" ry="6" fill={furDark} stroke={OL} strokeWidth="2" />
+          <ellipse cx="115" cy="237" rx="13" ry="6" fill={furDark} stroke={OL} strokeWidth="2" />
+        </g>
+        {/* Left arm hangs relaxed at the side - the laid-back read */}
+        <g className="m-arm-l">
+          <path d="M67 141 Q52 159 55 183" fill="none" stroke={fur} strokeWidth="16" strokeLinecap="round" />
+          <circle cx="56" cy="185" r="10" fill={fur} stroke={OL} strokeWidth={OLW} />
+        </g>
+        {/* Right arm loosely bent - the gesturing arm (drives point / celebrate) */}
+        <g className="m-arm-r">
+          <path d="M137 141 Q155 151 151 177" fill="none" stroke={fur} strokeWidth="16" strokeLinecap="round" />
+          <circle cx="150" cy="179" r="10" fill={fur} stroke={OL} strokeWidth={OLW} />
+        </g>
+        {/* Body: fur neck bridges head to the red kit so the outline reads as one
+            continuous mass; the hem tilts with the cocked hip. */}
+        <g className="m-torso">
+          <path d="M85 112 H115 V131 H85 Z" fill={fur} />
+          <path d="M63 141 Q61 126 82 123 Q100 120 118 123 Q139 126 137 141 L133 197 Q100 209 67 195 Z" fill={kit} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+          <text x="100" y="177" className="m-num" textAnchor="middle">26</text>
+        </g>
+        {/* Antlers - the landmark. Broad palmate blades framing the head, behind it. */}
         <g className="m-antlers">
-          <path d="M74 54 Q46 44 38 18 Q54 30 56 16 Q66 32 66 12 Q76 30 84 26 L88 52Z" fill={antler} stroke={furDark} strokeWidth="2" strokeLinejoin="round" />
-          <path d="M128 54 Q160 40 172 12 Q152 28 150 12 Q140 30 138 10 Q130 30 120 24 L116 52Z" fill={antler} stroke={furDark} strokeWidth="2" strokeLinejoin="round" />
+          <path d="M83 70 Q59 66 45 50 Q37 41 33 30 Q40 31 45 38 Q42 25 51 27 Q53 36 58 41 Q56 23 65 27 Q67 37 71 43 Q75 34 81 41 Q87 56 83 70 Z" fill={antler} stroke={antlerDark} strokeWidth="2.4" strokeLinejoin="round" />
+          <path d="M117 70 Q141 66 155 50 Q163 41 167 30 Q160 31 155 38 Q158 25 149 27 Q147 36 142 41 Q144 23 135 27 Q133 37 129 43 Q125 34 119 41 Q113 56 117 70 Z" fill={antler} stroke={antlerDark} strokeWidth="2.4" strokeLinejoin="round" />
         </g>
-        <ellipse className="m-ear m-ear-l" cx="66" cy="72" rx="12" ry="18" fill={fur} stroke={OL} strokeWidth={OLW} transform="rotate(-26 66 72)" />
-        <ellipse className="m-ear m-ear-r" cx="138" cy="72" rx="12" ry="18" fill={fur} stroke={OL} strokeWidth={OLW} transform="rotate(26 138 72)" />
-        {/* head - pushed slightly forward of centre for the eager lean */}
-        <ellipse cx="103" cy="86" rx="46" ry="40" fill={fur} stroke={OL} strokeWidth={OLW} />
-        {/* long droopy snout */}
-        <path d="M103 96 Q74 100 72 124 Q80 140 103 140 Q126 140 134 124 Q132 100 103 96Z" fill={snout} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
-        {/* huge warm eyes, left larger (asymmetry) */}
-        <g className="m-eyes">
-          <g className="m-eye-l"><ellipse cx="86" cy="80" rx="11" ry="12" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="88" cy="82" r="5.4" fill="#20242a" /><circle cx="90.4" cy="79.6" r="1.7" fill="#fff" /></g>
-          <ellipse cx="118" cy="81" rx="9" ry="10" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="119" cy="83" r="4.4" fill="#20242a" /><circle cx="121" cy="80.6" r="1.4" fill="#fff" />
+        <g className="m-head">
+          {/* A permanent easy head-tilt lives on an inner static group so GSAP can
+              still drive .m-head rotation without wiping the resting lean. */}
+          <g className="m-head-tilt" transform="rotate(4 100 96)">
+            <ellipse className="m-ear m-ear-l" cx="63" cy="79" rx="11" ry="17" fill={fur} stroke={OL} strokeWidth={OLW} transform="rotate(-28 63 79)" />
+            <ellipse className="m-ear m-ear-r" cx="137" cy="79" rx="11" ry="17" fill={fur} stroke={OL} strokeWidth={OLW} transform="rotate(28 137 79)" />
+            <ellipse cx="100" cy="90" rx="44" ry="39" fill={fur} stroke={OL} strokeWidth={OLW} />
+            {/* Long, droopy moose snout - the species read */}
+            <path d="M100 100 Q71 104 69 130 Q73 149 100 151 Q127 149 131 130 Q129 104 100 100 Z" fill={snout} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+            <ellipse cx="90" cy="136" rx="4" ry="3" fill={furDark} />
+            <ellipse cx="110" cy="136" rx="4" ry="3" fill={furDark} />
+            <path className="m-mouth" d="M86 141 Q100 151 114 141" fill="none" stroke={furDark} strokeWidth="3.4" strokeLinecap="round" />
+            {/* Big warm eyes, left a touch larger (character asymmetry) */}
+            <g className="m-eyes">
+              <g className="m-eye-l"><ellipse cx="83" cy="85" rx="11" ry="12" fill="#fff" stroke={OL} strokeWidth="2.4" /><circle className="m-pupil-l" cx="85" cy="87" r="5.4" fill="#171a1e" /><circle cx="87.4" cy="84.4" r="1.8" fill="#fff" /></g>
+              <g className="m-eye-r"><ellipse cx="117" cy="86" rx="9.5" ry="11" fill="#fff" stroke={OL} strokeWidth="2.4" /><circle className="m-pupil-r" cx="118" cy="88" r="4.8" fill="#171a1e" /><circle cx="120" cy="85.4" r="1.5" fill="#fff" /></g>
+            </g>
+            <path className="m-brow m-brow-l" d="M73 69 Q84 63 95 68" fill="none" stroke={furDark} strokeWidth="3.6" strokeLinecap="round" />
+            <path className="m-brow m-brow-r" d="M107 68 Q118 63 127 70" fill="none" stroke={furDark} strokeWidth="3.6" strokeLinecap="round" />
+          </g>
         </g>
-        <path className="m-brow m-brow-l" d="M76 62 Q86 56 97 62" stroke={furDark} strokeWidth="3.4" fill="none" strokeLinecap="round" />
-        <path className="m-brow m-brow-r" d="M109 63 Q118 58 127 64" stroke={furDark} strokeWidth="3.4" fill="none" strokeLinecap="round" />
-        <ellipse cx="92" cy="120" rx="4" ry="3" fill={furDark} /><ellipse cx="114" cy="120" rx="4" ry="3" fill={furDark} />
-        <path className="m-mouth" d="M85 127 Q103 144 121 127" stroke={furDark} strokeWidth="3.6" fill="none" strokeLinecap="round" />
+        <Ball x={150} y={221} />
       </g>
     </g>
   )
@@ -190,7 +206,7 @@ function Zayu() {
 // Per-mascot SVG pivots (svgOrigin) for the shared tour-beat animations, plus the
 // full nation name for the "Explore …" hand-off button.
 const ORIGINS = {
-  CA: { country: 'Canada', armL: '66 152', armR: '142 152', center: '103 118' },
+  CA: { country: 'Canada', armL: '67 141', armR: '137 141', center: '100 120' },
   US: { country: 'United States', armL: '56 156', armR: '150 156', center: '103 128' },
   MX: { country: 'Mexico', armL: '64 152', armR: '140 154', center: '96 118' },
 }
@@ -265,9 +281,12 @@ const MASCOTS = {
       'Toronto’s BMO Field and Vancouver’s BC Place stage the Canadian matches.',
       'BC Place has one of the world’s largest cable-supported retractable roofs.',
     ],
+    landmark: '.m-antlers',
+    // Hover: the antlers give a small proud tilt-back overshoot.
+    hover: (q) => gsap.fromTo(q('.m-antlers'), { rotation: 0 }, { rotation: 3, duration: 0.5, yoyo: true, repeat: 1, svgOrigin: '100 66', ease: 'sine.inOut' }),
     // Antlers wiggle + a happy jump.
     poke: (q) => {
-      gsap.fromTo(q('.m-antlers'), { rotation: 0 }, { rotation: 14, duration: 0.14, yoyo: true, repeat: 5, transformOrigin: '50% 100%', svgOrigin: '103 52', ease: 'sine.inOut' })
+      gsap.fromTo(q('.m-antlers'), { rotation: 0 }, { rotation: 12, duration: 0.14, yoyo: true, repeat: 5, svgOrigin: '100 66', ease: 'sine.inOut' })
       gsap.fromTo(q('.m-mascot'), { y: 0 }, { y: -22, duration: 0.22, yoyo: true, repeat: 1, ease: 'power2.out' })
     },
   },
@@ -367,37 +386,21 @@ export default function HostMascot({ iso, variant = 'panel', onExplore }) {
     setBeat(0)
     const root = rootRef.current
     if (!def || !root || reduced()) return undefined
-    const oc = origins?.center || '103 118'
-    const oal = origins?.armL || '64 152'
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector(root)
-      gsap.from(q('.m-torso'), { x: -240, opacity: 0, duration: 0.5, ease: 'back.out(1.7)' })
-      gsap.from(q('.m-head'), { x: -240, opacity: 0, duration: 0.5, delay: 0.08, ease: 'back.out(1.7)' })
-      gsap.from([q('.m-legs'), q('.m-ball'), q('.m-tail')], { y: 46, opacity: 0, duration: 0.42, delay: 0.22, stagger: 0.05, ease: 'power2.out' })
+      // Cohesive entrance: the whole silhouette rises and settles as one mass
+      // (no parts sliding in from opposite edges), so the character reads as a
+      // single form the instant it lands. Mascots without the new .m-breath
+      // wrapper (mid-overhaul) still animate here - .m-mascot is always present.
+      gsap.from(q('.m-mascot'), { y: 26, scale: 0.92, opacity: 0, transformOrigin: '50% 100%', duration: 0.52, ease: 'back.out(1.4)' })
 
-      // Idle personality loop: the mascot is never still. One repeating timeline
-      // cycles three beats so it reads as a living character, not a bobbing prop:
-      //   1) a happy bounce with a squash-and-stretch landing,
-      //   2) a curious look-around, then
-      //   3) a friendly wave at the user.
-      gsap.timeline({ repeat: -1, delay: 0.8 })
-        // 1) happy bounce
-        .to(q('.m-torso'), { y: -12, duration: 0.34, ease: 'power2.out' })
-        .to(q('.m-torso'), { y: 0, scaleY: 0.9, scaleX: 1.1, duration: 0.24, transformOrigin: '50% 100%', ease: 'bounce.out' })
-        .to(q('.m-torso'), { scaleY: 1, scaleX: 1, duration: 0.16, ease: 'power1.out' })
-        .to(q('.m-torso'), { y: -7, duration: 0.3, ease: 'sine.inOut' })
-        .to(q('.m-torso'), { y: 0, duration: 0.3, ease: 'sine.inOut' })
-        // 2) look around
-        .to(q('.m-head'), { rotation: -13, duration: 0.4, svgOrigin: oc, ease: 'power1.inOut' })
-        .to(q('.m-head'), { rotation: 11, duration: 0.55, svgOrigin: oc, ease: 'power1.inOut' })
-        .to(q('.m-head'), { rotation: 0, duration: 0.3, svgOrigin: oc, ease: 'power2.out' })
-        // 3) wave at the user
-        .to(q('.m-arm-l'), { rotation: -44, duration: 0.2, svgOrigin: oal, ease: 'back.out(2)' })
-        .to(q('.m-arm-l'), { rotation: -22, duration: 0.14, svgOrigin: oal })
-        .to(q('.m-arm-l'), { rotation: -44, duration: 0.14, svgOrigin: oal })
-        .to(q('.m-arm-l'), { rotation: -22, duration: 0.14, svgOrigin: oal })
-        .to(q('.m-arm-l'), { rotation: 0, duration: 0.22, svgOrigin: oal, ease: 'power2.out' })
-        .to({}, { duration: 0.5 }) // breath before the loop repeats
+      // Idle breathing: the body mass swells a hair on a slow sine, pivoting at
+      // the planted feet - alive, never a bobbing puppet. The ground shadow
+      // breathes in counterpoint (widens as the body settles, narrows as it lifts).
+      // Each tween is gated on its target existing so a mascot mid-overhaul (art
+      // not yet carrying .m-breath/.m-shadow) never logs a GSAP "target not found".
+      if (q('.m-breath').length) gsap.to(q('.m-breath'), { scaleY: 1.014, duration: 2.4, transformOrigin: '50% 100%', ease: 'sine.inOut', repeat: -1, yoyo: true })
+      if (q('.m-shadow').length) gsap.to(q('.m-shadow'), { scaleX: 1.035, duration: 2.4, transformOrigin: '50% 50%', ease: 'sine.inOut', repeat: -1, yoyo: true })
 
       // Blink loop with a wink on every third blink. A single repeating timeline
       // (blink, blink, wink) keeps it deterministic and fully inside the context,
@@ -405,11 +408,25 @@ export default function HostMascot({ iso, variant = 'panel', onExplore }) {
       const blink = (tl, sel) => tl
         .to(q(sel), { scaleY: 0.1, duration: 0.08, transformOrigin: '50% 50%' })
         .to(q(sel), { scaleY: 1, duration: 0.09 })
-        .to({}, { duration: 2.4 })
+        .to({}, { duration: 2.6 })
       const bt = gsap.timeline({ repeat: -1, delay: 1.4 })
       blink(bt, '.m-eyes')
       blink(bt, '.m-eyes')
       blink(bt, '.m-eye-l') // the wink
+
+      // Pupil micro-drift: the eyes wander a couple of px on a long loop - the
+      // "looking around" tell, kept tiny so it never crosses into googly. Gated on
+      // the pupils existing (mascots mid-overhaul don't carry .m-pupil-* yet).
+      const pupils = q('.m-pupil-l, .m-pupil-r')
+      if (pupils.length) {
+        gsap.timeline({ repeat: -1, delay: 1 })
+          .to(pupils, { x: 1.6, y: -1, duration: 1.1, ease: 'sine.inOut' })
+          .to(pupils, { x: 1.6, y: -1, duration: 1.7 })
+          .to(pupils, { x: -1.8, y: 0.7, duration: 1.3, ease: 'sine.inOut' })
+          .to(pupils, { x: -1.8, y: 0.7, duration: 1.7 })
+          .to(pupils, { x: 0, y: 0, duration: 1.0, ease: 'sine.inOut' })
+          .to({}, { duration: 1.8 })
+      }
 
       // Tour: play the first beat's animation once the character has landed.
       if (isTour) gsap.delayedCall(0.85, () => playBeat(0))
@@ -436,6 +453,21 @@ export default function HostMascot({ iso, variant = 'panel', onExplore }) {
     const i = beat + 1
     setBeat(i)
     playBeat(i)
+  }
+
+  // Hover / focus (State 2): the whole character lifts off its shadow, the brows
+  // raise (alert, engaged), and the landmark feature reacts. Reduced-motion and
+  // touch (no hover) fall back to the static pose. Uses .to (not .from), so an
+  // unmount mid-hover strands nothing.
+  const setHover = (on) => {
+    const root = rootRef.current
+    if (!root || reduced()) return
+    const q = gsap.utils.selector(root)
+    gsap.to(q('.m-mascot'), { y: on ? -6 : 0, duration: on ? 0.25 : 0.32, ease: on ? 'back.out(1.4)' : 'power2.out', overwrite: 'auto' })
+    // Shadow fades as the body lifts (breathing owns its scaleX, so touch only opacity).
+    if (q('.m-shadow').length) gsap.to(q('.m-shadow'), { opacity: on ? 0.16 : 0.34, duration: 0.28, overwrite: 'auto' })
+    gsap.to(q('.m-brow'), { y: on ? -2.4 : 0, duration: 0.22, overwrite: 'auto' })
+    if (on && def.hover) def.hover(q)
   }
 
   // Poke (idle): an excited expression (mouth grins, brows lift) plus the species
@@ -486,6 +518,10 @@ export default function HostMascot({ iso, variant = 'panel', onExplore }) {
         type="button"
         className="mascot__figure"
         onClick={inTour ? nextBeat : poke}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
         aria-label={figureLabel}
       >
         <svg viewBox="0 0 200 250" width="150" height="188" role="img" aria-hidden="true">
