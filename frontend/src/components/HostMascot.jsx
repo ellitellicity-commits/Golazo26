@@ -172,51 +172,68 @@ function Clutch() {
 // prominent banded shell over one shoulder, a long tail curled up behind like a
 // question mark, big round curious eyes, and an oversized rakishly-tilted sombrero.
 function Zayu() {
-  const body = '#cba473', bodyLt = '#ddc196', shell = '#9d7546', shellDark = '#6f5030', kit = 'var(--mexican-green)'
-  const straw = '#e6c884', strawDark = '#bd9346', OL = '#20242a', OLW = 2.5
+  const skin = '#caa06a', skinDark = '#8d6a41', shell = '#a9814f', shellDark = '#6f5230', kit = 'var(--mexican-green)', gold = 'var(--trophy-gold)'
+  const OL = '#171a1e', OLW = 3
   return (
     <g className="m-mascot">
-      {/* tail curled up behind like a question mark */}
-      <g className="m-tail"><path d="M132 200 Q176 202 178 160 Q176 140 158 140 Q168 150 162 160 Q166 186 132 190Z" fill={shell} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" /></g>
-      <g className="m-legs">
-        <rect className="m-leg-l" x="82" y="198" width="19" height="40" rx="9" fill={body} stroke={OL} strokeWidth={OLW} />
-        <rect className="m-leg-r" x="105" y="198" width="19" height="40" rx="9" fill={body} stroke={OL} strokeWidth={OLW} />
-        <ellipse cx="91" cy="238" rx="13" ry="6" fill={shellDark} stroke={OL} strokeWidth="2" />
-        <ellipse cx="114" cy="238" rx="13" ry="6" fill={shellDark} stroke={OL} strokeWidth="2" />
-      </g>
-      <g className="m-torso">
-        <path d="M62 152 Q60 120 102 118 Q144 120 142 152 L139 198 Q102 212 65 198Z" fill={kit} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
-        {/* prominent banded shell over one shoulder */}
-        <path d="M100 118 Q146 120 143 154 L141 182 Q120 196 100 194Z" fill={shell} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
-        <path d="M104 130 Q124 128 140 134M104 146 Q124 144 141 150M104 162 Q123 160 138 166M107 178 Q122 176 134 180" stroke={shellDark} strokeWidth="2.4" fill="none" strokeLinecap="round" />
-        <text x="84" y="176" className="m-num" textAnchor="middle">10</text>
-        <g className="m-arm-l"><path d="M64 152 Q40 148 34 122" stroke={body} strokeWidth="14" strokeLinecap="round" fill="none" /><circle cx="34" cy="120" r="9" fill={body} stroke={OL} strokeWidth={OLW} /></g>
-        <g className="m-arm-r"><path d="M140 154 Q160 158 162 182" stroke={body} strokeWidth="14" strokeLinecap="round" fill="none" /><circle cx="162" cy="184" r="9" fill={body} stroke={OL} strokeWidth={OLW} /></g>
-      </g>
-      <Ball x={150} y={226} />
-      <g className="m-head">
-        <ellipse className="m-ear m-ear-l" cx="74" cy="70" rx="7" ry="13" fill={body} stroke={OL} strokeWidth="2" transform="rotate(-20 74 70)" />
-        <ellipse className="m-ear m-ear-r" cx="126" cy="70" rx="7" ry="13" fill={body} stroke={OL} strokeWidth="2" transform="rotate(20 126 70)" />
-        {/* head turned slightly toward the viewer - nudged left of centre */}
-        <ellipse cx="96" cy="90" rx="40" ry="37" fill={body} stroke={OL} strokeWidth={OLW} />
-        {/* long snout */}
-        <path d="M96 98 Q72 102 68 122 Q78 136 96 136 Q114 136 122 122 Q120 102 96 98Z" fill={bodyLt} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
-        {/* big round curious eyes */}
-        <g className="m-eyes">
-          <g className="m-eye-l"><ellipse cx="83" cy="86" rx="10" ry="11" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="85" cy="88" r="5" fill="#20242a" /><circle cx="87" cy="85.6" r="1.6" fill="#fff" /></g>
-          <ellipse cx="110" cy="87" rx="9" ry="10" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="111" cy="89" r="4.6" fill="#20242a" /><circle cx="113" cy="86.6" r="1.4" fill="#fff" />
+      <ellipse className="m-shadow" cx="100" cy="242" rx="52" ry="8" fill="var(--studio-black)" opacity="0.34" />
+      <g className="m-breath">
+        {/* Curled, segmented armadillo tail sweeping out to the right and up,
+            clear of the body so it reads (poke swings it up). */}
+        <g className="m-tail">
+          <path d="M128 196 Q180 198 184 154 Q184 134 163 136 Q177 146 169 159 Q166 188 128 185 Z" fill={shell} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+          <path d="M150 185 Q168 183 171 166 M144 178 Q164 176 167 156" fill="none" stroke={shellDark} strokeWidth="2" strokeLinecap="round" />
         </g>
-        <path className="m-brow m-brow-l" d="M73 70 Q83 64 93 70" stroke={shellDark} strokeWidth="3.2" fill="none" strokeLinecap="round" />
-        <path className="m-brow m-brow-r" d="M101 71 Q110 65 120 71" stroke={shellDark} strokeWidth="3.2" fill="none" strokeLinecap="round" />
-        <ellipse cx="96" cy="118" rx="6" ry="4.5" fill="#20242a" />
-        <path className="m-mouth" d="M81 125 Q96 140 111 125" stroke={shellDark} strokeWidth="3.5" fill="none" strokeLinecap="round" />
-        {/* oversized sombrero, tilted rakishly */}
-        <g className="m-hat" transform="rotate(-9 100 52)">
-          <ellipse cx="100" cy="56" rx="64" ry="15" fill={straw} stroke={OL} strokeWidth={OLW} />
-          <path d="M70 56 Q74 20 100 18 Q126 20 130 56Z" fill={straw} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
-          <ellipse cx="100" cy="56" rx="30" ry="7" fill="var(--mexican-green)" stroke={strawDark} strokeWidth="1.5" />
-          <path d="M40 56 Q100 66 160 56" fill="none" stroke={strawDark} strokeWidth="1.5" />
+        {/* Short low legs - compact, weight forward (coiled, ready to spring) */}
+        <g className="m-legs">
+          <rect className="m-leg-l" x="80" y="200" width="20" height="38" rx="9" fill={skin} stroke={OL} strokeWidth={OLW} />
+          <rect className="m-leg-r" x="102" y="204" width="20" height="34" rx="9" fill={skin} stroke={OL} strokeWidth={OLW} />
+          <ellipse cx="90" cy="237" rx="13" ry="6" fill={skinDark} stroke={OL} strokeWidth="2" />
+          <ellipse cx="112" cy="238" rx="13" ry="6" fill={skinDark} stroke={OL} strokeWidth="2" />
         </g>
+        {/* Arms - left relaxed, right forward and ready */}
+        <g className="m-arm-l">
+          <path d="M64 150 Q48 162 50 184" fill="none" stroke={skin} strokeWidth="15" strokeLinecap="round" />
+          <circle cx="51" cy="186" r="9.5" fill={skin} stroke={OL} strokeWidth={OLW} />
+        </g>
+        <g className="m-arm-r">
+          <path d="M136 150 Q156 158 156 180" fill="none" stroke={skin} strokeWidth="15" strokeLinecap="round" />
+          <circle cx="157" cy="182" r="9.5" fill={skin} stroke={OL} strokeWidth={OLW} />
+        </g>
+        {/* The shell - a domed, banded carapace cresting over the back, the
+            dominant upper form. Its horizontal segment bands are the landmark:
+            it reads as an armadillo at thumbnail size. A single thin trophy-gold
+            rim on the front plate is Zayu's one gold accent. */}
+        <g className="m-shell">
+          <path d="M48 154 Q42 92 100 66 Q158 92 152 154 Q152 158 146 159 L54 159 Q48 158 48 154 Z" fill={shell} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+          <path d="M55 108 Q100 95 145 108" fill="none" stroke={shellDark} strokeWidth="2.6" strokeLinecap="round" />
+          <path d="M52 126 Q100 114 148 126" fill="none" stroke={shellDark} strokeWidth="2.6" strokeLinecap="round" />
+          <path d="M51 144 Q100 133 149 144" fill="none" stroke={shellDark} strokeWidth="2.6" strokeLinecap="round" />
+          <path d="M54 152 Q100 142 146 152" fill="none" stroke={gold} strokeWidth="2.4" strokeLinecap="round" opacity="0.9" />
+        </g>
+        {/* Green kit over the belly */}
+        <g className="m-torso">
+          <path d="M60 154 Q58 140 82 137 Q100 134 118 137 Q142 140 140 154 L137 200 Q100 210 63 200 Z" fill={kit} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+          <text x="100" y="182" className="m-num" textAnchor="middle">10</text>
+        </g>
+        <g className="m-head">
+          {/* Big armadillo ears */}
+          <ellipse className="m-ear m-ear-l" cx="72" cy="90" rx="8" ry="15" fill={skin} stroke={OL} strokeWidth={OLW} transform="rotate(-22 72 90)" />
+          <ellipse className="m-ear m-ear-r" cx="128" cy="90" rx="8" ry="15" fill={skin} stroke={OL} strokeWidth={OLW} transform="rotate(22 128 90)" />
+          <ellipse cx="100" cy="110" rx="38" ry="33" fill={skin} stroke={OL} strokeWidth={OLW} />
+          {/* Long, pointed armadillo snout */}
+          <path d="M100 116 Q83 120 80 142 Q88 154 100 154 Q112 154 120 142 Q117 120 100 116 Z" fill={skinDark} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" opacity="0.9" />
+          <ellipse cx="100" cy="150" rx="6" ry="4.5" fill="#171a1e" />
+          <path className="m-mouth" d="M88 146 Q100 154 112 146" fill="none" stroke={shellDark} strokeWidth="3.2" strokeLinecap="round" />
+          {/* Big round curious eyes - the quick trickster */}
+          <g className="m-eyes">
+            <g className="m-eye-l"><ellipse cx="86" cy="106" rx="10" ry="11" fill="#fff" stroke={OL} strokeWidth="2.4" /><circle className="m-pupil-l" cx="88" cy="108" r="5" fill="#171a1e" /><circle cx="90" cy="105.6" r="1.6" fill="#fff" /></g>
+            <g className="m-eye-r"><ellipse cx="114" cy="106" rx="10" ry="11" fill="#fff" stroke={OL} strokeWidth="2.4" /><circle className="m-pupil-r" cx="116" cy="108" r="5" fill="#171a1e" /><circle cx="118" cy="105.6" r="1.6" fill="#fff" /></g>
+          </g>
+          <path className="m-brow m-brow-l" d="M76 91 Q86 86 96 91" fill="none" stroke={shellDark} strokeWidth="3.2" strokeLinecap="round" />
+          <path className="m-brow m-brow-r" d="M104 91 Q114 86 124 91" fill="none" stroke={shellDark} strokeWidth="3.2" strokeLinecap="round" />
+        </g>
+        <Ball x={150} y={224} />
       </g>
     </g>
   )
@@ -227,7 +244,7 @@ function Zayu() {
 const ORIGINS = {
   CA: { country: 'Canada', armL: '67 141', armR: '137 141', center: '100 120' },
   US: { country: 'United States', armL: '62 152', armR: '138 152', center: '100 128' },
-  MX: { country: 'Mexico', armL: '64 152', armR: '140 154', center: '96 118' },
+  MX: { country: 'Mexico', armL: '64 150', armR: '136 150', center: '100 130' },
 }
 
 // Guided-tour scripts (Part 2a) - real, confirmed WC2026 facts only. Each beat
@@ -332,10 +349,13 @@ const MASCOTS = {
       'Estadio Azteca has staged two World Cup finals: 1970 and 1986.',
       'Guadalajara and Monterrey join Mexico City as 2026 host cities.',
     ],
+    landmark: '.m-shell',
+    // Hover: the armoured shell gives a quick flex - the plates shimmer to life.
+    hover: (q) => gsap.fromTo(q('.m-shell'), { scale: 1 }, { scale: 1.04, duration: 0.3, yoyo: true, repeat: 1, transformOrigin: '50% 100%', ease: 'sine.inOut' }),
     // Tail swings up + a quick sideways curl-squash.
     poke: (q) => {
-      gsap.fromTo(q('.m-tail'), { rotation: 0 }, { rotation: -55, duration: 0.24, yoyo: true, repeat: 3, svgOrigin: '132 195', ease: 'sine.inOut' })
-      gsap.fromTo(q('.m-mascot'), { scaleX: 1 }, { scaleX: 0.86, duration: 0.18, yoyo: true, repeat: 1, transformOrigin: '50% 100%', ease: 'power2.out' })
+      gsap.fromTo(q('.m-tail'), { rotation: 0 }, { rotation: -48, duration: 0.24, yoyo: true, repeat: 3, svgOrigin: '138 192', ease: 'sine.inOut' })
+      gsap.fromTo(q('.m-mascot'), { scaleX: 1 }, { scaleX: 0.88, duration: 0.18, yoyo: true, repeat: 1, transformOrigin: '50% 100%', ease: 'power2.out' })
     },
   },
 }
