@@ -11,9 +11,6 @@ import './Home.css'
 // home tab's first paint; the canvas fades in once the chunk arrives.
 const FloatingShapes = lazy(() => import('../components/FloatingShapes'))
 
-// Dates are stored as UTC instants; format in UTC (matches the rest of the app).
-const DATE_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
-
 // The final's kickoff, mirroring finalCountdown()'s 20:00 UTC assumption. A real
 // countdown clock names its target time, so the snapshot shows it beneath the
 // figure ("Kick-off · 19 Jul, 20:00 UTC") - the detail that makes the number
@@ -179,7 +176,7 @@ function Snapshot() {
 
 function Home() {
   const { fixtures: fixturesData } = useTournamentData()
-  const { destinations, playedCount, updated } = useMemo(() => {
+  const { destinations, playedCount } = useMemo(() => {
     const fixtures = fixturesData.fixtures
     const scheduled = fixtures.filter((f) => f.status === 'scheduled')
     const playedCount = fixtures.filter((f) => f.status === 'completed').length
@@ -187,7 +184,6 @@ function Home() {
     return {
       destinations: buildDestinations({ todaysCount, upcomingCount: scheduled.length }),
       playedCount,
-      updated: DATE_FMT.format(new Date(`${fixturesData.generated}T00:00:00Z`)),
     }
   }, [fixturesData])
 
@@ -249,7 +245,7 @@ function Home() {
           ))}
         </ul>
         <p className="home-menu__note">
-          <span className="tnum">{playedCount}</span> matches played · model updated {updated}
+          <span className="tnum">{playedCount}</span> matches played · model updated with the latest results
         </p>
       </nav>
 
