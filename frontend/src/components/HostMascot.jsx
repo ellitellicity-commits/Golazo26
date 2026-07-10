@@ -101,48 +101,67 @@ function Maple() {
 // low and forward, and small, narrowed, determined eyes. Legs planted in a broad
 // power stance with a low centre of gravity.
 function Clutch() {
-  const fur = '#6b4f3c', furDark = '#3f2e22', mane = '#7d6047', horn = '#eadfca', kit = 'var(--american-blue)'
-  const OL = '#20242a', OLW = 2.5
+  const fur = '#6b4f3c', furDark = '#372a1f', mane = '#4a3628', muzzle = '#463629', horn = '#e6dbc2', kit = 'var(--american-blue)'
+  const OL = '#171a1e', OLW = 3
   return (
     <g className="m-mascot">
-      <Ball x={150} y={226} />
-      <g className="m-legs">
-        <rect className="m-leg-l" x="70" y="200" width="22" height="38" rx="9" fill={fur} stroke={OL} strokeWidth={OLW} />
-        <rect className="m-leg-r" x="112" y="200" width="22" height="38" rx="9" fill={fur} stroke={OL} strokeWidth={OLW} />
-        <ellipse cx="81" cy="238" rx="15" ry="6.5" fill={furDark} stroke={OL} strokeWidth="2" />
-        <ellipse cx="123" cy="238" rx="15" ry="6.5" fill={furDark} stroke={OL} strokeWidth="2" />
-      </g>
-      <g className="m-torso">
-        {/* broad, heavy torso */}
-        <path d="M52 156 Q50 122 103 120 Q156 122 154 156 L148 200 Q103 214 58 200Z" fill={kit} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
-        <text x="103" y="182" className="m-num" textAnchor="middle">USA</text>
-        <g className="m-arm-l"><path d="M56 156 Q30 150 26 122" stroke={fur} strokeWidth="18" strokeLinecap="round" fill="none" /><circle cx="26" cy="120" r="11" fill={fur} stroke={OL} strokeWidth={OLW} /></g>
-        <g className="m-arm-r"><path d="M150 156 Q176 150 180 122" stroke={fur} strokeWidth="18" strokeLinecap="round" fill="none" /><circle cx="180" cy="120" r="11" fill={fur} stroke={OL} strokeWidth={OLW} /></g>
-      </g>
-      <g className="m-head">
-        {/* massive shaggy mane behind everything */}
-        <path d="M46 96 Q34 52 72 44 Q103 30 134 44 Q172 52 160 96 Q156 130 103 132 Q50 130 46 96Z" fill={mane} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+      <ellipse className="m-shadow" cx="100" cy="241" rx="55" ry="8.5" fill="var(--studio-black)" opacity="0.34" />
+      <g className="m-breath">
+        {/* Legs planted wide - the power stance */}
+        <g className="m-legs">
+          <rect className="m-leg-l" x="66" y="198" width="24" height="40" rx="10" fill={fur} stroke={OL} strokeWidth={OLW} />
+          <rect className="m-leg-r" x="110" y="198" width="24" height="40" rx="10" fill={fur} stroke={OL} strokeWidth={OLW} />
+          <ellipse cx="78" cy="237" rx="15" ry="6.5" fill={furDark} stroke={OL} strokeWidth="2" />
+          <ellipse cx="122" cy="237" rx="15" ry="6.5" fill={furDark} stroke={OL} strokeWidth="2" />
+        </g>
+        {/* Arms flung out and up - hyping the crowd (drive wave / point / celebrate) */}
+        <g className="m-arm-l">
+          <path d="M62 152 Q40 141 29 121" fill="none" stroke={fur} strokeWidth="18" strokeLinecap="round" />
+          <circle cx="28" cy="119" r="11" fill={fur} stroke={OL} strokeWidth={OLW} />
+        </g>
+        <g className="m-arm-r">
+          <path d="M138 152 Q160 141 171 121" fill="none" stroke={fur} strokeWidth="18" strokeLinecap="round" />
+          <circle cx="172" cy="119" r="11" fill={fur} stroke={OL} strokeWidth={OLW} />
+        </g>
+        {/* The hump - a massive shaggy mane/shoulder mass that is the DOMINANT
+            upper form, peaking well above the small face that peeks from it. This
+            is the landmark: it reads as a bison at thumbnail size. */}
+        <g className="m-hump">
+          <path d="M46 158 Q38 96 56 72 Q62 54 80 51 Q90 43 100 47 Q110 43 120 51 Q138 54 144 72 Q162 96 154 158 Q154 162 148 163 L52 163 Q46 162 46 158 Z" fill={mane} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+          <path d="M70 74 Q74 98 67 120 M100 58 Q100 88 100 118 M130 74 Q126 98 133 120" fill="none" stroke={furDark} strokeWidth="2.4" strokeLinecap="round" opacity="0.55" />
+        </g>
+        {/* Broad blue kit */}
+        <g className="m-torso">
+          <path d="M58 160 Q56 143 80 140 Q100 137 120 140 Q144 143 142 160 L138 202 Q100 214 62 202 Z" fill={kit} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+          <text x="100" y="185" className="m-num" textAnchor="middle">USA</text>
+        </g>
+        {/* Curved horns emerging from the sides of the mane */}
         <g className="m-horns">
-          <path d="M62 74 Q40 66 34 84 Q46 80 56 86" fill="none" stroke={horn} strokeWidth="8" strokeLinecap="round" />
-          <path d="M144 74 Q166 66 172 84 Q160 80 150 86" fill="none" stroke={horn} strokeWidth="8" strokeLinecap="round" />
+          <path d="M64 106 Q42 98 36 113 Q48 111 59 117" fill="none" stroke={horn} strokeWidth="9" strokeLinecap="round" />
+          <path d="M136 106 Q158 98 164 113 Q152 111 141 117" fill="none" stroke={horn} strokeWidth="9" strokeLinecap="round" />
         </g>
-        <ellipse className="m-ear m-ear-l" cx="64" cy="86" rx="10" ry="7" fill={fur} stroke={OL} strokeWidth="2" />
-        <ellipse className="m-ear m-ear-r" cx="142" cy="86" rx="10" ry="7" fill={fur} stroke={OL} strokeWidth="2" />
-        {/* head, set low */}
-        <ellipse cx="103" cy="98" rx="44" ry="38" fill={fur} stroke={OL} strokeWidth={OLW} />
-        {/* broad dark muzzle */}
-        <ellipse cx="103" cy="118" rx="28" ry="20" fill="#4a382b" stroke={OL} strokeWidth={OLW} />
-        {/* forelock tuft between the horns */}
-        <path d="M92 62 Q103 50 114 62 Q108 74 103 74 Q98 74 92 62Z" fill={mane} stroke={OL} strokeWidth="2" strokeLinejoin="round" />
-        {/* small, narrowed, determined eyes */}
-        <g className="m-eyes">
-          <g className="m-eye-l"><ellipse cx="88" cy="90" rx="7" ry="6" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="89" cy="91" r="3.4" fill="#20242a" /></g>
-          <ellipse cx="118" cy="90" rx="7" ry="6" fill="#fff" stroke={OL} strokeWidth="2" /><circle cx="117" cy="91" r="3.4" fill="#20242a" />
+        <g className="m-head">
+          <ellipse className="m-ear m-ear-l" cx="67" cy="115" rx="9" ry="6.5" fill={fur} stroke={OL} strokeWidth="2" />
+          <ellipse className="m-ear m-ear-r" cx="133" cy="115" rx="9" ry="6.5" fill={fur} stroke={OL} strokeWidth="2" />
+          {/* Head peeking low out of the mane, a touch smaller than the hump */}
+          <ellipse cx="100" cy="115" rx="40" ry="34" fill={fur} stroke={OL} strokeWidth={OLW} />
+          {/* Shaggy bison beard hanging from the chin */}
+          <path d="M76 139 Q78 169 92 179 Q100 169 108 179 Q122 169 124 139 Z" fill={mane} stroke={OL} strokeWidth={OLW} strokeLinejoin="round" />
+          {/* Broad dark muzzle */}
+          <ellipse cx="100" cy="131" rx="26" ry="17" fill={muzzle} stroke={OL} strokeWidth={OLW} />
+          <ellipse cx="90" cy="128" rx="3.4" ry="2.7" fill="#171a1e" />
+          <ellipse cx="110" cy="128" rx="3.4" ry="2.7" fill="#171a1e" />
+          <path className="m-mouth" d="M89 139 Q100 147 111 139" fill="none" stroke="#171a1e" strokeWidth="3.2" strokeLinecap="round" />
+          {/* Small, narrowed, determined eyes */}
+          <g className="m-eyes">
+            <g className="m-eye-l"><ellipse cx="87" cy="111" rx="7.5" ry="7.5" fill="#fff" stroke={OL} strokeWidth="2.2" /><circle className="m-pupil-l" cx="88" cy="112" r="3.6" fill="#171a1e" /><circle cx="89.4" cy="110" r="1.2" fill="#fff" /></g>
+            <g className="m-eye-r"><ellipse cx="113" cy="111" rx="7.5" ry="7.5" fill="#fff" stroke={OL} strokeWidth="2.2" /><circle className="m-pupil-r" cx="114" cy="112" r="3.6" fill="#171a1e" /><circle cx="115.4" cy="110" r="1.2" fill="#fff" /></g>
+          </g>
+          {/* Determined, inward-angled brows */}
+          <path className="m-brow m-brow-l" d="M78 99 Q87 97 97 105" fill="none" stroke={furDark} strokeWidth="4" strokeLinecap="round" />
+          <path className="m-brow m-brow-r" d="M103 105 Q113 97 122 99" fill="none" stroke={furDark} strokeWidth="4" strokeLinecap="round" />
         </g>
-        <path className="m-brow m-brow-l" d="M78 80 Q88 74 99 81" stroke={furDark} strokeWidth="4" fill="none" strokeLinecap="round" />
-        <path className="m-brow m-brow-r" d="M107 81 Q118 74 128 80" stroke={furDark} strokeWidth="4" fill="none" strokeLinecap="round" />
-        <ellipse cx="94" cy="115" rx="4.5" ry="3.2" fill="#20242a" /><ellipse cx="112" cy="115" rx="4.5" ry="3.2" fill="#20242a" />
-        <path className="m-mouth" d="M87 125 Q103 141 119 125" stroke={furDark} strokeWidth="3.6" fill="none" strokeLinecap="round" />
+        <Ball x={150} y={224} />
       </g>
     </g>
   )
@@ -207,7 +226,7 @@ function Zayu() {
 // full nation name for the "Explore …" hand-off button.
 const ORIGINS = {
   CA: { country: 'Canada', armL: '67 141', armR: '137 141', center: '100 120' },
-  US: { country: 'United States', armL: '56 156', armR: '150 156', center: '103 128' },
+  US: { country: 'United States', armL: '62 152', armR: '138 152', center: '100 128' },
   MX: { country: 'Mexico', armL: '64 152', armR: '140 154', center: '96 118' },
 }
 
@@ -297,10 +316,13 @@ const MASCOTS = {
       'MetLife Stadium in New Jersey hosts the Final on 19 July 2026.',
       'It is the USA’s first men’s World Cup since 1994.',
     ],
+    landmark: '.m-hump',
+    // Hover: the shaggy hump pops up, like the bison rolling its shoulders.
+    hover: (q) => gsap.fromTo(q('.m-hump'), { y: 0 }, { y: -4, duration: 0.24, yoyo: true, repeat: 1, ease: 'power2.out' }),
     // Head lowers to charge + a hoof stomp.
     poke: (q) => {
-      gsap.fromTo(q('.m-head'), { rotation: 0 }, { rotation: -12, duration: 0.16, yoyo: true, repeat: 3, svgOrigin: '103 128', ease: 'power2.inOut' })
-      gsap.fromTo(q('.m-leg-r'), { rotation: 0 }, { rotation: 18, duration: 0.12, yoyo: true, repeat: 5, svgOrigin: '123 202', ease: 'sine.inOut' })
+      gsap.fromTo(q('.m-head'), { rotation: 0 }, { rotation: -12, duration: 0.16, yoyo: true, repeat: 3, svgOrigin: '100 118', ease: 'power2.inOut' })
+      gsap.fromTo(q('.m-leg-r'), { rotation: 0 }, { rotation: 18, duration: 0.12, yoyo: true, repeat: 5, svgOrigin: '122 200', ease: 'sine.inOut' })
     },
   },
   MX: {
