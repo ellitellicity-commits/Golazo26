@@ -13,9 +13,12 @@ import './HostMascot.css'
 // is opened; the 45 non-host nations get none. Everything degrades to a static
 // pose under prefers-reduced-motion, and all timelines are killed on unmount.
 //
-//   Canada  - Maple, a moose in a Canadian-red kit, palmate antlers.
-//   USA     - Clutch, a bison in an American-blue kit, shaggy mane + horns.
-//   Mexico  - Zayu, an armadillo in a Mexican-green kit, sombrero + curl tail.
+// Each is one cohesive silhouette (a single body mass with internal detail
+// linework) built around a landmark that reads at thumbnail size, not a pile of
+// primitives. GSAP drives organic idle breathing, a hover lift, and the tour:
+//   Canada  - Maple, a moose in a Canadian-red kit; palmate antlers landmark.
+//   USA     - Clutch, a bison in an American-blue kit; shaggy shoulder-hump landmark.
+//   Mexico  - Zayu, an armadillo in a Mexican-green kit; banded shell landmark + curled tail.
 
 // A tiny football, shared by all three (at the mascot's feet).
 function Ball({ x, y }) {
@@ -30,9 +33,9 @@ function Ball({ x, y }) {
 }
 
 // --- Maple - moose (Canada) ---------------------------------------------------
-// Forward-leaning and eager: oversized, slightly asymmetric palmate antlers, huge
-// warm eyes (left larger), a long droopy snout, and one hoof raising the ball
-// aloft like a trophy. Thick hand-drawn outlines throughout.
+// The chill host: broad palmate antlers frame the head (the landmark), a hip-cocked
+// stance with one arm relaxed at the side and an easy head-tilt, huge warm eyes
+// (left larger), and a long droopy moose snout. One cohesive fur-and-kit mass.
 function Maple() {
   const fur = '#7c5836', furDark = '#4d3722', snout = '#9c7850', antler = '#d9c39a', antlerDark = '#a98f63', kit = 'var(--canadian-red)'
   const OL = '#171a1e', OLW = 3
@@ -97,9 +100,9 @@ function Maple() {
 }
 
 // --- Clutch - bison (USA) -----------------------------------------------------
-// Wide, low and powerful: a massive shaggy mane, thick curved horns, a head set
-// low and forward, and small, narrowed, determined eyes. Legs planted in a broad
-// power stance with a low centre of gravity.
+// The hype man: a massive shaggy shoulder-hump dominates the upper silhouette
+// (the landmark), with the small determined face peeking from it, thick curved
+// horns, a shaggy beard, arms flung wide, and legs planted in a broad power stance.
 function Clutch() {
   const fur = '#6b4f3c', furDark = '#372a1f', mane = '#4a3628', muzzle = '#463629', horn = '#e6dbc2', kit = 'var(--american-blue)'
   const OL = '#171a1e', OLW = 3
@@ -168,9 +171,9 @@ function Clutch() {
 }
 
 // --- Zayu - armadillo (Mexico) ------------------------------------------------
-// Peeking and playful: head turned toward the viewer (nudged left of centre), a
-// prominent banded shell over one shoulder, a long tail curled up behind like a
-// question mark, big round curious eyes, and an oversized rakishly-tilted sombrero.
+// The quick trickster: a domed, banded carapace crests the back (the landmark)
+// with a single gold rim, big prominent ears and a long pointed snout, big round
+// curious eyes, a segmented tail curling out to the side, and a low, coiled stance.
 function Zayu() {
   const skin = '#caa06a', skinDark = '#8d6a41', shell = '#a9814f', shellDark = '#6f5230', kit = 'var(--mexican-green)', gold = 'var(--trophy-gold)'
   const OL = '#171a1e', OLW = 3
