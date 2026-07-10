@@ -2,7 +2,7 @@
 
 # GOLAZO26
 
-![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=16&pause=2000&color=002395;FFFFFF;ED2939&center=true&vCenter=true&width=750&lines=%22Sometimes+in+the+life+I%27m+too+competitive%2C+you+know%2C+it%27s+good+to+be+competitif...%22+%E2%80%94+Kylian+Mbappe;%22Sometimes+in+the+life+I%27m+too+competitive%2C+you+know%2C+it%27s+good+to+be+competitif...%22+%E2%80%94+Kylian+Mbappe;%22Sometimes+in+the+life+I%27m+too+competitive%2C+you+know%2C+it%27s+good+to+be+competitif...%22+%E2%80%94+Kylian+Mbappe)
+![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=14&pause=2000&color=002395&center=true&vCenter=true&multiline=true&height=60&width=750&lines=%22Sometimes+in+the+life+I%27m+too+competitive%2C+you+know%2C;it%27s+good+to+be+competitif...%22+%E2%80%94+Kylian+Mbappe)
 
 [![Status](https://img.shields.io/badge/STATUS-LIVE-28A745?style=flat-square)]()
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)]()
