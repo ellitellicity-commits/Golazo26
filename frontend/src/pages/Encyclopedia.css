@@ -70,9 +70,16 @@
   width: 100%;
   height: min(74vh, 700px);
 }
-/* The globe (and every foreground stage element) sits above the atmospheric
-   CloudBackground, which renders behind at z-index 0. */
-.enc__stage > .globe-hero { position: relative; z-index: 1; }
+/* The globe sits at the base of the stage's stacking context (z-index 0); the
+   profile panel and mascot layer above it in DOM/tree order. (It formerly cleared
+   an atmospheric CloudBackground at z 0, since removed - the base layer is now the
+   studio black page itself.) Raising the globe above 0 is what let the canvas
+   paint over the panel and bleed through it on the right. */
+.enc__stage > .globe-hero { position: relative; z-index: 0; }
+/* While a profile is open the globe stops taking pointer input, so a drag over
+   the panel (or the exposed globe edge) never rotates it out from under the
+   reader; it resumes the moment the panel closes. */
+.enc__stage--panel > .globe-hero { pointer-events: none; }
 .enc__hint {
   position: absolute;
   left: 50%;
