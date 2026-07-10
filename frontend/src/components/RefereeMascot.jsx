@@ -20,7 +20,8 @@ const KIT_HI = '#262626'
 const HAIR = '#20242a'
 const SILVER = '#c0c0c0'
 
-function RefereeArt() {
+function RefereeArt({ hand = 'card' }) {
+  const whistle = hand === 'whistle'
   return (
     <g className="ref-char">
       <g className="ref-legs">
@@ -67,10 +68,21 @@ function RefereeArt() {
         <circle cx="166" cy="72" r="8" fill={SKIN} />
         {/* the three cards share the hand; only one shows at a time */}
         <g className="ref-cards" transform="translate(166 72) rotate(12)">
-          <rect className="ref-card ref-card-red" x="-8" y="-34" width="17" height="26" rx="2" fill="#cc0000" stroke="#8f0000" strokeWidth="1" />
+          <rect className="ref-card ref-card-red" x="-8" y="-34" width="17" height="26" rx="2" fill="#cc0000" stroke="#8f0000" strokeWidth="1" opacity={whistle ? 0 : 1} />
           <rect className="ref-card ref-card-yellow" x="-8" y="-34" width="17" height="26" rx="2" fill="#ffd700" stroke="#b89600" strokeWidth="1" opacity="0" />
           <rect className="ref-card ref-card-green" x="-8" y="-34" width="17" height="26" rx="2" fill="#2dc26b" stroke="#1c8a49" strokeWidth="1" opacity="0" />
         </g>
+        {/* Cutscene variant: a silver whistle in the raised hand instead of a card -
+            rounded body, a mouthpiece nib, and a lanyard-loop ring. Grouped so the
+            per-beat blow tween can raise and settle it. */}
+        {whistle && (
+          <g className="ref-whistle-hand" transform="translate(166 72) rotate(12)">
+            <rect x="-9" y="-30" width="18" height="12" rx="5" fill={SILVER} stroke="#8a8a8a" strokeWidth="1.5" />
+            <rect x="-13" y="-27" width="5" height="6" rx="2" fill={SILVER} stroke="#8a8a8a" strokeWidth="1.5" />
+            <circle cx="6" cy="-24" r="2.4" fill="#7a7a7a" />
+            <circle cx="9" cy="-31" r="2.6" fill="none" stroke="#9a9a9a" strokeWidth="1.5" />
+          </g>
+        )}
       </g>
 
       <g className="ref-head">
@@ -146,7 +158,7 @@ export function RefereeNarrator({ beat, line, lines }) {
     const root = rootRef.current
     if (!root || reduced() || !beat) return undefined
     const q = gsap.utils.selector(root)
-    const kill = () => gsap.killTweensOf([q('.ref-arm-r'), q('.ref-mouth'), q('.ref-head')])
+    const kill = () => gsap.killTweensOf([q('.ref-arm-r'), q('.ref-mouth'), q('.ref-head'), q('.ref-whistle-hand')])
     if (beat === 'vs') {
       // Point at each team in turn.
       gsap.fromTo(q('.ref-arm-r'), { rotation: 0 }, { rotation: -22, duration: 0.32, yoyo: true, repeat: 3, svgOrigin: '134 124', ease: 'power2.inOut' })
@@ -158,6 +170,8 @@ export function RefereeNarrator({ beat, line, lines }) {
       // Mouth snaps open to blow.
       gsap.to(q('.ref-mouth'), { scaleY: 2.6, scaleX: 0.7, duration: 0.1, transformOrigin: '50% 50%', svgOrigin: '100 100' })
       gsap.fromTo(q('.ref-char'), { scale: 1 }, { scale: 1.04, duration: 0.1, yoyo: true, repeat: 1, svgOrigin: '100 220' })
+      // Whistle blow: a short raise-and-settle on the whistle as the audio fires.
+      gsap.fromTo(q('.ref-whistle-hand'), { y: 0, rotation: 0 }, { y: -3, rotation: -10, duration: 0.12, yoyo: true, repeat: 1, transformOrigin: '50% 100%', ease: 'power2.inOut' })
     }
     return kill
   }, [beat])
@@ -172,7 +186,7 @@ export function RefereeNarrator({ beat, line, lines }) {
         </div>
       )}
       <svg className="referee__svg" viewBox="0 0 200 250" width="150" height="188" role="img" aria-label="Match referee">
-        <RefereeArt />
+        <RefereeArt hand="whistle" />
       </svg>
     </div>
   )
