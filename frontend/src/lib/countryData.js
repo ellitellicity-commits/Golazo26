@@ -46,6 +46,20 @@ const ODDS = Object.fromEntries(getOdds().teams.map((t) => [t.team, t]))
 // positions, so the list is not a 1..48 sequence.
 export const COUNTRY_NAMES = Object.keys(RANKS)
 
+// The squad extraction occasionally repeats a name token (e.g. "Lucas Lucas
+// Paqueta", "Ederson Ederson", "Jorgen Strand Strand Larsen") - a join artefact.
+// Collapse consecutive duplicate tokens so the display name reads cleanly. Purely
+// mechanical: it only removes an immediately-repeated word (case-insensitively),
+// never reorders tokens or invents anything, so the name stays the sourced name.
+function dedupeName(name) {
+  if (!name) return name
+  const out = []
+  for (const tok of name.trim().split(/\s+/)) {
+    if (!out.length || out[out.length - 1].toLowerCase() !== tok.toLowerCase()) out.push(tok)
+  }
+  return out.join(' ')
+}
+
 /**
  * Full profile for a team name, or null if unknown. Sourced fields are real
  * (rank, Elo, record, squad, coach, history); `intro` is editorial copy. Any
@@ -69,9 +83,16 @@ export function getCountry(name) {
     isHost: p?.isHost ?? false,
     championshipOdds: o?.championship_odds ?? null,
     record: p ? { w: p.w, d: p.d, l: p.l, gf: p.gf, ga: p.ga, played: p.played } : null,
-    // Sourced squad data (join resolved via scripts/generate_squads.py):
+    // Sourced squad data (join resolved via scripts/generate_squads.py). Ordered
+    // most-capped first so the panel leads with each nation's senior names (the
+    // raw list arrives in squad-number order, which buried the stars) - a
+    // deterministic re-sort, not a curation, so nothing is invented or dropped.
     squadSize: sq?.squadSize ?? null,
-    notablePlayers: sq?.notablePlayers ?? null,
+    notablePlayers: sq?.notablePlayers
+      ? [...sq.notablePlayers]
+          .map((p) => ({ ...p, name: dedupeName(p.name) }))
+          .sort((a, b) => (b.caps ?? 0) - (a.caps ?? 0))
+      : null,
     // Editorial broadcast intro copy - powers the typewriter reveal:
     intro: INTROS[name] ?? null,
     // Sourced: Wikipedia World Cup record (history) + football-data.org API (coach).

@@ -44,6 +44,14 @@ const MARKERS = Object.entries(TEAM_COORDINATES).map(([name, [lat, lng]]) => ({
   code: teamMeta(name).code,
 }))
 
+// Initials for the coach badge - first + last name letter, or an em dash when the
+// manager is unsourced. Purely derived from the name string, nothing invented.
+function initials(name) {
+  if (!name) return '—'
+  const p = name.trim().split(/\s+/)
+  return ((p[0]?.[0] || '') + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase()
+}
+
 function Stat({ label, value, accent }) {
   return (
     <div className={`enc-stat${accent ? ' enc-stat--accent' : ''}`}>
@@ -75,7 +83,7 @@ function Panel({ country, onClose }) {
     return d
   })
   return (
-    <aside className="enc-panel" aria-label={`${c.name} profile`}>
+    <aside className={`enc-panel${c.iso && HOST_ISO.has(c.iso) ? ' enc-panel--host' : ''}`} aria-label={`${c.name} profile`}>
       <button className="enc-panel__close" onClick={onClose} type="button" aria-label="Close profile">×</button>
       <header className="enc-panel__head">
         {c.flag && <img className="enc-panel__flag" src={c.flag} alt="" width="44" height="33" />}
@@ -119,12 +127,15 @@ function Panel({ country, onClose }) {
       </dl>
 
       <div className="enc-panel__coach">
-        <span className="enc-panel__record-title">Head Coach</span>
-        {c.coach ? (
-          <span className="enc-panel__coach-name">{c.coach}</span>
-        ) : (
-          <span className="enc-panel__coach-pending">Data sourcing pending</span>
-        )}
+        <span className="enc-panel__coach-badge" aria-hidden="true">{initials(c.coach)}</span>
+        <span className="enc-panel__coach-text">
+          <span className="enc-panel__coach-role">Head Coach</span>
+          {c.coach ? (
+            <span className="enc-panel__coach-name display">{c.coach}</span>
+          ) : (
+            <span className="enc-panel__coach-pending">Data sourcing pending</span>
+          )}
+        </span>
       </div>
 
       {rec && (
