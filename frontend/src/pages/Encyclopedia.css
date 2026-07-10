@@ -70,13 +70,19 @@
   width: 100%;
   height: min(74vh, 700px);
 }
-/* The globe (and every foreground stage element) sits above the atmospheric
-   CloudBackground, which renders behind at z-index 0. */
-.enc__stage > .globe-hero { position: relative; z-index: 1; }
+/* The globe is the base layer of the stage; the profile card, hint, and mascot
+   are lifted explicitly above it. Without this, the globe canvas paints over the
+   card (the card would otherwise sit at z-index:auto below a positioned globe). */
+.enc__stage > .globe-hero { position: relative; z-index: 0; }
+/* While a profile card is open, the globe stops intercepting pointer events so
+   scrolling and clicking land on the card, not the canvas beneath it. The globe
+   keeps auto-rotating behind the card; interactivity returns when it closes. */
+.enc__stage--panel > .globe-hero { pointer-events: none; }
 .enc__hint {
   position: absolute;
   left: 50%;
   bottom: 16px;
+  z-index: 2;
   transform: translateX(-50%);
   margin: 0;
   padding: 8px 14px;
@@ -95,6 +101,7 @@
   position: absolute;
   top: var(--space-md);
   right: var(--space-md);
+  z-index: 20;
   width: min(340px, calc(100% - 2 * var(--space-md)));
   max-height: calc(100% - 2 * var(--space-md));
   overflow-y: auto;
@@ -335,12 +342,49 @@
   text-wrap: pretty;
 }
 
-/* Head coach - sourced identity data, set in the display face like the other
-   headline figures. Falls back to an honest, muted "pending" when unsourced. */
+/* Host-identity accent: the three 2026 hosts pick up their national colour on the
+   coach badge + squad position chips - the same host-identity role the globe tint
+   already uses. Every other nation resolves --accent to neutral ink, so the
+   treatment stays role-locked to hosts and never introduces an off-palette hue. */
+.enc-panel { --accent: var(--ink-secondary); }
+.enc-panel--host { --accent: var(--host-colour, var(--ink-secondary)); }
+
+/* Head coach - an avatar-led manager row: an initials monogram (host-ringed for
+   hosts), the role label, then the name in the display face like other headline
+   figures. Falls back to an honest, muted "pending" when unsourced. */
 .enc-panel__coach {
   display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.enc-panel__coach-badge {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--surface-elevated);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.125rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.enc-panel__coach-text {
+  display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
+  min-width: 0;
+}
+.enc-panel__coach-role {
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
 }
 .enc-panel__coach-name {
   font-family: var(--font-display);
@@ -389,13 +433,13 @@
   min-width: 34px;
   padding: 3px 0;
   text-align: center;
-  background: var(--surface-overlay);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-overlay));
   border-radius: var(--radius-sm);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: var(--text-label);
   letter-spacing: 0.04em;
-  color: var(--ink-secondary);
+  color: var(--accent);
 }
 .enc-squad__name {
   font-weight: 600;

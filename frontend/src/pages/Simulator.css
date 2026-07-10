@@ -122,13 +122,15 @@
   width: 100%;
   height: min(60vh, 560px);
 }
-/* The globe (and every foreground stage element) sits above the atmospheric
-   CloudBackground, which renders behind at z-index 0. */
-.sim__stage > .globe-hero { position: relative; z-index: 1; }
+/* The globe is the base layer of the stage; the venue bar and stadium panel are
+   lifted explicitly above it, so the DESTINATION bar is never obscured by the
+   canvas (it would otherwise sit at z-index:auto below a positioned globe). */
+.sim__stage > .globe-hero { position: relative; z-index: 0; }
 .sim__venue-hint {
   position: absolute;
   left: 50%;
   bottom: 16px;
+  z-index: 2;
   transform: translateX(-50%);
   margin: 0;
   padding: 8px 14px;
