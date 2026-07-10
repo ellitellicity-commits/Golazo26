@@ -110,3 +110,81 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
+
+/* ---------------------------------------------------------------------------
+   Additive host sub-map enhancements: constellation links, gold World Cup
+   venue dots, a host-tinted ring on the national capital, and a hover tooltip.
+   Filter blur radii are in SVG user units (viewBox is ~degree-scale), so they
+   are deliberately sub-pixel small - a few px once the map is drawn at size.
+   --------------------------------------------------------------------------- */
+
+/* Faint, static network lines between nearby capitals - purely atmospheric. */
+.submap__link {
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 0.16;
+  vector-effect: non-scaling-stroke;
+}
+
+/* World Cup venue cities: trophy gold, larger than a capital dot, gently pulsing. */
+.submap__venue {
+  fill: var(--trophy-gold);
+  stroke: var(--studio-black);
+  stroke-width: 0.5;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 0.7px color-mix(in srgb, var(--trophy-gold) 70%, transparent));
+  animation: submap-venue-pulse 2s var(--ease-out-quint) infinite;
+}
+@keyframes submap-venue-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0.5px color-mix(in srgb, var(--trophy-gold) 45%, transparent)); }
+  50%      { filter: drop-shadow(0 0 1.1px color-mix(in srgb, var(--trophy-gold) 90%, transparent)); }
+}
+
+/* National capital: a persistent host-tinted glow ring (US blue / CA red / MX green). */
+.submap__cap--nat {
+  filter: drop-shadow(0 0 0.8px color-mix(in srgb, var(--host) 75%, transparent));
+  animation: submap-nat-pulse 1.8s var(--ease-out-quint) infinite;
+}
+@keyframes submap-nat-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0.6px color-mix(in srgb, var(--host) 55%, transparent)); }
+  50%      { filter: drop-shadow(0 0 1.3px var(--host)); }
+}
+
+.submap__cap, .submap__venue { cursor: pointer; }
+
+/* Hover tooltip - dark broadcast chip, positioned from the pointer in figure px. */
+.submap__tooltip {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, calc(-100% - 8px));
+  padding: 3px 8px;
+  background: rgba(13, 13, 13, 0.92);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font: 600 var(--text-meta) / 1 var(--font-body);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.submap__tooltip.is-on { opacity: 1; }
+
+/* Venue swatch appended to the legend. */
+.submap__legend-venue {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 8px;
+}
+.submap__legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: var(--trophy-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .submap__venue, .submap__cap--nat { animation: none; }
+}

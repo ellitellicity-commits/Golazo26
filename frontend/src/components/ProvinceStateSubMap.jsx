@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
 import hostSubs from '../data/hostSubdivisions.json'
 import { subAbbr } from '../data/subdivisionAbbr'
+import { STADIUMS } from '../lib/stadiumData'
 import './ProvinceStateSubMap.css'
 
 // Host-nation sub-map (B3). For the three 2026 hosts only, an SVG inset of the
@@ -94,9 +97,34 @@ export default function ProvinceStateSubMap({ code }) {
     })
     const caps = capitals.map((c) => { const [x, y] = project(c.lng, c.lat); return { ...c, x, y } })
 
-    return { subs, provs, caps, w, h, vbW: w + 2, vbH: h + 2 }
+    // World Cup venue cities for this host, projected through the same transform so
+    // the gold dots land on the real host cities. Additive layer over the capitals.
+    const venues = Object.entries(STADIUMS)
+      .filter(([, s]) => s.country === code)
+      .map(([name, s]) => { const [x, y] = project(s.lng, s.lat); return { name, city: s.hostCity, x, y } })
+
+    // Faint constellation links: each capital tethered to its two nearest neighbours
+    // within a size-relative cutoff, so the field reads as a network, not a web.
+    const diag = Math.hypot(w, h) || 1
+    const maxD = diag * 0.18
+    const seen = new Set()
+    const links = []
+    caps.forEach((a, i) => {
+      caps
+        .map((b, j) => ({ j, d: Math.hypot(a.x - b.x, a.y - b.y) }))
+        .filter((o) => o.j !== i && o.d <= maxD)
+        .sort((p, q) => p.d - q.d)
+        .slice(0, 2)
+        .forEach(({ j }) => {
+          const key = i < j ? `${i}-${j}` : `${j}-${i}`
+          if (!seen.has(key)) { seen.add(key); links.push({ key, x1: a.x, y1: a.y, x2: caps[j].x, y2: caps[j].y }) }
+        })
+    })
+
+    return { subs, provs, caps, venues, links, w, h, vbW: w + 2, vbH: h + 2 }
   }, [data, code])
 
+  const figRef = useRef(null) // <figure> - GSAP scope + tooltip positioning frame
   const svgRef = useRef(null)
   const vpRef = useRef(null) // the panned/zoomed viewport <g>
   // View lives in a ref, not state: a wheel tick or a pointer-move pixel updates
@@ -107,6 +135,16 @@ export default function ProvinceStateSubMap({ code }) {
   // The only reactive bit: a boolean that flips just once when zoom crosses the
   // 1x threshold, to swap the grab cursor and mount the reset button.
   const [zoomed, setZoomed] = useState(false)
+  // Hover tooltip: {text, x, y} in figure-relative px. Positioned from the pointer
+  // client coords (not SVG user units), so it stays correct through zoom/pan.
+  const [tip, setTip] = useState(null)
+  const showTip = useCallback((text) => (e) => {
+    const fig = figRef.current
+    if (!fig) return
+    const r = fig.getBoundingClientRect()
+    setTip({ text, x: e.clientX - r.left, y: e.clientY - r.top })
+  }, [])
+  const hideTip = useCallback(() => setTip(null), [])
 
   // Keep the viewport clamped so the map can never be panned fully off-frame.
   // Plain in/out - no setState - so it can run inside the imperative handlers.
@@ -167,6 +205,31 @@ export default function ProvinceStateSubMap({ code }) {
     return () => svg.removeEventListener('wheel', onWheel)
   }, [geo, toUser, clampViewRaw, applyTransform])
 
+  // Staggered dot entrance, replayed on every country switch (keyed on `code`).
+  // Scoped to the figure via useGSAP so the tween context reverts cleanly on
+  // unmount/remount (StrictMode-safe). Skipped under reduced motion, leaving the
+  // dots and legend at their natural (visible) CSS state.
+  useGSAP(() => {
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (reduce || !figRef.current) return
+    const q = gsap.utils.selector(figRef.current)
+    const dots = q('.submap__cap, .submap__venue')
+    const stagger = 0.008
+    if (dots.length) {
+      gsap.fromTo(
+        dots,
+        { opacity: 0, scale: 0, transformOrigin: '50% 50%' },
+        { opacity: 1, scale: 1, duration: 0.3, stagger, ease: 'back.out(1.4)' },
+      )
+    }
+    // Legend fades in only after the dots have finished landing.
+    gsap.fromTo(
+      q('.submap__legend'),
+      { opacity: 0 },
+      { opacity: 1, duration: 0.4, delay: dots.length * stagger + 0.1, ease: 'power2.out' },
+    )
+  }, { scope: figRef, dependencies: [code] })
+
   if (!geo) return null
 
   const onPointerDown = (e) => {
@@ -188,7 +251,7 @@ export default function ProvinceStateSubMap({ code }) {
   const reset = () => { viewRef.current = { z: 1, x: 0, y: 0 }; applyTransform() }
 
   return (
-    <figure className={`submap submap--${code}`} aria-label={`${HOST_LABEL[code]} - ${geo.subs.length} ${UNIT[code]} and their capitals`}>
+    <figure ref={figRef} className={`submap submap--${code}`} aria-label={`${HOST_LABEL[code]} - ${geo.subs.length} ${UNIT[code]} and their capitals`}>
       <svg
         ref={svgRef}
         viewBox={`-1 -1 ${geo.vbW.toFixed(1)} ${geo.vbH.toFixed(1)}`}
@@ -207,14 +270,38 @@ export default function ProvinceStateSubMap({ code }) {
               <path key={p.name} d={p.d} className={`submap__prov submap__prov--t${p.tone}`} />
             ))}
           </g>
+          {/* Constellation links - faint, static, atmospheric (host sub-maps only). */}
+          <g className="submap__links" aria-hidden="true">
+            {geo.links.map((l) => (
+              <line key={l.key} x1={l.x1.toFixed(2)} y1={l.y1.toFixed(2)} x2={l.x2.toFixed(2)} y2={l.y2.toFixed(2)} className="submap__link" />
+            ))}
+          </g>
           <g className="submap__caps">
             {geo.caps.map((c) => (
               <circle
                 key={`${c.name}-${c.region || 'nat'}`}
                 cx={c.x.toFixed(2)} cy={c.y.toFixed(2)} r={c.national ? 1.2 : 0.5}
                 className={`submap__cap${c.national ? ' submap__cap--nat' : ''}`}
+                onMouseEnter={showTip(`${c.name}${c.region ? ` · ${c.region}` : ''}${c.national ? ' (capital)' : ''}`)}
+                onMouseMove={showTip(`${c.name}${c.region ? ` · ${c.region}` : ''}${c.national ? ' (capital)' : ''}`)}
+                onMouseLeave={hideTip}
               >
                 <title>{c.name}{c.region ? ` · ${c.region}` : ''}{c.national ? ' (capital)' : ''}</title>
+              </circle>
+            ))}
+          </g>
+          {/* World Cup venue cities - trophy gold, larger, pulsing (host maps only). */}
+          <g className="submap__venues">
+            {geo.venues.map((v) => (
+              <circle
+                key={v.name}
+                cx={v.x.toFixed(2)} cy={v.y.toFixed(2)} r={0.95}
+                className="submap__venue"
+                onMouseEnter={showTip(`${v.city} · World Cup venue`)}
+                onMouseMove={showTip(`${v.city} · World Cup venue`)}
+                onMouseLeave={hideTip}
+              >
+                <title>{v.city} · World Cup venue</title>
               </circle>
             ))}
           </g>
@@ -237,8 +324,14 @@ export default function ProvinceStateSubMap({ code }) {
           Reset
         </button>
       )}
+      {tip && (
+        <span className="submap__tooltip is-on" style={{ left: tip.x, top: tip.y }} aria-hidden="true">
+          {tip.text}
+        </span>
+      )}
       <figcaption className="submap__legend">
         {code === 'US' ? LEGEND.US : <><span className="tnum">{geo.subs.length}</span> {UNIT[code]}</>} · <span className="tnum">{geo.caps.length}</span> capitals · scroll to zoom
+        <span className="submap__legend-venue"><span className="submap__legend-dot" aria-hidden="true" /> World Cup venues</span>
       </figcaption>
     </figure>
   )
