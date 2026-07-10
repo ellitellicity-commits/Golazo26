@@ -2,7 +2,7 @@
 
 # GOLAZO26
 
-*"Sometimes in life I'm too competitive, you know, it's good to be competitif. . ."*  — Kylian Mbappe
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=16&pause=2000&color=F5B800&center=true&vCenter=true&width=600&lines="Sometimes+in+life+I'm+too+competitive"+%E2%80%94+Kylian+Mbappe)]
 
 [![Status](https://img.shields.io/badge/STATUS-LIVE-28A745?style=flat-square)]()
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)]()
@@ -15,11 +15,11 @@
 
 ---
 
-## What's in it?
+## What's in it
 
 | Feature | What it does |
 |---|---|
-| Match Predictor | Win/draw/loss probabilities for any fixture, group stage through the final |
+| Match Predictor | Win / draw / loss probabilities for any fixture, group stage through the final |
 | Monte Carlo Simulator | Simulates the full 48-team tournament 10,000 times. Who lifts the trophy? Run it and find out |
 | The Atlas | Spin an interactive 3D globe of all 48 nations, click any country and get their full story: squad, Elo, all-time record, group path. Host nations get their own animated mascots |
 | Matchup Sandbox | Pick any two nations, any round, watch a pregame cutscene and get the model's call |
@@ -27,16 +27,17 @@
 | Knockout Bracket | Redraws in real time as results land, with the champion's path traced all the way through |
 | Championship Odds | Every team's title shot updated off the latest simulation run |
 
-## Under the Hood
+## Under the hood
 
-| Frontend | Data & ML | Maps & Animation |
-|---|---|---|
-| React 19 | XGBoost | Three.js |
-| Vite | Monte Carlo | GSAP |
-| | football-data.org | Natural Earth |
-| | ESPN API | D3 |
+| | |
+|---|---|
+| React 19 | Vite |
+| Three.js | GSAP |
+| XGBoost | Monte Carlo |
+| football-data.org | ESPN API |
+| Natural Earth | D3 |
 
-## Run Process
+## Running it
 
 ```bash
 cd frontend
@@ -51,7 +52,7 @@ cp .env.example .env
 # drop in FOOTBALL_DATA_API_KEY, free at football-data.org
 ```
 
-## Model Architecture
+## The model, straight up
 
 | Stat | Reality |
 |---|---|
@@ -73,6 +74,18 @@ Strong read on a football tournament. Not God.
 | Wikimedia Commons | Stadium photography (CC-licensed, attributed per venue) |
 | FIFA rankings snapshot | Team strength baseline and tiebreaker inputs |
 
+## Known limitations
+
+| Limitation | Reality |
+|---|---|
+| Model accuracy | ~46.2% on three classes. Useful, not oracular |
+| Draws | Hardest outcome in football to predict. Weakest part of the model |
+| No scorelines | Predicts win / draw / loss only, not goals |
+| Desktop-first | Mobile layout is not fully implemented yet |
+| Player headshots | ESPN covers about 4% of 2026 squads. Falls back to initials gracefully |
+| Live source coupling | Depends on football-data.org and ESPN schemas, which can change without notice |
+| No persistence | Simulation results live in memory and reset between sessions |
+
 ## Deployment
 
 Vercel. Auto-deploys on push to `main`. football-data.org key lives server-side, never touches the client bundle. Degrades gracefully to the static snapshot if no key is set.
@@ -80,3 +93,4 @@ Vercel. Auto-deploys on push to `main`. football-data.org key lives server-side,
 ---
 
 *Golazo26 built live during the 2026 World Cup by [Ellison James Naz](https://github.com/ellitellicity-commits)*
+
