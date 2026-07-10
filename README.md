@@ -1,6 +1,6 @@
 <div align="center">
 
-# GOLAZO26
+# GOLAZO26 (World Cup 2026 App)
 
 ![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=14&pause=2000&color=002395&center=true&vCenter=true&multiline=true&height=60&width=750&lines=%22Sometimes+in+the+life+I%27m+too+competitive%2C+you+know%2C;it%27s+good+to+be+competitif...%22+%E2%80%94+Kylian+Mbappe)
 
@@ -15,7 +15,7 @@
 
 ---
 
-## What's in it
+## Features
 
 | Feature | What it does |
 |---|---|
@@ -27,7 +27,7 @@
 | Knockout Bracket | Redraws in real time as results land, with the champion's path traced all the way through |
 | Championship Odds | Every team's title shot updated off the latest simulation run |
 
-## Under the hood
+## Under the Hood (Backend Functions)
 
 | | |
 |---|---|
@@ -37,7 +37,7 @@
 | football-data.org | ESPN API |
 | Natural Earth | D3 |
 
-## Running it
+## Running Process
 
 ```bash
 cd frontend
@@ -52,7 +52,7 @@ cp .env.example .env
 # drop in FOOTBALL_DATA_API_KEY, free at football-data.org
 ```
 
-## The model, straight up
+## AI Model Structure
 
 | Stat | Reality |
 |---|---|
@@ -64,7 +64,7 @@ cp .env.example .env
 
 Strong read on a football tournament. Not God.
 
-## Data
+## Data Sources
 
 | Source | Used for |
 |---|---|
@@ -74,7 +74,7 @@ Strong read on a football tournament. Not God.
 | Wikimedia Commons | Stadium photography (CC-licensed, attributed per venue) |
 | FIFA rankings snapshot | Team strength baseline and tiebreaker inputs |
 
-## Known limitations
+## Known Limitations
 
 | Limitation | Reality |
 |---|---|
@@ -92,5 +92,5 @@ Vercel. Auto-deploys on push to `main`. football-data.org key lives server-side,
 
 ---
 
-*Golazo26 built live during the 2026 World Cup by [Ellison James Naz](https://github.com/ellitellicity-commits)*
+*Golazo26 was built live during the 2026 World Cup by [Ellison N.](https://github.com/ellitellicity-commits)*
 
