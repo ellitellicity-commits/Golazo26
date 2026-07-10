@@ -2,7 +2,7 @@
 
 # GOLAZO26
 
-*"Sometimes in life I'm too competitive, you know, it's good to be competitif. . ."* — Kylian Mbappe
+*"Sometimes in life I'm too competitive, you know, it's good to be competitif. . ."*  — Kylian Mbappe
 
 [![Status](https://img.shields.io/badge/STATUS-LIVE-28A745?style=flat-square)]()
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)]()
@@ -15,7 +15,7 @@
 
 ---
 
-## What's in it
+## What's in it?
 
 | Feature | What it does |
 |---|---|
@@ -27,11 +27,11 @@
 | Knockout Bracket | Redraws in real time as results land, with the champion's path traced all the way through |
 | Championship Odds | Every team's title shot updated off the latest simulation run |
 
-## Under the hood
+## Under the Hood
 
 React 19, Vite, Three.js, GSAP, XGBoost, Monte Carlo simulation engine, football-data.org, ESPN API, Natural Earth, D3
 
-## Running it
+## Run Process
 
 ```bash
 cd frontend
@@ -46,7 +46,7 @@ cp .env.example .env
 # drop in FOOTBALL_DATA_API_KEY, free at football-data.org
 ```
 
-## The model, straight up
+## Model Architecture
 
 | Stat | Reality |
 |---|---|
