@@ -227,3 +227,5 @@ __marimo__/
 **/.playwright-cli/
 MEMORY.md
 project_design_context.md
+.vercel
+.env*
