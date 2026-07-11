@@ -4,10 +4,13 @@ import { GEO, MAP_VIEWBOX, project } from '../lib/cutsceneMap'
 import { RefereeNarrator } from './RefereeMascot'
 import './Cutscene.css'
 
-// Short, generated 880Hz whistle blow via the Web Audio API - no external file.
+// Short, generated whistle blow via the Web Audio API - no external file.
 // Triggered on the hard cut, inside the user-initiated simulate gesture so the
 // AudioContext is allowed to start. Silently no-ops if audio is unavailable or
-// the user prefers reduced motion.
+// the user prefers reduced motion. A referee whistle reads as a bright pealing
+// tone with a slight waver, not a flat single-frequency beep - the frequency
+// ramp gives it that "peal" character - and the gain stays low so it doesn't
+// blast out of the speakers.
 function playWhistle() {
   try {
     const Ctx = window.AudioContext || window.webkitAudioContext
@@ -18,11 +21,13 @@ function playWhistle() {
     osc.connect(gain)
     gain.connect(ctx.destination)
     osc.type = 'sine'
-    osc.frequency.value = 880
-    gain.gain.setValueAtTime(0.22, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4)
-    osc.start()
-    osc.stop(ctx.currentTime + 0.42)
+    osc.frequency.setValueAtTime(2800, ctx.currentTime)
+    osc.frequency.linearRampToValueAtTime(3000, ctx.currentTime + 0.1)
+    osc.frequency.linearRampToValueAtTime(2700, ctx.currentTime + 0.5)
+    gain.gain.setValueAtTime(0.12, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6)
+    osc.start(ctx.currentTime)
+    osc.stop(ctx.currentTime + 0.6)
     osc.onended = () => ctx.close?.()
   } catch {
     /* audio blocked - the visual flash carries the cut */
