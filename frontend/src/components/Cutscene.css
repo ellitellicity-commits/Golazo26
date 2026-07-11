@@ -19,11 +19,14 @@
   --cut-line: rgba(92, 68, 36, 0.30);
   --cut-frame: rgba(74, 54, 28, 0.62);
   --cut-route: #a23b1e;
-  --cut-vignette: rgba(58, 40, 16, 0.52);
+  --cut-vignette: rgba(58, 40, 16, 0.6);
 }
 
 /* Beat 2 - the aged paper map. Parchment base + mottled aging + a slice-filled
-   SVG chart on top. Revealed at the flight beat, faded out after. */
+   SVG chart on top. Revealed at the flight beat, faded out after. The inset
+   box-shadow (Part 2 overhaul) gives the sheet physical presence - a soft dark
+   edge the parchment recedes into, like a lit object on the studio-black
+   ground rather than a flat full-bleed fill. Paint-only, no layout cost. */
 .cut__map {
   position: absolute;
   inset: 0;
@@ -32,6 +35,7 @@
     radial-gradient(120% 90% at 22% 18%, color-mix(in srgb, var(--cut-parchment) 92%, #fff), transparent 60%),
     radial-gradient(140% 120% at 82% 88%, var(--cut-parchment-deep), transparent 55%),
     var(--cut-parchment);
+  box-shadow: inset 0 0 160px 30px rgba(20, 12, 4, 0.4);
 }
 .cut__chart {
   position: absolute;
@@ -45,14 +49,54 @@
   text-anchor: middle;
 }
 
-/* Host-nation coastlines - hand-drawn vintage look: thin sepia stroke over a
-   barely-there land tint, so the route and pin read clearly on top. */
-.cut__geo path {
+/* Host-nation land fill (Part 2 overhaul) - a faint sepia base plus a low-
+   opacity wash of each host's own role colour (identity, not data - the same
+   treatment already established on the Atlas globe), so Canada/USA/Mexico
+   read at a glance without breaking the parchment mood. Fill only; the crisp
+   stroke lives in .cut__coast below so the two can be tuned independently. */
+.cut__geo-land {
+  stroke: none;
   fill: color-mix(in srgb, var(--cut-ink) 7%, transparent);
+}
+.cut__geo-land--ca { fill: color-mix(in srgb, var(--canadian-red) 16%, color-mix(in srgb, var(--cut-ink) 7%, transparent)); }
+.cut__geo-land--us { fill: color-mix(in srgb, var(--american-blue) 16%, color-mix(in srgb, var(--cut-ink) 7%, transparent)); }
+.cut__geo-land--mx { fill: color-mix(in srgb, var(--mexican-green) 16%, color-mix(in srgb, var(--cut-ink) 7%, transparent)); }
+
+/* Crisp, confident coastline strokes - hand-drawn vintage look, on top of the
+   tint and the province borders below so every country reads as a clean,
+   defined shape. */
+.cut__coast path {
+  fill: none;
   stroke: var(--cut-frame);
   stroke-width: 1.3;
   stroke-linejoin: round;
   stroke-linecap: round;
+}
+
+/* Province/state borders (Part 2 overhaul) - very fine, low-opacity hairlines,
+   clearly subordinate to the coastline above. */
+.cut__borders path {
+  fill: none;
+  stroke: var(--cut-frame);
+  stroke-width: 0.5;
+  opacity: 0.32;
+}
+
+/* Flight route (Part 2 overhaul) - a faint dashed flight-plan preview, visible
+   for the whole beat; the comet-tail below is what reads as "flown so far". */
+.cut__route {
+  opacity: 0.32;
+}
+.cut__route-trail {
+  stroke: var(--cut-route);
+}
+.cut__route-trail--far {
+  stroke-width: 3;
+  opacity: 0.4;
+}
+.cut__route-trail--near {
+  stroke-width: 3.5;
+  opacity: 0.95;
 }
 
 /* --- Beat 1: VS card, pinned in the TOP THIRD so the team names and flags sit

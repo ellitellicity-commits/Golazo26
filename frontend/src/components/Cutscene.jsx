@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { GEO, MAP_VIEWBOX, project } from '../lib/cutsceneMap'
+import { GEO_BORDERS } from '../lib/cutsceneMapBorders'
 import { RefereeNarrator } from './RefereeMascot'
 import './Cutscene.css'
 
@@ -71,6 +72,8 @@ export default function Cutscene({ match, onComplete }) {
   const { home, away, homeFlag, awayFlag, homeCode, awayCode, venue, hype } = match
   const rootRef = useRef(null)
   const pathRef = useRef(null)
+  const trailNearRef = useRef(null)
+  const trailFarRef = useRef(null)
   const planeRef = useRef(null)
   const tlRef = useRef(null)
   const doneRef = useRef(false)
@@ -125,12 +128,26 @@ export default function Cutscene({ match, onComplete }) {
     tl.fromTo(q('.cut__map'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, ease: 'power2.out' }, '<')
     tl.fromTo(q('.cut__caption--venue'), { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, '<0.2')
 
-    // Fly the plane along the (statically dashed, vintage-chart) route: one
-    // progress tween samples the path so the nose always points along the arc.
+    // Fly the plane along the vintage-chart route: one progress tween samples
+    // the path so the nose always points along the arc. The dashed route
+    // itself (cut__route) is now a faint, always-visible flight-plan preview
+    // rather than a solid line appearing instantly; two overlapping "trail"
+    // paths (Part 2 overhaul) reveal a short, fading comet-tail that moves
+    // with the plane, using the classic stroke-dasharray/dashoffset reveal
+    // trick - a moving [d-trailLen, d] window rather than a monotonic 0→d
+    // growth, so the tail actually trails instead of accumulating forever.
     const path = pathRef.current
     const plane = planeRef.current
+    const trailNear = trailNearRef.current
+    const trailFar = trailFarRef.current
     const len = path.getTotalLength()
+    const setTrail = (el, trailLen, d) => {
+      el.setAttribute('stroke-dasharray', `${trailLen} ${len + 10}`)
+      el.setAttribute('stroke-dashoffset', `${-(d - trailLen)}`)
+    }
     gsap.set(plane, { autoAlpha: 1 })
+    setTrail(trailNear, 42, 0)
+    setTrail(trailFar, 115, 0)
     const prog = { t: 0 }
     tl.to(
       prog,
@@ -146,6 +163,8 @@ export default function Cutscene({ match, onComplete }) {
           // Grow as it nears the pin - the "flying toward you" depth read.
           const scale = 0.45 + 0.6 * prog.t
           plane.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${ang}) scale(${scale})`)
+          setTrail(trailNear, 42, d)
+          setTrail(trailFar, 115, d)
         },
       },
       '<0.1',
@@ -204,16 +223,43 @@ export default function Cutscene({ match, onComplete }) {
             <pattern id="cut-grat" width="62.5" height="62.5" patternUnits="userSpaceOnUse">
               <path d="M62.5 0 H0 V62.5" fill="none" stroke="var(--cut-line)" strokeWidth="1" />
             </pattern>
+            {/* Engraved-sea texture (Part 2 overhaul) - fine wave hatching under the
+                land, the signature depth cue of a real vintage nautical/aeronautical
+                chart: water reads as worked engraving, land as clean parchment. */}
+            <pattern id="cut-sea" width="26" height="14" patternUnits="userSpaceOnUse">
+              <path d="M0 7 Q6.5 2 13 7 T26 7" fill="none" stroke="var(--cut-line)" strokeWidth="0.8" />
+            </pattern>
             <radialGradient id="cut-vignette" cx="50%" cy="46%" r="72%">
               <stop offset="55%" stopColor="transparent" />
               <stop offset="100%" stopColor="var(--cut-vignette)" />
             </radialGradient>
           </defs>
 
+          <rect width="1000" height="600" fill="url(#cut-sea)" opacity="0.55" />
           <rect width="1000" height="600" fill="url(#cut-grat)" />
 
-          {/* Host-nation coastlines (6a) - a faint sepia land layer under the route. */}
+          {/* Host-nation coastlines (6a, Part 2 overhaul) - a sepia land layer under
+              the route, each host washed with a faint tint of its own role colour
+              (Canada red / USA blue / Mexico green - the same identity treatment as
+              the Atlas globe, not a new use of the role-locked data channels) so the
+              three hosts read at a glance without breaking the parchment mood. */}
           <g className="cut__geo" aria-hidden="true">
+            <path className="cut__geo-land cut__geo-land--ca" d={GEO.canada} />
+            <path className="cut__geo-land cut__geo-land--us" d={GEO.usa} />
+            <path className="cut__geo-land cut__geo-land--mx" d={GEO.mexico} />
+          </g>
+
+          {/* Province/state borders (Part 2 overhaul) - very fine, low-opacity
+              hairlines, clearly subordinate to the crisp coastline strokes below;
+              an authentic touch real vintage atlases carried too. */}
+          <g className="cut__borders" aria-hidden="true">
+            <path d={GEO_BORDERS.canada} />
+            <path d={GEO_BORDERS.usa} />
+            <path d={GEO_BORDERS.mexico} />
+          </g>
+
+          {/* Coastline strokes on top of the tint/borders - crisp and confident. */}
+          <g className="cut__coast" aria-hidden="true">
             <path d={GEO.canada} />
             <path d={GEO.usa} />
             <path d={GEO.mexico} />
@@ -235,7 +281,9 @@ export default function Cutscene({ match, onComplete }) {
           </g>
 
           {/* Flight arc: plane enters from off-screen (lower-left) and closes on
-              the projected destination pin. No origin marker - it just arrives. */}
+              the projected destination pin. No origin marker - it just arrives.
+              A faint flight-plan preview, dashed, visible for the whole beat -
+              the comet-tail (below) is what actually reads as "flown". */}
           <path
             ref={pathRef}
             className="cut__route"
@@ -246,6 +294,12 @@ export default function Cutscene({ match, onComplete }) {
             strokeLinecap="round"
             strokeDasharray="9 10"
           />
+          {/* Comet-tail (Part 2 overhaul): two solid overlapping segments, driven
+              by the same flight progress in the onUpdate above, giving a short
+              fading trail that moves with the plane instead of a line that
+              either snaps in fully or grows and stays solid forever. */}
+          <path ref={trailFarRef} className="cut__route-trail cut__route-trail--far" d={routeD} fill="none" strokeLinecap="round" />
+          <path ref={trailNearRef} className="cut__route-trail cut__route-trail--near" d={routeD} fill="none" strokeLinecap="round" />
 
           {/* Destination pin at the venue's real projected coordinate. */}
           <g className="cut__pin" transform={`translate(${dest.x} ${dest.y})`}>
