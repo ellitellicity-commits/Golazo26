@@ -114,7 +114,16 @@ async function fetchLiveMatches() {
 function indexFinished(matches) {
   const idx = new Map()
   for (const m of matches) {
-    if (m.status !== 'FINISHED') continue
+    // `status` is normally a reliable enum, but football-data.org has been
+    // observed to hand back a raw timestamp string (e.g. "2026-07-06
+    // 01:00:00Z") in place of "FINISHED" for an otherwise-complete match - the
+    // score and a decided `winner` are still present and correct. Trust either
+    // signal: a single corrupted status field must not freeze the knockout
+    // bracket on that round forever, since no later round (including whichever
+    // one is actually live right now) can resolve its teams until this match's
+    // winner is known.
+    const hasDecidedWinner = m.score?.winner === 'HOME_TEAM' || m.score?.winner === 'AWAY_TEAM' || m.score?.winner === 'DRAW'
+    if (m.status !== 'FINISHED' && !hasDecidedWinner) continue
     const home = resolveTeamName(m.homeTeam?.name)
     const away = resolveTeamName(m.awayTeam?.name)
     const s = m.score || {}
