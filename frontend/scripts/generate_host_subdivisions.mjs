@@ -10,8 +10,12 @@
 // OUTPUT (keyed by host country code US/CA/MX):
 //   { US: { bbox, subs: [{ name, rings: [[[lng,lat],...]] }],
 //           capitals: [{ name, region, lat, lng, national }] }, ... }
-// Coordinates rounded to 2dp; only the largest ring per subdivision is kept
-// (islands/exclaves dropped) to stay compact and legible as an inset map.
+// Coordinates rounded to 2dp; only rings whose bbox area is at least SIG_RATIO
+// of the subdivision's largest ring are kept (tiny skerries/exclaves dropped)
+// to stay compact and legible as an inset map. A single-largest-ring cutoff
+// used to drop Nunavut's Arctic islands entirely, including Baffin Island -
+// where the capital Iqaluit sits - so the capital dot/label rendered
+// floating over blank space with no landmass under it.
 //
 // Run: node scripts/generate_host_subdivisions.mjs
 
@@ -38,7 +42,8 @@ const round2 = (n) => Math.round(n * 100) / 100
 
 // Douglas–Peucker simplification in lng/lat degrees. Tolerance ~0.12° keeps
 // province shapes recognizable as an inset while cutting the 10m point count
-// (and file size) by an order of magnitude.
+// (and file size) by an order of magnitude. Assumes an open polyline whose
+// endpoints differ - see rdpClosed below for the ring (closed-loop) entry point.
 function rdp(points, eps) {
   if (points.length < 3) return points
   let maxD = 0, idx = 0
@@ -59,19 +64,49 @@ function rdp(points, eps) {
   return [points[0], points[points.length - 1]]
 }
 
-function largestRing(geom) {
+// GeoJSON polygon rings are closed loops (first coordinate === last), so
+// feeding one straight into rdp() is degenerate: its anchor chord has zero
+// length, every point's "distance" from that chord computes to 0, and the
+// whole ring collapses to its (identical) first/last point. Split the ring at
+// its two farthest-apart vertices into two open chains first, simplify each
+// independently (now with a real chord to measure against), then rejoin.
+function farthestIndex(pts, from) {
+  let bestI = 0, bestD = -1
+  for (let i = 0; i < pts.length; i++) {
+    const dx = pts[i][0] - from[0], dy = pts[i][1] - from[1]
+    const d = dx * dx + dy * dy
+    if (d > bestD) { bestD = d; bestI = i }
+  }
+  return bestI
+}
+function rdpClosed(ring, eps) {
+  const closed = ring[0][0] === ring[ring.length - 1][0] && ring[0][1] === ring[ring.length - 1][1]
+  const pts = closed ? ring.slice(0, -1) : ring
+  if (pts.length < 3) return ring
+  const k = farthestIndex(pts, pts[0])
+  const chainA = rdp(pts.slice(0, k + 1), eps) // pts[0] .. pts[k]
+  const chainB = rdp(pts.slice(k).concat([pts[0]]), eps) // pts[k] .. pts[end] .. back to pts[0]
+  return chainA.slice(0, -1).concat(chainB)
+}
+
+// Fraction of the largest ring's bbox area a ring must clear to survive -
+// keeps major islands (Baffin, Vancouver Island, ...) while still dropping
+// the long tail of tiny skerries/exclaves that would just clutter the inset.
+const SIG_RATIO = 0.03
+
+function significantRings(geom) {
   const rings = geom.type === 'Polygon' ? [geom.coordinates[0]]
     : geom.type === 'MultiPolygon' ? geom.coordinates.map((p) => p[0]) : []
-  let best = null, bestA = -1
-  for (const r of rings) {
+  const withArea = rings.map((r) => {
     let a = 180, b = 90, c = -180, d = -90
     for (const [x, y] of r) { if (x < a) a = x; if (y < b) b = y; if (x > c) c = x; if (y > d) d = y }
-    const area = (c - a) * (d - b)
-    if (area > bestA) { bestA = area; best = r }
-  }
-  if (!best) return null
-  const simplified = rdp(best, 0.12)
-  return simplified.map(([x, y]) => [round2(x), round2(y)])
+    return { r, area: (c - a) * (d - b) }
+  })
+  const maxArea = withArea.reduce((m, x) => Math.max(m, x.area), 0)
+  if (maxArea <= 0) return []
+  return withArea
+    .filter((x) => x.area >= maxArea * SIG_RATIO)
+    .map((x) => rdpClosed(x.r, 0.12).map(([lng, lat]) => [round2(lng), round2(lat)]))
 }
 
 async function main() {
@@ -83,10 +118,10 @@ async function main() {
     const subs = []
     let a = 180, b = 90, c = -180, d = -90
     for (const f of feats) {
-      const ring = largestRing(f.geometry)
-      if (!ring) continue
-      subs.push({ name: f.properties.name, rings: [ring] })
-      for (const [x, y] of ring) { if (x < a) a = x; if (y < b) b = y; if (x > c) c = x; if (y > d) d = y }
+      const rings = significantRings(f.geometry)
+      if (!rings.length) continue
+      subs.push({ name: f.properties.name, rings })
+      for (const ring of rings) for (const [x, y] of ring) { if (x < a) a = x; if (y < b) b = y; if (x > c) c = x; if (y > d) d = y }
     }
     out[code] = { bbox: [a, b, c, d], subs, capitals: [] }
     console.log(`${code}: ${subs.length} subdivisions`)
