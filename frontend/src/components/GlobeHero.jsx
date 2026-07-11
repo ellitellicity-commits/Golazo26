@@ -3,7 +3,6 @@ import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import worldLines from '../data/worldLines.json'
-import hostSubdivisions from '../data/hostSubdivisions.json'
 import { llToXYZ, xyzToLL, greatCircleArc, hostAtPoint } from '../lib/geo'
 import { countryAt } from '../lib/countryHitTest'
 import './GlobeHero.css'
@@ -45,12 +44,16 @@ const PAPER = {
 }
 
 // Build one LineSegments geometry from all coastline rings, on the sphere.
-function buildLand() {
+// `stride` (paper globe only) keeps every Nth ring point - the crumple tween
+// re-displaces every land vertex every frame, so fewer points is a direct,
+// meaningful perf win on the Sandbox globe without visibly changing the shape.
+function buildLand(stride = 1) {
   const positions = []
   for (const ring of worldLines) {
-    for (let i = 0; i < ring.length - 1; i++) {
-      const a = llToXYZ(ring[i][1], ring[i][0], R * 1.002)
-      const b = llToXYZ(ring[i + 1][1], ring[i + 1][0], R * 1.002)
+    const pts = stride > 1 ? ring.filter((_, i) => i % stride === 0 || i === ring.length - 1) : ring
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = llToXYZ(pts[i][1], pts[i][0], R * 1.002)
+      const b = llToXYZ(pts[i + 1][1], pts[i + 1][0], R * 1.002)
       positions.push(a[0], a[1], a[2], b[0], b[1], b[2])
     }
   }
@@ -72,34 +75,6 @@ function buildGraticule() {
   const geo = new THREE.BufferGeometry()
   geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
   return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: COL.grat, transparent: true, opacity: 0.5 }))
-}
-
-// Province/state borders for the three 2026 hosts only (paper globe) - built the
-// same way as buildLand but from hostSubdivisions.json's admin-1 rings, sitting
-// just under the coastline layer and reading finer + fainter so it stays clearly
-// subordinate to the dominant, single-weight country outline. hostSubdivisions.json
-// is detailed enough for the zoomed-in 2D Atlas sub-maps (every island ring, full
-// point density) - both are too dense for this small overview globe, so this
-// layer only draws each subdivision's one primary ring (dropping minor island
-// slivers, which read as noise at this scale) and strides every other point
-// (halving segment count) while always keeping the ring's closing point.
-const PROVINCE_STRIDE = 2
-function buildProvinceBorders() {
-  const positions = []
-  for (const host of Object.values(hostSubdivisions)) {
-    for (const sub of host.subs) {
-      const ring = sub.rings.reduce((a, b) => (b.length > a.length ? b : a))
-      const pts = ring.filter((_, i) => i % PROVINCE_STRIDE === 0 || i === ring.length - 1)
-      for (let i = 0; i < pts.length - 1; i++) {
-        const a = llToXYZ(pts[i][1], pts[i][0], R * 1.0015)
-        const b = llToXYZ(pts[i + 1][1], pts[i + 1][0], R * 1.0015)
-        positions.push(a[0], a[1], a[2], b[0], b[1], b[2])
-      }
-    }
-  }
-  const geo = new THREE.BufferGeometry()
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
-  return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: PAPER.line, transparent: true, opacity: 0.35 }))
 }
 
 // Hex int (0xrrggbb) → "r,g,b" for rgba() strings - keeps the canvas texture
@@ -404,8 +379,12 @@ function GlobeHero({
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100)
     camera.position.set(0, 0.6, 3.2)
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    // Mobile/tablet perf: MSAA and a full-res retina buffer are the two biggest
+    // GPU costs on a phone/tablet for comparatively little visual gain on a
+    // small canvas, so both scale down under the ~820px tablet breakpoint.
+    const isNarrow = window.innerWidth <= 820
+    const renderer = new THREE.WebGLRenderer({ antialias: !isNarrow, alpha: true })
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isNarrow ? 1.5 : 2))
     renderer.setSize(width, height)
     mount.appendChild(renderer.domElement)
 
@@ -417,7 +396,10 @@ function GlobeHero({
     scene.add(key)
 
     const globe = new THREE.Group()
-    const sphereGeo = new THREE.SphereGeometry(R, paper ? 48 : 64, paper ? 48 : 64)
+    // Paper mode trims geometry density hard - the crumple tween re-displaces
+    // every vertex every frame, so a lighter mesh/line count is a direct,
+    // meaningful perf win on the Sandbox globe (mobile especially).
+    const sphereGeo = new THREE.SphereGeometry(R, paper ? 28 : 64, paper ? 28 : 64)
     const sphere = new THREE.Mesh(
       sphereGeo,
       paper
@@ -425,16 +407,10 @@ function GlobeHero({
         : new THREE.MeshStandardMaterial({ color: COL.ocean, roughness: 1, metalness: 0 }),
     )
     globe.add(sphere)
-    const land = buildLand()
+    const land = buildLand(paper ? 3 : 1)
     if (paper) land.material.color.setHex(PAPER.ink)
     globe.add(land)
-    let provinceBorders = null
-    if (paper) {
-      provinceBorders = buildProvinceBorders()
-      globe.add(provinceBorders)
-    } else {
-      globe.add(buildGraticule())
-    }
+    if (!paper) globe.add(buildGraticule())
     scene.add(globe)
 
     // Crumple base-position cache (paper globe only) - captured once, right
@@ -444,7 +420,6 @@ function GlobeHero({
       ? {
           sphere: sphereGeo.attributes.position.array.slice(),
           land: land.geometry.attributes.position.array.slice(),
-          borders: provinceBorders.geometry.attributes.position.array.slice(),
         }
       : null
 
@@ -473,7 +448,7 @@ function GlobeHero({
     const pointer = new THREE.Vector2()
 
     eng.current = {
-      scene, camera, renderer, globe, sphere, land, provinceBorders, markerGroup, arcGroup, hostGroup, flagGroup, controls, raycaster, pointer,
+      scene, camera, renderer, globe, sphere, land, markerGroup, arcGroup, hostGroup, flagGroup, controls, raycaster, pointer,
       markerMeshes: [], flight: null, raf: 0, disposed: false, running: false, inView: true, lastHost: undefined, mode,
       // Atlas flag-fill state: caches + the currently shown country.
       flagGeo: new Map(), flagTex: new Map(), hoverName: null, hoverMesh: null, hoverPaused: false,
@@ -486,11 +461,11 @@ function GlobeHero({
 
     // --- Paper globe crumple/unfold ------------------------------------------
     // One symmetric GSAP tween 0→1→0 (yoyo) drives crumpleVertex across the
-    // sphere, land, province-border, and marker layers every frame of the
-    // animation window - each layer reads its own cached base positions, so
-    // everything crumples "as one sheet" without any shared indexing. sine.inOut
-    // (vs. the punchier power2.inOut this started as) reads as a slower, more
-    // deliberate physical fold rather than a snap.
+    // sphere, land, and marker layers every frame of the animation window -
+    // each layer reads its own cached base positions, so everything crumples
+    // "as one sheet" without any shared indexing. sine.inOut (vs. the punchier
+    // power2.inOut this started as) reads as a slower, more deliberate
+    // physical fold rather than a snap.
     const runCrumple = (duration, onLock) => {
       const E = eng.current
       if (!E || !E.paper || !E.crumpleBase) return
@@ -498,10 +473,9 @@ function GlobeHero({
       if (reduce) { onLock?.(); return }
       gsap.killTweensOf(E.crumpleTween || {})
       const state = { t: 0 }
-      const { sphere: sBase, land: lBase, borders: bBase } = E.crumpleBase
+      const { sphere: sBase, land: lBase } = E.crumpleBase
       const sPos = E.sphere.geometry.attributes.position.array
       const lPos = E.land.geometry.attributes.position.array
-      const bPos = E.provinceBorders.geometry.attributes.position.array
       const apply = () => {
         const t = state.t
         for (let i = 0; i < sBase.length; i += 3) {
@@ -512,13 +486,8 @@ function GlobeHero({
           const p = crumpleVertex(lBase[i], lBase[i + 1], lBase[i + 2], t)
           lPos[i] = p[0]; lPos[i + 1] = p[1]; lPos[i + 2] = p[2]
         }
-        for (let i = 0; i < bBase.length; i += 3) {
-          const p = crumpleVertex(bBase[i], bBase[i + 1], bBase[i + 2], t)
-          bPos[i] = p[0]; bPos[i + 1] = p[1]; bPos[i + 2] = p[2]
-        }
         E.sphere.geometry.attributes.position.needsUpdate = true
         E.land.geometry.attributes.position.needsUpdate = true
-        E.provinceBorders.geometry.attributes.position.needsUpdate = true
         for (const m of E.markerMeshes) {
           const base = m.userData.basePos
           if (!base) continue
