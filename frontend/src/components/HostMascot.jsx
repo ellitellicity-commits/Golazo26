@@ -247,6 +247,30 @@ const ORIGINS = {
   MX: { country: 'Mexico', explore: 'Explore Mexico', armL: '64 150', armR: '136 150', center: '100 130' },
 }
 
+// Hip/tail pivots for the independent idle limb sway (below) - the arm pivots
+// above (armL/armR) are reused as-is. Not present on a mascot means that limb
+// is skipped (Moswa/Tatanka have no tail).
+const IDLE_PIVOTS = {
+  CA: { legL: '91 194', legR: '115 198' },
+  US: { legL: '78 200', legR: '122 200' },
+  MX: { legL: '91 200', legR: '114 200', tail: '138 192' },
+}
+
+// Estimated speaking duration (ms) for a bubble line, mirroring Typewriter's own
+// per-char cadence + punctuation beats + its startDelay, so the mouth talks for
+// roughly as long as the line takes to type out rather than a fixed/random span.
+const speakDuration = (text) => {
+  const full = text || ''
+  if (!full) return 0
+  const perChar = Math.max(9, Math.min(22, 1500 / full.length))
+  let acc = 160
+  for (const ch of full) {
+    acc += perChar
+    if (ch === '!' || ch === '?') acc += 80
+  }
+  return acc
+}
+
 // Guided-tour scripts (Part 2a) - real, confirmed WC2026 facts only. Each beat
 // names the mascot animation it plays. The mascot speaks directly to the user.
 const TOURS = {
@@ -444,6 +468,22 @@ export default function HostMascot({ iso, variant = 'panel', onExplore }) {
       if (q('.m-breath').length) gsap.to(q('.m-breath'), { scaleY: 1.014, duration: 2.4, transformOrigin: '50% 100%', ease: 'sine.inOut', repeat: -1, yoyo: true })
       if (q('.m-shadow').length) gsap.to(q('.m-shadow'), { scaleX: 1.035, duration: 2.4, transformOrigin: '50% 50%', ease: 'sine.inOut', repeat: -1, yoyo: true })
 
+      // Independent limb idle sway, layered on top of the shared .m-breath scale.
+      // Each limb gets its own duration/delay (mirroring the reference cadence in
+      // the CLAUDE.md brief) so the character reads as loosely, independently
+      // alive rather than a single puppeted mass. Small rotation amplitudes keep
+      // it a subtle "alive" tell, not a wave. Gated per-target existing, and any
+      // tour-beat/hover/poke tween on the same limb naturally takes over via
+      // GSAP's default overwrite when it fires.
+      const pivots = IDLE_PIVOTS[code]
+      if (pivots) {
+        if (q('.m-arm-l').length) gsap.to(q('.m-arm-l'), { rotation: 3, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true, svgOrigin: origins.armL })
+        if (q('.m-arm-r').length) gsap.to(q('.m-arm-r'), { rotation: -4, duration: 2.2, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 0.4, svgOrigin: origins.armR })
+        if (pivots.legL && q('.m-leg-l').length) gsap.to(q('.m-leg-l'), { rotation: 2, duration: 1.6, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 0.8, svgOrigin: pivots.legL })
+        if (pivots.legR && q('.m-leg-r').length) gsap.to(q('.m-leg-r'), { rotation: -2, duration: 1.9, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 0.2, svgOrigin: pivots.legR })
+        if (pivots.tail && q('.m-tail').length) gsap.to(q('.m-tail'), { rotation: -3, duration: 2.4, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 0.6, svgOrigin: pivots.tail })
+      }
+
       // Blink loop with a wink on every third blink. A single repeating timeline
       // (blink, blink, wink) keeps it deterministic and fully inside the context,
       // so revert() tears it down with no stray delayedCalls left running.
@@ -481,6 +521,34 @@ export default function HostMascot({ iso, variant = 'panel', onExplore }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [def, isTour])
+
+  // Mouth-sync: whenever the bubble's line changes (tour beat advances, or a
+  // poke cycles to the next fun fact), open/close the mouth on a fast loop for
+  // roughly as long as that line takes to type out (speakDuration mirrors
+  // Typewriter's own per-char cadence), then close it again. Not wired to
+  // Typewriter directly - keeps this component independent of it - but timed to
+  // track the same visible "speaking" window.
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root || reduced() || !def) return undefined
+    const line = isTour && phase === 'tour' ? tour?.[beat]?.line : def.facts[factIdx]
+    const q = gsap.utils.selector(root)
+    const mouth = q('.m-mouth')
+    if (!mouth.length) return undefined
+    gsap.killTweensOf(mouth)
+    const dur = speakDuration(line)
+    if (!dur) return undefined
+    const talk = gsap.to(mouth, { scaleY: 1.4, duration: 0.12, ease: 'power1.inOut', transformOrigin: '50% 0%', repeat: -1, yoyo: true })
+    const stop = gsap.delayedCall(dur / 1000, () => {
+      talk.kill()
+      gsap.to(mouth, { scaleY: 1, duration: 0.1 })
+    })
+    return () => {
+      talk.kill()
+      stop.kill()
+      gsap.set(mouth, { scaleY: 1 })
+    }
+  }, [def, isTour, phase, beat, factIdx, tour])
 
   if (!def) return null
 
