@@ -16,6 +16,16 @@
 .referee__svg {
   filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.55));
 }
+
+/* Explicit paint-order lock for the whistle-in-mouth beat: SVG2 honours z-index
+   on plain <g> elements without needing `position`, so this pins the stacking
+   even if the group order in the markup ever drifts. ref-head sits lowest so
+   the raised whistle (a child of ref-arm-r) always paints in front of the face
+   and neck; ref-whistle-hand itself sits highest within that arm. */
+.ref-head { z-index: 1; }
+.ref-arm-l { z-index: 2; }
+.ref-arm-r { z-index: 3; }
+.ref-whistle-hand { z-index: 4; }
 .referee__bubble {
   position: relative;
   display: flex;

@@ -54,42 +54,15 @@ function RefereeArt({ hand = 'card' }) {
         </g>
       </g>
 
-      {/* left arm on hip */}
-      <g className="ref-arm-l">
-        <path d="M70 128 Q54 138 60 158 Q64 170 78 166" fill="none" stroke={SKIN} strokeWidth="13" strokeLinecap="round" />
-        <circle cx="78" cy="166" r="8" fill={SKIN} />
-        <path d="M70 128 Q58 134 58 150" fill="none" stroke={KIT} strokeWidth="15" strokeLinecap="round" opacity="0.9" />
-      </g>
-
-      {/* right arm raised, holding the card */}
-      <g className="ref-arm-r">
-        <path className="ref-sleeve" d="M130 126 Q150 122 158 104" fill="none" stroke={KIT} strokeWidth="16" strokeLinecap="round" />
-        <path d="M150 108 Q162 92 166 74" fill="none" stroke={SKIN} strokeWidth="12" strokeLinecap="round" />
-        <circle cx="166" cy="72" r="8" fill={SKIN} />
-        {/* the three cards share the hand; only one shows at a time */}
-        <g className="ref-cards" transform="translate(166 72) rotate(12)">
-          <rect className="ref-card ref-card-red" x="-8" y="-34" width="17" height="26" rx="2" fill="#cc0000" stroke="#8f0000" strokeWidth="1" opacity={whistle ? 0 : 1} />
-          <rect className="ref-card ref-card-yellow" x="-8" y="-34" width="17" height="26" rx="2" fill="#ffd700" stroke="#b89600" strokeWidth="1" opacity="0" />
-          <rect className="ref-card ref-card-green" x="-8" y="-34" width="17" height="26" rx="2" fill="#2dc26b" stroke="#1c8a49" strokeWidth="1" opacity="0" />
-        </g>
-        {/* Cutscene variant: a silver whistle in the raised hand instead of a card -
-            rounded body, a mouthpiece nib, and a lanyard-loop ring. Grouped so the
-            per-beat blow tween can raise and settle it. */}
-        {/* Body centred on the fist's own origin (0,0, r 8) so it reads as gripped
-            inside the closed hand rather than floating above it. */}
-        {whistle && (
-          <g className="ref-whistle-hand" transform="translate(166 72) rotate(12)">
-            <rect x="-9" y="-6" width="18" height="12" rx="5" fill={SILVER} stroke="#8a8a8a" strokeWidth="1.5" />
-            <rect x="-13" y="-3" width="5" height="6" rx="2" fill={SILVER} stroke="#8a8a8a" strokeWidth="1.5" />
-            <circle cx="6" cy="0" r="2.4" fill="#7a7a7a" />
-            <circle cx="9" cy="-7" r="2.6" fill="none" stroke="#9a9a9a" strokeWidth="1.5" />
-          </g>
-        )}
-      </g>
-
+      {/* Head is drawn BEFORE the arms (SVG paint order = document order) so the
+          raised whistle-hand - a child of ref-arm-r - always paints in front of
+          the face/neck, at every frame of the count/whistle beats, not just the
+          resting pose. See ref-arm-r below for the whistle group itself. */}
       <g className="ref-head">
-        {/* neck */}
-        <rect x="93" y="104" width="14" height="12" fill={SKIN_DK} />
+        {/* neck - widened to span the jersey collar opening (88-112) instead of
+            a narrow 14px column, so it reads as bridging a stocky neck into the
+            shoulders rather than a thin stalk under the head. */}
+        <rect x="88" y="100" width="24" height="17" fill={SKIN_DK} />
         {/* head */}
         <ellipse cx="100" cy="82" rx="29" ry="31" fill={SKIN} />
         <path d="M100 111 Q114 110 118 100 Q112 113 100 113 Q88 113 82 100 Q86 110 100 111 Z" fill={SKIN_DK} opacity="0.5" />
@@ -115,6 +88,42 @@ function RefereeArt({ hand = 'card' }) {
         <ellipse className="ref-cheek ref-cheek-r" cx="118" cy="92" rx="9" ry="7" fill={SKIN} />
         {/* thin serious mouth - scales to an "O" on the whistle blow */}
         <path className="ref-mouth" d="M91 100 Q100 103 109 100" stroke="#7a3b2a" strokeWidth="3" fill="none" strokeLinecap="round" />
+      </g>
+
+      {/* left arm on hip - drawn after the head; never overlaps the face at rest. */}
+      <g className="ref-arm-l">
+        <path d="M70 128 Q54 138 60 158 Q64 170 78 166" fill="none" stroke={SKIN} strokeWidth="13" strokeLinecap="round" />
+        <circle cx="78" cy="166" r="8" fill={SKIN} />
+        <path d="M70 128 Q58 134 58 150" fill="none" stroke={KIT} strokeWidth="15" strokeLinecap="round" opacity="0.9" />
+      </g>
+
+      {/* Right arm raised, holding the card/whistle - drawn AFTER ref-head so it
+          (and the whistle grouped inside it) always paints in front of the face
+          and neck, including every frame of the count/whistle beats when the fist
+          swings up to mouth level. */}
+      <g className="ref-arm-r">
+        <path className="ref-sleeve" d="M130 126 Q150 122 158 104" fill="none" stroke={KIT} strokeWidth="16" strokeLinecap="round" />
+        <path d="M150 108 Q162 92 166 74" fill="none" stroke={SKIN} strokeWidth="12" strokeLinecap="round" />
+        <circle cx="166" cy="72" r="8" fill={SKIN} />
+        {/* the three cards share the hand; only one shows at a time */}
+        <g className="ref-cards" transform="translate(166 72) rotate(12)">
+          <rect className="ref-card ref-card-red" x="-8" y="-34" width="17" height="26" rx="2" fill="#cc0000" stroke="#8f0000" strokeWidth="1" opacity={whistle ? 0 : 1} />
+          <rect className="ref-card ref-card-yellow" x="-8" y="-34" width="17" height="26" rx="2" fill="#ffd700" stroke="#b89600" strokeWidth="1" opacity="0" />
+          <rect className="ref-card ref-card-green" x="-8" y="-34" width="17" height="26" rx="2" fill="#2dc26b" stroke="#1c8a49" strokeWidth="1" opacity="0" />
+        </g>
+        {/* Cutscene variant: a silver whistle in the raised hand instead of a card -
+            rounded body, a mouthpiece nib, and a lanyard-loop ring. Grouped so the
+            per-beat blow tween can raise and settle it. */}
+        {/* Body centred on the fist's own origin (0,0, r 8) so it reads as gripped
+            inside the closed hand rather than floating above it. */}
+        {whistle && (
+          <g className="ref-whistle-hand" transform="translate(166 72) rotate(12)">
+            <rect x="-9" y="-6" width="18" height="12" rx="5" fill={SILVER} stroke="#8a8a8a" strokeWidth="1.5" />
+            <rect x="-13" y="-3" width="5" height="6" rx="2" fill={SILVER} stroke="#8a8a8a" strokeWidth="1.5" />
+            <circle cx="6" cy="0" r="2.4" fill="#7a7a7a" />
+            <circle cx="9" cy="-7" r="2.6" fill="none" stroke="#9a9a9a" strokeWidth="1.5" />
+          </g>
+        )}
       </g>
     </g>
   )
