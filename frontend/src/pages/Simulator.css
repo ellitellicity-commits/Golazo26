@@ -151,6 +151,15 @@
      stage grow to fit it rather than clipping. */
   .sim__stage { height: auto; }
   .sim__stage .globe-hero { height: min(60vh, 560px); }
+  /* The hint's fixed `nowrap` pill is wide enough that a long venue name (e.g.
+     "Estadio Azteca") pushes past both edges of a narrow viewport once it's
+     centered, causing horizontal scroll. Let it wrap and cap its width to the
+     stage instead - same pill styling, just no longer fixed to one line. */
+  .sim__venue-hint {
+    max-width: calc(100% - 2 * var(--space-md, 16px));
+    white-space: normal;
+    text-align: center;
+  }
 }
 
 /* --- Result card --- */

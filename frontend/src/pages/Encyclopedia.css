@@ -95,6 +95,12 @@
   text-transform: uppercase;
   pointer-events: none;
 }
+/* Sits above the "Tap a marker" hint (bottom) so first load can show both
+   without overlapping - this one clears itself on the first drag/tap. */
+.enc__hint--drag {
+  bottom: auto;
+  top: 16px;
+}
 
 /* --- Profile panel --- */
 .enc-panel {

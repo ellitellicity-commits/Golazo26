@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useDragHint } from '../lib/useDragHint'
 import GlobeHero from '../components/GlobeHero'
 import Typewriter from '../components/Typewriter'
 import HostMascot from '../components/HostMascot'
@@ -188,6 +189,7 @@ export default function Encyclopedia() {
 
   const isHost = !!(country?.iso && HOST_ISO.has(country.iso))
   const hostColour = country?.iso ? HOST_COLOURS[country.iso] : null
+  const [showDragHint, dragHintBind] = useDragHint('atlas-globe')
 
   const choose = (name) => {
     setTourDone(false)
@@ -235,8 +237,10 @@ export default function Encyclopedia() {
       <div
         className={`enc__stage${showPanel ? ' enc__stage--panel' : ''}`}
         style={hostColour ? { '--host-colour': hostColour } : undefined}
+        {...dragHintBind}
       >
         <GlobeHero mode="interactive" markers={MARKERS} countryShapes={COUNTRY_SHAPES} hostTints={HOST_TINTS} focus={focus} onCountryClick={(m) => choose(m.name)} ariaLabel="Country atlas globe" />
+        {showDragHint && <p className="enc__hint enc__hint--drag" aria-hidden="true">Drag to rotate</p>}
         {!country && <p className="enc__hint" aria-hidden="true">Tap a marker</p>}
         {/* Host mascot stays mounted for the whole selection: it runs the guided
             tour, then drops into idle (onExplore) beside the open panel. */}
