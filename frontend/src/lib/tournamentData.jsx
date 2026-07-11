@@ -9,11 +9,14 @@ import LoadingScreen from '../components/LoadingScreen'
 const TournamentDataContext = createContext(null)
 
 // Polling cadence (seconds). Fast while a match is in play so scores/minutes
-// tick along; slow otherwise, just to catch a match kicking off. Both stay well
-// under football-data.org's 10 req/min free-tier limit (which is shared across
-// all clients via the one server-side key), and polling pauses while the tab is
-// hidden. Odds are static and loaded once, so only fixtures are re-fetched.
-const POLL_LIVE_S = 60
+// tick along; slow otherwise, just to catch a match kicking off. The shared
+// football-data.org key is protected by the proxy's own short edge cache
+// (api/index.js: s-maxage=20) rather than the client interval alone, so this can
+// run at the product's 30s live-freshness target without risking the upstream's
+// 10 req/min free-tier limit - concurrent clients within that 20s window collapse
+// into one upstream call. Polling pauses while the tab is hidden. Odds are static
+// and loaded once, so only fixtures are re-fetched.
+const POLL_LIVE_S = 30
 const POLL_IDLE_S = 300
 
 // Minimum time the loading gate stays up, even if data resolves in one tick -
