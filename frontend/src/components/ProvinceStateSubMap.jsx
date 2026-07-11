@@ -132,6 +132,9 @@ export default function ProvinceStateSubMap({ code }) {
   // re-render mid-gesture (the old setState-per-pixel caused frame drops/crash).
   const viewRef = useRef({ z: 1, x: 0, y: 0 })
   const drag = useRef(null)
+  // Last zoom level the dot radii were rescaled for - lets applyTransform skip
+  // the rescale loop on pure pans (drag changes x/y but not z).
+  const dotZRef = useRef(1)
   // The only reactive bit: a boolean that flips just once when zoom crosses the
   // 1x threshold, to swap the grab cursor and mount the reset button.
   const [zoomed, setZoomed] = useState(false)
@@ -168,6 +171,19 @@ export default function ProvinceStateSubMap({ code }) {
     vp.setAttribute('transform', `translate(${x.toFixed(3)} ${y.toFixed(3)}) scale(${z.toFixed(3)})`)
     const isZoomed = z > MIN_ZOOM
     setZoomed((prev) => (prev === isZoomed ? prev : isZoomed))
+    // Capital/venue dots live inside the scaled viewport group, so their radius
+    // would otherwise balloon or shrink with the map. Counter-scale by 1/z so
+    // they read as a constant size on screen at any zoom level. Skipped on a
+    // pure pan (z unchanged) to avoid walking every dot on each pointermove.
+    if (z !== dotZRef.current) {
+      dotZRef.current = z
+      const svg = svgRef.current
+      if (svg) {
+        for (const el of svg.querySelectorAll('[data-r]')) {
+          el.setAttribute('r', (Number(el.dataset.r) / z).toFixed(3))
+        }
+      }
+    }
   }, [])
 
   // Reset to the full-country view whenever the selected host changes.
@@ -281,6 +297,7 @@ export default function ProvinceStateSubMap({ code }) {
               <circle
                 key={`${c.name}-${c.region || 'nat'}`}
                 cx={c.x.toFixed(2)} cy={c.y.toFixed(2)} r={c.national ? 1.2 : 0.5}
+                data-r={c.national ? 1.2 : 0.5}
                 className={`submap__cap${c.national ? ' submap__cap--nat' : ''}`}
                 onMouseEnter={showTip(`${c.name}${c.region ? ` · ${c.region}` : ''}${c.national ? ' (capital)' : ''}`)}
                 onMouseMove={showTip(`${c.name}${c.region ? ` · ${c.region}` : ''}${c.national ? ' (capital)' : ''}`)}
@@ -296,6 +313,7 @@ export default function ProvinceStateSubMap({ code }) {
               <circle
                 key={v.name}
                 cx={v.x.toFixed(2)} cy={v.y.toFixed(2)} r={0.95}
+                data-r={0.95}
                 className="submap__venue"
                 onMouseEnter={showTip(`${v.city} · World Cup venue`)}
                 onMouseMove={showTip(`${v.city} · World Cup venue`)}
