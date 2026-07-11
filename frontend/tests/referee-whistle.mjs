@@ -1,16 +1,26 @@
 #!/usr/bin/env node
 // Playwright scenario: the cutscene referee's whistle renders IN the mouth.
 //
-// Runs against `npm run dev`. The whistle used to paint behind the neck/head
-// because ref-head was the last group in the SVG (SVG paint order = document
-// order), so the raised whistle-hand - a child of ref-arm-r, which came earlier
-// in the markup - was always occluded. The fix draws ref-head first and the
-// arms after, plus an explicit CSS z-index lock. This asserts, at the 'count'
-// and 'whistle' beats:
+// Runs against `npm run dev`. Two bugs, two fixes:
+//   1. The whistle used to paint behind the neck/head because ref-head was the
+//      last group in the SVG (SVG paint order = document order), so the raised
+//      whistle-hand - a child of ref-arm-r, earlier in the markup - was always
+//      occluded. Fixed by drawing ref-head first and the arms after, plus an
+//      explicit CSS z-index lock.
+//   2. Even once visible, a single rigid shoulder rotation could only ever
+//      land the fist ~20-26 units short of the mouth (the arm's own length
+//      exceeds the shoulder-to-mouth distance), so it read as the arm
+//      covering the mouth rather than the whistle touching it. Fixed with a
+//      real two-bone reach: the shoulder rotates a little about its own exact
+//      attach point (never gaps from the sleeve) and the elbow rotates the
+//      rest of the way, landing the fist precisely on the lips.
+// This asserts, at the 'count' and 'whistle' beats:
 //   1. whistle-above-head   — computed z-index of .ref-whistle-hand > .ref-head.
-//   2. whistle-at-mouth     — the whistle's bounding box sits at mouth height
-//                             and is within a small horizontal tolerance of the
-//                             mouth's centre (not off beside the shoulder).
+//   2. whistle-at-mouth     — the whistle's bounding box is tightly centred on
+//                             the mouth (within 15% of the head's own width).
+//   3. cheek-touch-puff     — the cheek gets a light puff as the whistle
+//                             settles into the mouth (distinct from the bigger
+//                             blow puff).
 // No console errors throughout.
 
 import { execFileSync } from 'node:child_process'
@@ -32,6 +42,7 @@ const MEASURE_SRC = `() => {
   const mouth = document.querySelector('.ref-mouth');
   const whistle = document.querySelector('.ref-whistle-hand');
   const head = document.querySelector('.ref-head');
+  const cheek = document.querySelector('.ref-cheek-l');
   if (!mouth || !whistle || !head) return { missing: true };
   const m = mouth.getBoundingClientRect();
   const w = whistle.getBoundingClientRect();
@@ -39,7 +50,10 @@ const MEASURE_SRC = `() => {
   const headZ = +getComputedStyle(head).zIndex || 0;
   const dx = Math.abs((m.left + m.right) / 2 - (w.left + w.right) / 2);
   const yOverlap = Math.min(m.bottom, w.bottom) - Math.max(m.top, w.top);
-  return { whistleZ, headZ, dx, yOverlap, headW: head.getBoundingClientRect().width };
+  // Cheek puff reads via the transform matrix's scaleX (matrix(a,b,c,d,tx,ty), a = scaleX).
+  const ct = cheek ? getComputedStyle(cheek).transform : 'none';
+  const cheekScaleX = ct && ct !== 'none' ? parseFloat(ct.split('(')[1].split(',')[0]) : 1;
+  return { whistleZ, headZ, dx, yOverlap, headW: head.getBoundingClientRect().width, cheekScaleX };
 }`
 
 // Drives to the 'count' beat (held 1.8s - safe to measure after a settle wait)
@@ -90,7 +104,12 @@ try {
   record('count-whistle-above-head', !count.missing && count.whistleZ > count.headZ, JSON.stringify(count))
   record(
     'count-whistle-at-mouth',
-    !count.missing && count.yOverlap > 0 && count.dx <= count.headW * 0.4,
+    !count.missing && count.yOverlap > 0 && count.dx <= count.headW * 0.15,
+    JSON.stringify(count),
+  )
+  record(
+    'count-cheek-touch-puff',
+    !count.missing && count.cheekScaleX > 1.02,
     JSON.stringify(count),
   )
 
@@ -98,7 +117,7 @@ try {
   record('whistle-beat-whistle-above-head', !blow.missing && blow.whistleZ > blow.headZ, JSON.stringify(blow))
   record(
     'whistle-beat-whistle-at-mouth',
-    !blow.missing && blow.yOverlap > -4 && blow.dx <= blow.headW * 0.4,
+    !blow.missing && blow.yOverlap > -4 && blow.dx <= blow.headW * 0.15,
     JSON.stringify(blow),
   )
 
