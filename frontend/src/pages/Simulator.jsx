@@ -172,7 +172,9 @@ export default function Simulator() {
   const [phase, setPhase] = useState('idle') // idle | cutscene | result
   const [cutscene, setCutscene] = useState(null) // match payload for the pregame sequence (B4)
   const [result, setResult] = useState(null)
+  const [crumpleTick, setCrumpleTick] = useState(0) // bumps to fire the paper globe's venue-change crumple
   const pending = useRef(null)
+  const pendingVenue = useRef(null) // marker picked mid-crumple, applied at the peak by lockVenue
 
   const round = ROUNDS.find((r) => r.id === roundId)
   const canSim = home && away && home !== away
@@ -189,12 +191,22 @@ export default function Simulator() {
     return ms
   }, [home, away, venueName])
 
-  // Clicking a venue marker selects it as the flight destination and opens its
-  // encyclopedia panel (ignored mid-cutscene so a running sim isn't hijacked).
+  // Clicking a venue marker plays the paper globe's fast crumple-unfold as a
+  // transition beat (ignored mid-cutscene so a running sim isn't hijacked); the
+  // actual destination swap is deferred to lockVenue, fired by GlobeHero at the
+  // crumple's fully-scrunched peak, so the change locks in hidden rather than
+  // snapping visibly on a flat, open globe.
   const onMarkerClick = (m) => {
     if (m?.kind !== 'venue' || phase === 'cutscene') return
-    setVenueName(m.name)
-    setPanelVenue(m.name)
+    pendingVenue.current = m.name
+    setCrumpleTick((n) => n + 1)
+  }
+
+  const lockVenue = () => {
+    const name = pendingVenue.current
+    if (!name) return
+    setVenueName(name)
+    setPanelVenue(name)
   }
 
   // Resolved venue for the panel: geo (stadiumData) + facts/spec (stadiumInfo).
@@ -268,6 +280,9 @@ export default function Simulator() {
           mode="flight"
           markers={markers}
           onCountryClick={onMarkerClick}
+          paper
+          crumpleTrigger={crumpleTick}
+          onCrumpleLock={lockVenue}
           ariaLabel="Venue selection globe"
         />
         {!panelVenue && (

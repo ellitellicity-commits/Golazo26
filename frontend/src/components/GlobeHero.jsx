@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import worldLines from '../data/worldLines.json'
+import hostSubdivisions from '../data/hostSubdivisions.json'
 import { llToXYZ, xyzToLL, greatCircleArc, hostAtPoint } from '../lib/geo'
 import { countryAt } from '../lib/countryHitTest'
 import './GlobeHero.css'
@@ -27,6 +28,20 @@ const COL = {
   markerHot: 0xf6f6f6, // ink - active/endpoint
   arc: 0x439bf7, // american-blue - the prediction/flight channel
   plane: 0xf6f6f6,
+}
+
+// --- Paper globe (Matchup Sandbox only) --------------------------------------
+// A deliberate, self-contained departure from the broadcast-black palette above,
+// reusing the exact parchment hexes already established as the app's one
+// sanctioned "paper" motif in the pregame Cutscene chart (Cutscene.css
+// --cut-parchment/--cut-ink/--cut-line/--cut-route) so the two paper surfaces
+// read as one consistent idea rather than two competing ones.
+const PAPER = {
+  parchment: 0xe7d7b4,
+  parchmentDeep: 0xd6c093,
+  ink: 0x3a2c17,
+  line: 0x5c4424, // --cut-line's rgb, applied via low opacity below
+  route: 0xa23b1e,
 }
 
 // Build one LineSegments geometry from all coastline rings, on the sphere.
@@ -57,6 +72,104 @@ function buildGraticule() {
   const geo = new THREE.BufferGeometry()
   geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
   return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: COL.grat, transparent: true, opacity: 0.5 }))
+}
+
+// Province/state borders for the three 2026 hosts only (paper globe) - built the
+// same way as buildLand but from hostSubdivisions.json's admin-1 rings, sitting
+// just under the coastline layer and reading finer + fainter so it stays clearly
+// subordinate to the dominant, single-weight country outline.
+function buildProvinceBorders() {
+  const positions = []
+  for (const host of Object.values(hostSubdivisions)) {
+    for (const sub of host.subs) {
+      for (const ring of sub.rings) {
+        for (let i = 0; i < ring.length - 1; i++) {
+          const a = llToXYZ(ring[i][1], ring[i][0], R * 1.0015)
+          const b = llToXYZ(ring[i + 1][1], ring[i + 1][0], R * 1.0015)
+          positions.push(a[0], a[1], a[2], b[0], b[1], b[2])
+        }
+      }
+    }
+  }
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
+  return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: PAPER.line, transparent: true, opacity: 0.35 }))
+}
+
+// Hex int (0xrrggbb) → "r,g,b" for rgba() strings - keeps the canvas texture
+// derived from the one PAPER palette instead of duplicating literal hexes.
+const rgbOf = (hex) => `${(hex >> 16) & 255},${(hex >> 8) & 255},${hex & 255}`
+
+// Small tileable parchment texture: a warm cream base plus fine fiber/grain
+// noise, drawn once to a canvas and repeat-wrapped across the sphere - cheap
+// (no per-frame cost) and deliberately not photorealistic, per the brief.
+function buildPaperTexture() {
+  const size = 256
+  const cvs = document.createElement('canvas')
+  cvs.width = size; cvs.height = size
+  const ctx = cvs.getContext('2d')
+  ctx.fillStyle = `#${PAPER.parchment.toString(16).padStart(6, '0')}`
+  ctx.fillRect(0, 0, size, size)
+  // Soft mottled blotches - cheap seeded pseudo-random via a fixed LCG so the
+  // texture is deterministic across reloads (no visible "shimmer" on refresh).
+  const deepRgb = rgbOf(PAPER.parchmentDeep)
+  let seed = 1337
+  const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff }
+  for (let i = 0; i < 90; i++) {
+    const x = rand() * size, y = rand() * size, r = 8 + rand() * 26
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r)
+    const deep = rand() > 0.5
+    g.addColorStop(0, deep ? `rgba(${deepRgb},0.35)` : 'rgba(255,250,235,0.3)')
+    g.addColorStop(1, `rgba(${rgbOf(PAPER.parchment)},0)`)
+    ctx.fillStyle = g
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill()
+  }
+  // Fine grain - individual low-alpha ink specks, the "fiber" of the sheet.
+  const inkRgb = rgbOf(PAPER.ink)
+  for (let i = 0; i < 1400; i++) {
+    ctx.fillStyle = `rgba(${inkRgb},${(0.03 + rand() * 0.05).toFixed(3)})`
+    ctx.fillRect(rand() * size, rand() * size, 1, 1)
+  }
+  const tex = new THREE.CanvasTexture(cvs)
+  tex.wrapS = THREE.RepeatWrapping
+  tex.wrapT = THREE.RepeatWrapping
+  tex.repeat.set(6, 3)
+  tex.colorSpace = THREE.SRGBColorSpace
+  return tex
+}
+
+// --- Crumple/unfold (paper globe only) ---------------------------------------
+// A small hand-rolled deterministic pseudo-noise (a few summed sines - no
+// library, no per-call allocation) evaluated purely from a point's own base
+// position. Applying the same function to every layer's own base coordinates
+// is what makes the ocean, coastlines, province borders, and markers crumple
+// together "as one sheet" without sharing vertex indices across geometry types.
+function crumpleNoise(x, y, z) {
+  return (
+    Math.sin(x * 6.1 + y * 3.7 + 1.3) * 0.5 +
+    Math.sin(y * 5.3 - z * 4.9 + 2.7) * 0.3 +
+    Math.sin(z * 7.7 + x * 2.1 - 0.6) * 0.2
+  )
+}
+
+// t: 0 = flat sphere, 1 = fully crumpled. Radially crushes each point toward a
+// smaller, irregular ball and adds noise-driven bump + a slight tangential
+// swirl for a wrinkled (not merely lumpy) read. Pure function of (x,y,z,t).
+const crumpleOut = [0, 0, 0]
+function crumpleVertex(x, y, z, t) {
+  if (t <= 0) { crumpleOut[0] = x; crumpleOut[1] = y; crumpleOut[2] = z; return crumpleOut }
+  const len = Math.hypot(x, y, z) || 1
+  const nx = x / len, ny = y / len, nz = z / len
+  const n1 = crumpleNoise(nx * 2.2, ny * 2.2, nz * 2.2)
+  const n2 = crumpleNoise(nx * 5.1 + 9, ny * 5.1 + 9, nz * 5.1 + 9)
+  const crush = 1 - t * 0.62
+  const bump = 1 + t * 0.22 * n1 + t * 0.1 * n2
+  const scale = crush * bump
+  const swirl = t * 0.18 * n2 * len
+  crumpleOut[0] = x * scale + ny * swirl
+  crumpleOut[1] = y * scale + nz * swirl
+  crumpleOut[2] = z * scale + nx * swirl
+  return crumpleOut
 }
 
 // --- Atlas flag-fill (Part A) -------------------------------------------------
@@ -244,10 +357,13 @@ function GlobeHero({
   countryShapes = null,
   hostTints = null,
   focus = null,
+  paper = false,
+  crumpleTrigger = null,
   onFlightProgress,
   onFlightComplete,
   onCountryClick,
   onCountryHover,
+  onCrumpleLock,
   className = '',
   ariaLabel = 'Interactive globe',
 }) {
@@ -255,7 +371,7 @@ function GlobeHero({
   const eng = useRef(null)
   // Keep the latest callbacks reachable from the animation loop without re-init.
   const cbs = useRef({})
-  cbs.current = { onFlightProgress, onFlightComplete, onCountryClick, onCountryHover }
+  cbs.current = { onFlightProgress, onFlightComplete, onCountryClick, onCountryHover, onCrumpleLock }
   // Latest country boundary data, read live by the pointermove hit test.
   const shapesRef = useRef(null)
   shapesRef.current = countryShapes
@@ -288,16 +404,36 @@ function GlobeHero({
     scene.add(key)
 
     const globe = new THREE.Group()
+    const sphereGeo = new THREE.SphereGeometry(R, paper ? 48 : 64, paper ? 48 : 64)
     const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(R, 64, 64),
-      new THREE.MeshStandardMaterial({ color: COL.ocean, roughness: 1, metalness: 0 }),
+      sphereGeo,
+      paper
+        ? new THREE.MeshStandardMaterial({ map: buildPaperTexture(), roughness: 0.95, metalness: 0 })
+        : new THREE.MeshStandardMaterial({ color: COL.ocean, roughness: 1, metalness: 0 }),
     )
     globe.add(sphere)
     const land = buildLand()
-    const grat = buildGraticule()
-    globe.add(grat)
+    if (paper) land.material.color.setHex(PAPER.ink)
     globe.add(land)
+    let provinceBorders = null
+    if (paper) {
+      provinceBorders = buildProvinceBorders()
+      globe.add(provinceBorders)
+    } else {
+      globe.add(buildGraticule())
+    }
     scene.add(globe)
+
+    // Crumple base-position cache (paper globe only) - captured once, right
+    // after each layer is built, so the crumple tween always displaces from the
+    // true rest shape regardless of how many times it's played.
+    const crumpleBase = paper
+      ? {
+          sphere: sphereGeo.attributes.position.array.slice(),
+          land: land.geometry.attributes.position.array.slice(),
+          borders: provinceBorders.geometry.attributes.position.array.slice(),
+        }
+      : null
 
     const markerGroup = new THREE.Group()
     globe.add(markerGroup)
@@ -324,13 +460,70 @@ function GlobeHero({
     const pointer = new THREE.Vector2()
 
     eng.current = {
-      scene, camera, renderer, globe, sphere, markerGroup, arcGroup, hostGroup, flagGroup, controls, raycaster, pointer,
+      scene, camera, renderer, globe, sphere, land, provinceBorders, markerGroup, arcGroup, hostGroup, flagGroup, controls, raycaster, pointer,
       markerMeshes: [], flight: null, raf: 0, disposed: false, running: false, inView: true, lastHost: undefined, mode,
       // Atlas flag-fill state: caches + the currently shown country.
       flagGeo: new Map(), flagTex: new Map(), hoverName: null, hoverMesh: null, hoverPaused: false,
       testFreeze: false,
       // Part 1: camera focus + host-rise state.
       flyFreeze: false, hostMeshByName: new Map(), raisedHost: null,
+      // Paper globe crumple state.
+      paper, crumpleBase, crumpleTween: null,
+    }
+
+    // --- Paper globe crumple/unfold ------------------------------------------
+    // One symmetric GSAP tween 0→1→0 (yoyo) drives crumpleVertex across the
+    // sphere, land, province-border, and marker layers every frame of the
+    // ~quarter-second window - each layer reads its own cached base positions,
+    // so everything crumples "as one sheet" without any shared indexing.
+    const runCrumple = (duration, onLock) => {
+      const E = eng.current
+      if (!E || !E.paper || !E.crumpleBase) return
+      const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      if (reduce) { onLock?.(); return }
+      gsap.killTweensOf(E.crumpleTween || {})
+      const state = { t: 0 }
+      const { sphere: sBase, land: lBase, borders: bBase } = E.crumpleBase
+      const sPos = E.sphere.geometry.attributes.position.array
+      const lPos = E.land.geometry.attributes.position.array
+      const bPos = E.provinceBorders.geometry.attributes.position.array
+      const apply = () => {
+        const t = state.t
+        for (let i = 0; i < sBase.length; i += 3) {
+          const p = crumpleVertex(sBase[i], sBase[i + 1], sBase[i + 2], t)
+          sPos[i] = p[0]; sPos[i + 1] = p[1]; sPos[i + 2] = p[2]
+        }
+        for (let i = 0; i < lBase.length; i += 3) {
+          const p = crumpleVertex(lBase[i], lBase[i + 1], lBase[i + 2], t)
+          lPos[i] = p[0]; lPos[i + 1] = p[1]; lPos[i + 2] = p[2]
+        }
+        for (let i = 0; i < bBase.length; i += 3) {
+          const p = crumpleVertex(bBase[i], bBase[i + 1], bBase[i + 2], t)
+          bPos[i] = p[0]; bPos[i + 1] = p[1]; bPos[i + 2] = p[2]
+        }
+        E.sphere.geometry.attributes.position.needsUpdate = true
+        E.land.geometry.attributes.position.needsUpdate = true
+        E.provinceBorders.geometry.attributes.position.needsUpdate = true
+        for (const m of E.markerMeshes) {
+          const base = m.userData.basePos
+          if (!base) continue
+          const p = crumpleVertex(base[0], base[1], base[2], t)
+          m.position.set(p[0], p[1], p[2])
+        }
+      }
+      E.crumpleTween = gsap.to(state, {
+        t: 1,
+        duration: duration / 2,
+        ease: 'power2.inOut',
+        yoyo: true,
+        repeat: 1,
+        onUpdate: apply,
+        onRepeat: () => onLock?.(),
+        onComplete: () => {
+          E.sphere.geometry.attributes.position.needsUpdate = true
+          E.sphere.geometry.computeVertexNormals()
+        },
+      })
     }
 
     // --- Interaction: click a marker ---
@@ -565,7 +758,14 @@ function GlobeHero({
     // Exposed so the flight effect can resume the loop if a flight starts while
     // the globe is paused off-screen (a flight advances inside tick()).
     eng.current.start = start
+    eng.current.runCrumple = runCrumple
     start()
+
+    // Paper globe: crumple up and unfold once on load. Deferred to the next
+    // animation frame so it runs after the markers effect below has populated
+    // markerGroup (both effects fire synchronously on mount, in declaration
+    // order, but the rAF guarantees the marker rebuild has already landed).
+    if (paper) requestAnimationFrame(() => runCrumple(0.46))
 
     // Pause the render loop while the globe is scrolled out of view. A raw rAF
     // loop keeps firing full-speed off-screen otherwise - the browser only
@@ -610,10 +810,11 @@ function GlobeHero({
       E.flagGeo.forEach((g) => g.dispose())
       E.flagTex.forEach((t) => t.dispose())
       if (import.meta.env.DEV && window.__atlas) delete window.__atlas
+      E.crumpleTween?.kill()
       controls.dispose()
       scene.traverse((o) => {
         if (o.geometry) o.geometry.dispose()
-        if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m.dispose())
+        if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => { m.map?.dispose(); m.dispose() })
       })
       renderer.dispose()
       if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement)
@@ -639,11 +840,14 @@ function GlobeHero({
     const geo = new THREE.SphereGeometry(0.016, 12, 12)
     let venueN = 0
     for (const mk of markers) {
-      const mat = new THREE.MeshBasicMaterial({ color: mk.hot ? COL.markerHot : COL.marker })
+      const hotColor = E.paper ? PAPER.route : COL.markerHot
+      const restColor = E.paper ? PAPER.ink : COL.marker
+      const mat = new THREE.MeshBasicMaterial({ color: mk.hot ? hotColor : restColor })
       const mesh = new THREE.Mesh(geo.clone(), mat)
       const [x, y, z] = llToXYZ(mk.lat, mk.lng, R * 1.01)
       mesh.position.set(x, y, z)
       mesh.userData.payload = mk
+      mesh.userData.basePos = [x, y, z]
       // Part 5g - venue dots breathe with a gentle, staggered pulse (each offset
       // by a phase so they never pulse in unison). Country markers stay steady.
       if (mk.kind === 'venue') { mesh.userData.pulse = true; mesh.userData.phase = venueN++ * 0.7 }
@@ -717,6 +921,19 @@ function GlobeHero({
     E.start?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flight?.id])
+
+  // --- Paper globe: fast crumple-unfold on venue selection --------------------
+  // `crumpleTrigger` bumps (same pattern as flight.id) whenever the caller wants
+  // a transition beat. onCrumpleLock fires at the crumple's fully-scrunched
+  // peak, before the unfold - callers use it to swap the destination/marker
+  // state while the sheet is balled up, so the change "locks in" hidden rather
+  // than snapping visibly on a flat, open globe.
+  useEffect(() => {
+    const E = eng.current
+    if (!E || !crumpleTrigger || !E.paper) return
+    E.runCrumple?.(0.28, () => cbs.current.onCrumpleLock?.())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [crumpleTrigger])
 
   return <div ref={mountRef} className={`globe-hero ${className}`} role="img" aria-label={ariaLabel} />
 }
