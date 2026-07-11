@@ -16,9 +16,9 @@ import './HostMascot.css'
 // Each is one cohesive silhouette (a single body mass with internal detail
 // linework) built around a landmark that reads at thumbnail size, not a pile of
 // primitives. GSAP drives organic idle breathing, a hover lift, and the tour:
-//   Canada  - Maple, a moose in a Canadian-red kit; palmate antlers landmark.
-//   USA     - Clutch, a bison in an American-blue kit; shaggy shoulder-hump landmark.
-//   Mexico  - Zayu, an armadillo in a Mexican-green kit; banded shell landmark + curled tail.
+//   Canada  - Moswa, a moose in a Canadian-red kit; palmate antlers landmark.
+//   USA     - Tatanka, a bison in an American-blue kit; shaggy shoulder-hump landmark.
+//   Mexico  - Ayotoch, an armadillo in a Mexican-green kit; banded shell landmark + curled tail.
 
 // A tiny football, shared by all three (at the mascot's feet).
 function Ball({ x, y }) {
@@ -32,11 +32,11 @@ function Ball({ x, y }) {
   )
 }
 
-// --- Maple - moose (Canada) ---------------------------------------------------
+// --- Moswa - moose (Canada) ---------------------------------------------------
 // The chill host: broad palmate antlers frame the head (the landmark), a hip-cocked
 // stance with one arm relaxed at the side and an easy head-tilt, huge warm eyes
 // (left larger), and a long droopy moose snout. One cohesive fur-and-kit mass.
-function Maple() {
+function Moswa() {
   const fur = '#7c5836', furDark = '#4d3722', snout = '#9c7850', antler = '#d9c39a', antlerDark = '#a98f63', kit = 'var(--canadian-red)'
   const OL = '#171a1e', OLW = 3
   return (
@@ -99,11 +99,11 @@ function Maple() {
   )
 }
 
-// --- Clutch - bison (USA) -----------------------------------------------------
+// --- Tatanka - bison (USA) -----------------------------------------------------
 // The hype man: a massive shaggy shoulder-hump dominates the upper silhouette
 // (the landmark), with the small determined face peeking from it, thick curved
 // horns, a shaggy beard, arms flung wide, and legs planted in a broad power stance.
-function Clutch() {
+function Tatanka() {
   const fur = '#6b4f3c', furDark = '#372a1f', mane = '#4a3628', muzzle = '#8a6a4e', horn = '#e6dbc2', kit = 'var(--american-blue)'
   const OL = '#171a1e', OLW = 3
   return (
@@ -174,13 +174,13 @@ function Clutch() {
   )
 }
 
-// --- Zayu - armadillo (Mexico) ------------------------------------------------
+// --- Ayotoch - armadillo (Mexico) ------------------------------------------------
 // Peeking and playful: head turned toward the viewer (nudged left of centre), a
 // prominent banded shell over one shoulder, a long tail curled up behind like a
 // question mark, big round curious eyes, and an oversized rakishly-tilted sombrero.
 // (Restored old hat model. Reconnected to the current idle system - .m-breath /
 // .m-shadow wrappers and the .m-shell hover landmark - without touching its paths.)
-function Zayu() {
+function Ayotoch() {
   const body = '#cba473', bodyLt = '#ddc196', shell = '#9d7546', shellDark = '#6f5030', kit = 'var(--mexican-green)'
   const straw = '#e6c884', strawDark = '#bd9346', OL = '#20242a', OLW = 2.5
   return (
@@ -308,7 +308,7 @@ const BEAT_ANIM = {
 // iso → mascot definition. Facts are real, checkable World Cup 2026 / host notes.
 const MASCOTS = {
   CA: {
-    name: 'Maple', kind: 'the Moose', Art: Maple,
+    name: 'Moswa', kind: 'the Moose', Art: Moswa,
     facts: [
       'Canada co-hosts its first men’s World Cup in 2026.',
       'Toronto’s BMO Field and Vancouver’s BC Place stage the Canadian matches.',
@@ -324,7 +324,7 @@ const MASCOTS = {
     },
   },
   US: {
-    name: 'Clutch', kind: 'the Bison', Art: Clutch,
+    name: 'Tatanka', kind: 'the Bison', Art: Tatanka,
     facts: [
       'The USA stages 11 of the 16 tournament venues.',
       'MetLife Stadium in New Jersey hosts the Final on 19 July 2026.',
@@ -340,7 +340,7 @@ const MASCOTS = {
     },
   },
   MX: {
-    name: 'Zayu', kind: 'the Armadillo', Art: Zayu,
+    name: 'Ayotoch', kind: 'the Armadillo', Art: Ayotoch,
     facts: [
       'Mexico is the first nation to host or co-host three men’s World Cups.',
       'Estadio Azteca has staged two World Cup finals: 1970 and 1986.',
