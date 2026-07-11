@@ -150,31 +150,38 @@ function buildPaperTexture() {
 // position. Applying the same function to every layer's own base coordinates
 // is what makes the ocean, coastlines, province borders, and markers crumple
 // together "as one sheet" without sharing vertex indices across geometry types.
+// Kept LOW frequency deliberately: the province-border layer packs many points
+// close together, and early higher-frequency noise gave nearby points visibly
+// different displacement, breaking each border into a jittery "scribble"
+// instead of folding together. A handful of big, smooth lobes reads as paper
+// folding; many small ones reads as noise.
 function crumpleNoise(x, y, z) {
   return (
-    Math.sin(x * 6.1 + y * 3.7 + 1.3) * 0.5 +
-    Math.sin(y * 5.3 - z * 4.9 + 2.7) * 0.3 +
-    Math.sin(z * 7.7 + x * 2.1 - 0.6) * 0.2
+    Math.sin(x * 1.7 + y * 1.1 + 1.3) * 0.5 +
+    Math.sin(y * 1.4 - z * 1.3 + 2.7) * 0.3 +
+    Math.sin(z * 1.9 + x * 0.8 - 0.6) * 0.2
   )
 }
 
 // t: 0 = flat sphere, 1 = fully crumpled. Radially crushes each point toward a
-// smaller, irregular ball and adds noise-driven bump + a slight tangential
-// swirl for a wrinkled (not merely lumpy) read. Pure function of (x,y,z,t).
+// smaller, irregular ball and adds a gentle noise-driven bump for a wrinkled
+// (not merely shrunken) read. Pure function of (x,y,z,t). No tangential shear -
+// an earlier "swirl" term shifted points sideways independently of their
+// neighbours, which is what actually broke the border lines into a scribble;
+// a purely radial displacement keeps every point on a line moving together.
 const crumpleOut = [0, 0, 0]
 function crumpleVertex(x, y, z, t) {
   if (t <= 0) { crumpleOut[0] = x; crumpleOut[1] = y; crumpleOut[2] = z; return crumpleOut }
   const len = Math.hypot(x, y, z) || 1
   const nx = x / len, ny = y / len, nz = z / len
-  const n1 = crumpleNoise(nx * 2.2, ny * 2.2, nz * 2.2)
-  const n2 = crumpleNoise(nx * 5.1 + 9, ny * 5.1 + 9, nz * 5.1 + 9)
-  const crush = 1 - t * 0.62
-  const bump = 1 + t * 0.22 * n1 + t * 0.1 * n2
+  const n1 = crumpleNoise(nx * 1.6, ny * 1.6, nz * 1.6)
+  const n2 = crumpleNoise(nx * 2.8 + 9, ny * 2.8 + 9, nz * 2.8 + 9)
+  const crush = 1 - t * 0.5
+  const bump = 1 + t * 0.16 * n1 + t * 0.06 * n2
   const scale = crush * bump
-  const swirl = t * 0.18 * n2 * len
-  crumpleOut[0] = x * scale + ny * swirl
-  crumpleOut[1] = y * scale + nz * swirl
-  crumpleOut[2] = z * scale + nx * swirl
+  crumpleOut[0] = x * scale
+  crumpleOut[1] = y * scale
+  crumpleOut[2] = z * scale
   return crumpleOut
 }
 
@@ -480,8 +487,10 @@ function GlobeHero({
     // --- Paper globe crumple/unfold ------------------------------------------
     // One symmetric GSAP tween 0→1→0 (yoyo) drives crumpleVertex across the
     // sphere, land, province-border, and marker layers every frame of the
-    // ~quarter-second window - each layer reads its own cached base positions,
-    // so everything crumples "as one sheet" without any shared indexing.
+    // animation window - each layer reads its own cached base positions, so
+    // everything crumples "as one sheet" without any shared indexing. sine.inOut
+    // (vs. the punchier power2.inOut this started as) reads as a slower, more
+    // deliberate physical fold rather than a snap.
     const runCrumple = (duration, onLock) => {
       const E = eng.current
       if (!E || !E.paper || !E.crumpleBase) return
@@ -520,7 +529,7 @@ function GlobeHero({
       E.crumpleTween = gsap.to(state, {
         t: 1,
         duration: duration / 2,
-        ease: 'power2.inOut',
+        ease: 'sine.inOut',
         yoyo: true,
         repeat: 1,
         onUpdate: apply,
@@ -771,7 +780,7 @@ function GlobeHero({
     // animation frame so it runs after the markers effect below has populated
     // markerGroup (both effects fire synchronously on mount, in declaration
     // order, but the rAF guarantees the marker rebuild has already landed).
-    if (paper) requestAnimationFrame(() => runCrumple(0.46))
+    if (paper) requestAnimationFrame(() => runCrumple(1.3))
 
     // Pause the render loop while the globe is scrolled out of view. A raw rAF
     // loop keeps firing full-speed off-screen otherwise - the browser only
@@ -937,7 +946,7 @@ function GlobeHero({
   useEffect(() => {
     const E = eng.current
     if (!E || !crumpleTrigger || !E.paper) return
-    E.runCrumple?.(0.28, () => cbs.current.onCrumpleLock?.())
+    E.runCrumple?.(0.75, () => cbs.current.onCrumpleLock?.())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [crumpleTrigger])
 
