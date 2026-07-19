@@ -36,6 +36,10 @@ Pick any two nations, any round. Watch the VS card, plane flight, stadium flyove
 
 https://github.com/user-attachments/assets/f9ea6550-4106-4b9f-992b-59b61345660d
 
+**Live During the Real Tournament**
+The Predictor tab tracking the actual 3rd match, France vs England, with live ESPN-sourced stats, match events, and win probabilities updating in real time as the game played out.
+
+![Live match tracker showing France 3-4 England around the 77' minute, with live stats, recent match events, and pre-match win probabilities](./assets/predictor-live-bronze-final.png)
 ---
 
 ## Features (What It Does)
