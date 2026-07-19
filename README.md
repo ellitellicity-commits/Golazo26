@@ -40,7 +40,9 @@ Pick any two nations, any round. Watch the VS card, plane flight, stadium flyove
 **Live During the Real Tournament**
 The Predictor tab tracking the actual Third Place match, France vs England, with live ESPN-sourced stats and match events while the game was in progress.
 
-<img src="./assets/predictor-live-bronze-final.png" alt="Live match predictor: France vs England Bronze Final" width="500">
+<div align="center">
+  <img src="./assets/predictor-live-bronze-final.png" alt="Live match predictor: France vs England Bronze Final" width="400">
+</div>
 
 ---
 
